@@ -59,7 +59,7 @@ router.post('/login', (req, res, next) => {
 });
 
 router.post('/register/:id',verifyToken, verifyTitle, (req, res, next) => {
-    return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
+    return auth.doOnlyWith(['admin'], req, res, () => {
         bcrypt.hash(req.body.password, 10, (error, hash) => {
             if (error) return res.status(400).json({ error });
             let queryString = 'CALL user_ekle(?, ?, ?)';

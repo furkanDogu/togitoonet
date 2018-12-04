@@ -7,7 +7,7 @@ import { logOut } from '../actions/userActions';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const AuthButton = ({ history, isAuthenticated, logOut, text }) => (
       
@@ -19,7 +19,7 @@ const AuthButton = ({ history, isAuthenticated, logOut, text }) => (
                 history.push("/");
             }}
           >
-              <ListItemIcon><InboxIcon /></ListItemIcon>
+              <ListItemIcon><ExitToAppIcon /></ListItemIcon>
               <ListItemText primary={text} />
           </ListItem>
       ) : (

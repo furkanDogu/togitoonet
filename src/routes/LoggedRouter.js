@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
-import PrivateRoute from './PrivateRoute';
 import Dashboard from '../components/Dashboard';
 
 
@@ -12,7 +11,7 @@ const LoggedRouter = () => {
             <BrowserRouter>
                 <Dashboard>
                     <Switch>
-                        <Route path="/users" render={() => (<h1 style={{ marginTop: 100 }}>AAA</h1>)} />     
+                        <Route path="/a" render={() => (<h1 style={{ marginTop: 100 }}>AAA</h1>)} />     
                     </Switch>
                 </Dashboard>
             </BrowserRouter>

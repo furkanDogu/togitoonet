@@ -13,20 +13,31 @@ class LoginForm extends React.Component {
         super(props);
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            isInputInvalid: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.hideInvalidErrorModal = this.hideInvalidErrorModal.bind(this);
     }
     handleChange({ target }) {
         this.setState({ [target.name]: target.value });
     }
     handleSubmit(event) {
         event.preventDefault();
-        this.props.fetchUserInfo({
-            email: this.state.email,
-            password: this.state.password
-        });
+        
+        const regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+        if (this.state.email.length > 200 || !regex.test(this.state.email) || this.state.password.length > 100) {
+            this.setState({ isInputInvalid: true, email: '', password: '' });
+        } else {
+            this.props.fetchUserInfo({
+                email: this.state.email,
+                password: this.state.password
+            });
+        }
+    }
+    hideInvalidErrorModal() {
+        this.setState({ isInputInvalid: false });
     }
     render() {
         return (
@@ -77,7 +88,12 @@ class LoginForm extends React.Component {
                     text="Hatalı giriş yaptınız lütfen tekrar deneyin"
                     isOpen={this.props.isLoginFailed}
                     onClose={this.props.hideLoginErrorModal}
-                />  
+                />
+                <ErrorModal
+                    text="Lütfen geçerli e posta ve şifre giriniz"
+                    isOpen={this.state.isInputInvalid}
+                    onClose={this.hideInvalidErrorModal} 
+                />
             </div>
         );
     }
