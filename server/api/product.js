@@ -242,6 +242,16 @@ router.post('/broken/:type/:id', verifyToken, (req, res, next) => {
 });
 
 
+router.get('/unregistered', verifyToken, (req, res, next) => {
+    return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
+        let queryString = 'SELECT * FROM zimmetsiz_bilesenler'
+        global.db.query(queryString, (err, result) => {
+            if (err) return res.status(500).json({ err });
+            res.status(200).json({ result });
+        });
+    });
+});
+
 
 
 module.exports = router;
