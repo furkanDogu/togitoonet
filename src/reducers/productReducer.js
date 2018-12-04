@@ -10,7 +10,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch(action.type) {
         case  SET_UNREGISTERED_PRODUCTS:
-            return {...state, unregisteredProducts: action.payload};
+            return {...state, unregisteredProducts: [...action.payload.result]};
         default: return state;
     }
 }

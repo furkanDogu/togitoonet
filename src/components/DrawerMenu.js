@@ -10,7 +10,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import ComputerIcon from '@material-ui/icons/Computer';
 import Hidden from '@material-ui/core/Hidden';
 import { withRouter } from 'react-router-dom';
-import LockIcon from '@material-ui/icons/Lock'
+import LockIcon from '@material-ui/icons/Lock';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -23,30 +23,27 @@ import PeopleIcon from '@material-ui/icons/People';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 class DrawerMenu extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+	constructor(props) {
+		super(props);
+		this.state = {
 			productsOptionOpen: false,
 			addProductOptionOpen: false,
-			reportsOptionOpen: false
-
-        }
+			reportsOptionOpen: false,
+		};
 		this.handleProductsOption = this.handleProductsOption.bind(this);
 		this.handleAddProductOption = this.handleAddProductOption.bind(this);
 		this.handleReportsOption = this.handleReportsOption.bind(this);
-    }
-    handleProductsOption() {
-        this.setState(state => ({ productsOptionOpen: !state.productsOptionOpen }));
+	}
+	handleProductsOption() {
+		this.setState(state => ({ productsOptionOpen: !state.productsOptionOpen }));
 	}
 	handleAddProductOption() {
-        this.setState(state => ({ addProductOptionOpen: !state.addProductOptionOpen }));
+		this.setState(state => ({ addProductOptionOpen: !state.addProductOptionOpen }));
 	}
 	handleReportsOption() {
-        this.setState(state => ({ reportsOptionOpen: !state.reportsOptionOpen }));
+		this.setState(state => ({ reportsOptionOpen: !state.reportsOptionOpen }));
 	}
-	
-      
-      
+
 	render() {
 		const { role } = this.props;
 		const { productsOptionOpen, addProductOptionOpen, reportsOptionOpen } = this.state;
@@ -67,7 +64,11 @@ class DrawerMenu extends React.Component {
 							</ListItem>
 							<Collapse in={productsOptionOpen} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItem button style={{ paddingLeft: 35 }}>
+									<ListItem
+										button
+										style={{ paddingLeft: 35 }}
+										onClick={() => this.props.history.push('/registeredProducts')}
+									>
 										<ListItemIcon>
 											<LockOpenIcon />
 										</ListItemIcon>
@@ -115,28 +116,28 @@ class DrawerMenu extends React.Component {
 				</List>
 				<Divider />
 				<ListItem button key={'Raporlar'} onClick={this.handleReportsOption}>
-						<ListItemIcon>
-							<InsertChartIcon />
-						</ListItemIcon>
-						<ListItemText>Raporlar</ListItemText>
-						{reportsOptionOpen ? <ExpandLess /> : <ExpandMore />}
+					<ListItemIcon>
+						<InsertChartIcon />
+					</ListItemIcon>
+					<ListItemText>Raporlar</ListItemText>
+					{reportsOptionOpen ? <ExpandLess /> : <ExpandMore />}
 				</ListItem>
 				<Collapse in={reportsOptionOpen} timeout="auto" unmountOnExit>
-								<List component="div" disablePadding>
-									<ListItem button style={{ paddingLeft: 35 }}>
-										<ListItemIcon>
-											<PersonIcon />
-										</ListItemIcon>
-										<ListItemText inset primary="Kişi Bazlı" />
-									</ListItem>
-									<ListItem button style={{ paddingLeft: 35 }}>
-										<ListItemIcon>
-											<PeopleIcon />
-										</ListItemIcon>
-										<ListItemText inset primary="Bölüm Bazlı" />
-									</ListItem>
-								</List>
-							</Collapse>
+					<List component="div" disablePadding>
+						<ListItem button style={{ paddingLeft: 35 }}>
+							<ListItemIcon>
+								<PersonIcon />
+							</ListItemIcon>
+							<ListItemText inset primary="Kişi Bazlı" />
+						</ListItem>
+						<ListItem button style={{ paddingLeft: 35 }}>
+							<ListItemIcon>
+								<PeopleIcon />
+							</ListItemIcon>
+							<ListItemText inset primary="Bölüm Bazlı" />
+						</ListItem>
+					</List>
+				</Collapse>
 				<List>
 					{role === 'admin' ? (
 						<ListItem button key={'Kullanıcılar'} onClick={() => this.props.history.push('/a')}>

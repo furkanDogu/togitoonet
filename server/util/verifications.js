@@ -3,6 +3,7 @@ const { createEscapeStr, findAttrCount, convertIdToIntArray } = require('../util
 
 // a middleware that checks if the token is expired.
 const verifyToken = (req, res, next) => {
+    console.log(req.headers);
     var token = req.headers['web-token'];
     if (!token) {
         return res.status(403).json({ auth: false, message: 'No token provided'});

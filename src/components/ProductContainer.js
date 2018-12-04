@@ -40,11 +40,17 @@ class ProductContainer extends React.Component {
 						justify={"flex-start"}
                         spacing={32}
 					>
-                        {products.map(product => {
+                        {products.map((product, index) => {
                             let Item = hoc(ProductCard);
                             return (
-                                <Grid key={product} item>
-                                    <Item productName={product}/>
+                                <Grid key={index} item>
+                                    <Item
+									key={index}
+									name={product.bilesenAdi} 
+									id={product.bilesenID}
+									category={product.kategoriAdi}
+									brand={product.markaAdi}
+									/>
                                 </Grid>
                             );
                         })}

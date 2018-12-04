@@ -29,7 +29,7 @@ const styles = {
 };
 
 function ProductCard(props) {
-	const { classes, productName, buttons } = props;
+	const { classes, name, buttons, id, category, brand } = props;
 
 	return (
 		<Card className={classes.card}>
@@ -37,23 +37,23 @@ function ProductCard(props) {
 				<Grid container justify={'space-between'}>
 					<Grid item>
 						<Typography className={classes.typo} variant="h5">
-							{productName}
+								{name}
 						</Typography>
 					</Grid>
 					<Grid item>
 						<Typography variant="button" className={classes.typo}>
-							{"123123"}
+							ID: {id}
 						</Typography>
 					</Grid>
 				</Grid>
 				<Typography variant="caption" className={classes.typo}>
-					{'KATEGORİ'}
+					{category}
 				</Typography>
-				<Typography variant="subheading" className={classes.typo}>{'marka'}</Typography>
+				<Typography variant="subheading" className={classes.typo}>Marka: {brand}</Typography>
 			</CardContent>
 			<CardActions>
 				{buttons.map((button, index) => (
-					<Button bsStyle={button.bsStyle} onClick={button.onClick} key={index}>
+					<Button bsStyle={button.bsStyle} onClick={() => button.onClick(id)} key={index}>
 						{button.text}
 					</Button>
 				))}
@@ -64,6 +64,10 @@ function ProductCard(props) {
 
 ProductCard.propTypes = {
 	classes: PropTypes.object.isRequired,
+	name: PropTypes.string.isRequired,
+	id: PropTypes.number.isRequired,
+	category: PropTypes.string.isRequired,
+	brand: PropTypes.string.isRequired
 };
 
 

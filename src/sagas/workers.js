@@ -47,12 +47,12 @@ export function* checkIfAuthAsync() {
 export function* getUnregisteredProductsAsync(action) {
     let config = {
         headers: {
-          'web-token': action.token
+          'web-token': action.payload
         }
     }
-    try {
+    try {   
         const URL = 'http://localhost:3001/product/unregistered';
-        const response = yield axios.get(URL, { }, config);
+        const response = yield axios.get(URL, config);
         yield put({ type: SET_UNREGISTERED_PRODUCTS, payload: response.data });
     } catch(e) {
         console.log(e);

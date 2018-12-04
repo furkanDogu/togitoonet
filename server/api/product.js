@@ -252,6 +252,4 @@ router.get('/unregistered', verifyToken, (req, res, next) => {
     });
 });
 
-
-
 module.exports = router;
