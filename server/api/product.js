@@ -41,7 +41,7 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
             
         } else if (req.params.type === 'allOne') {
             // if coming requres want to save a new all in one
-            queryString = 'CALL hazir_pc_ekle(?, ?, ?, ?, ?, ?);';
+            queryString = 'CALL hazir_pc_ekle(?, ?, ?, ?, ?, ?, ?);';
             global.db.query(queryString,
                 [
                     parseInt(req.body.pcMarkaID),
@@ -50,6 +50,7 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
                     req.body.pcAdi,
                     parseInt(req.body.pcSatinAlinanAdet),
                     parseInt(req.body.pcTedarikciID),
+                    parseInt(req.body.pcSatinAlanID)
                 ], (err, pcID) => {
                     if (err) {
                         return res.status(501).json({
@@ -58,12 +59,12 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
                         });
                     }
                     // if the hazir_pc is succesfuly added to the db, we get the ID returned from hazir_pc_ekle procedure  
-                    queryString = 'INSERT INTO ?? (bilesenAdi, kategoriID, markaID, tedarikciID, satinAlinanAdet, stokMiktari, fiyat, pcID, satinAlmaTarihi) VALUES ?'
+                    queryString = 'INSERT INTO ?? (bilesenAdi, kategoriID, markaID, tedarikciID, satinAlinanAdet, stokMiktari, fiyat, pcID, satinAlmaTarihi, satinAlanID) VALUES ?'
                     // creating copy of the bilesenler
                     var copyOfBilesenler = req.body.bilesenler.map(function(arr) {
                         return arr.slice();
                     });
-                    tempAddPCInfo(copyOfBilesenler, parseInt(req.body.pcSatinAlinanAdet), parseInt(pcID[0][0]['id']), parseInt(req.body.pcTedarikciID), (addedOne) => {
+                    tempAddPCInfo(copyOfBilesenler, parseInt(req.body.pcSatinAlinanAdet), parseInt(pcID[0][0]['id']), parseInt(req.body.pcTedarikciID), parseInt(req.body.pcSatinAlanID),(addedOne) => {
                         global.db.query(queryString, ['tbl_bilesen',addedOne], (err) => {
                             if (err) { 
                                 return res.status(501).json({ error: err }); 
@@ -80,7 +81,7 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
 });
 
 // we need this method because we need to attach pc info to its components.
-function tempAddPCInfo(components, satinAlinanAdet, pcID, tedarikciID, callback) {
+function tempAddPCInfo(components, satinAlinanAdet, pcID, tedarikciID, satinAlanID, callback) {
     const queryString = 'SELECT NOW() AS now'
     global.db.query(queryString, (err, result) => {
         let newArr = [];
@@ -95,7 +96,7 @@ function tempAddPCInfo(components, satinAlinanAdet, pcID, tedarikciID, callback)
                 }
             }
             //here we attach pc information to its components.
-            temp = temp.concat([tedarikciID, satinAlinanAdet, satinAlinanAdet, 0, pcID, result[0]['now']]);
+            temp = temp.concat([tedarikciID, satinAlinanAdet, satinAlinanAdet, 0, pcID, result[0]['now'], satinAlanID]);
             newArr.push([...temp]);
         }
         callback(newArr);
@@ -144,24 +145,28 @@ router.post('/removereg/:type/:id', verifyToken, verifyIfRegistered, (req, res, 
             });
         } else if (req.params.type === 'allOne') {
             let db = global.db;
-            // this code block will make 'aktifMi' feature of all components that belongs to a all in one pc passive
-            let queryString = 'UPDATE' + db.escapeId('tbl_zimmetli_urun') +' SET '+ db.escapeId('aktifMi')+' = '+db.escape(0)+' WHERE '+ db.escapeId('zimmetID') +' IN';
-            queryString = queryString.concat(createEscapeStr(findAttrCount(req.body.zimmetIDs)));
-            // update tbl_zimmetli_urun set aktifMi = 0 where zimmetID in (1,2,3,4);
-            db.query(queryString, convertIdToIntArray(req.body.zimmetIDs), (error) => {
-                if (error) return res.status(500).json({ error: error,  step: '1' });
-                queryString = 'UPDATE' + db.escapeId('tbl_bilesen') +' SET '+ db.escapeId('stokMiktari')+' = '+ db.escapeId('stokMiktari')+ '+' +db.escape(1)+' WHERE '+ db.escapeId('bilesenID') +' IN';
-                queryString = queryString.concat(createEscapeStr(findAttrCount(req.body.bilesenIDs)));
-                db.query(queryString, convertIdToIntArray(req.body.bilesenIDs), (error) => {
-                    if (error) return res.status(500).json({ error: error, step: '2' });
-                    queryString = 'UPDATE ?? SET ?? = ?? + ? WHERE ?? = ?';
-                    db.query(queryString, ['tbl_hazir_pc', 'stokMiktari', 'stokMiktari', 1, 'pcID', req.params.id], (error) => {
-                        if (error) return res.status(500).json({ error: error, step: '3' });
-                        res.status(200).json({ message: 'inanmam'});
-                    });
-                })    
+            let queryString = 'SELECT NOW() as now'
+            db.query(queryString, (er, response) => {
+                // this code block will make 'aktifMi' feature of all components that belongs to a all in one pc passive
+                queryString = 'UPDATE' + db.escapeId('tbl_zimmetli_urun') +' SET '+ db.escapeId('aktifMi')+' = '+db.escape(0) + ', '+ db.escapeID('zimmetKaldirmaTarihi') +' = '+response[0]['now']+' WHERE '+ db.escapeId('zimmetID') +' IN';
+                queryString = queryString.concat(createEscapeStr(findAttrCount(req.body.zimmetIDs)));
+                // update tbl_zimmetli_urun set aktifMi = 0 where zimmetID in (1,2,3,4);
+                db.query(queryString, convertIdToIntArray(req.body.zimmetIDs), (error) => {
+                    if (error) return res.status(500).json({ error: error });
+                    queryString = 'UPDATE' + db.escapeId('tbl_bilesen') +' SET '+ db.escapeId('stokMiktari')+' = '+ db.escapeId('stokMiktari')+ '+' +db.escape(1)+' WHERE '+ db.escapeId('bilesenID') +' IN';
+                    queryString = queryString.concat(createEscapeStr(findAttrCount(req.body.bilesenIDs)));
+                    db.query(queryString, convertIdToIntArray(req.body.bilesenIDs), (error) => {
+                        if (error) return res.status(500).json({ error: error });
+                        queryString = 'UPDATE ?? SET ?? = ?? + ? WHERE ?? = ?';
+                        db.query(queryString, ['tbl_hazir_pc', 'stokMiktari', 'stokMiktari', 1, 'pcID', req.params.id], (error) => {
+                            if (error) return res.status(500).json({ error: error });
+                            res.status(200).json({ message: 'inanmam'});
+                        });
+                    })    
 
+                });
             });
+            
         } else {
             return res.status(400).json({
                 message: 'Bad removing registeration request'
@@ -244,10 +249,22 @@ router.post('/broken/:type/:id', verifyToken, (req, res, next) => {
 
 router.get('/unregistered', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
-        let queryString = 'SELECT * FROM zimmetsiz_bilesenler'
-        global.db.query(queryString, (err, result) => {
+        let queryString = 'SELECT * FROM view_zimmetsiz_bilesenler';
+        global.db.query(queryString, (err, b_result) => {
             if (err) return res.status(500).json({ err });
-            res.status(200).json({ result });
+            queryString = 'SELECT * FROM view_zimmetsiz_pcler';
+            global.db.query(queryString, (error, h_result) => {
+                if (error) return res.status(500).json({ error });
+                const result = [...b_result, ...h_result];
+                queryString = 'SELECT * FROM view_zimmetsiz_pc_parcalari';
+                global.db.query(queryString, (error, response) => {
+                    if (error) return res.status(500).json({ error });
+                    res.status(200).json({ 
+                        result,
+                        'parcalar': response 
+                     });
+                });
+            });
         });
     });
 });

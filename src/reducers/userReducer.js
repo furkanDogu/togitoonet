@@ -2,7 +2,8 @@ import {
     ON_LOGIN_SUCCESS,
     ON_LOGIN_FAIL,
     LOG_OUT,
-    HIDE_ERROR_MODAL
+    HIDE_ERROR_MODAL,
+    SET_EMPLOYEES
 } from '../actions/types';
 const INITIAL_STATE = {
     email: '',
@@ -10,7 +11,8 @@ const INITIAL_STATE = {
     name: '',
     userID: '',
     role: '',
-    isLoginFailed: false
+    isLoginFailed: false,
+    employees: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -31,6 +33,8 @@ export default (state = INITIAL_STATE, action) => {
              return {...state, isLoginFailed: true };
         case HIDE_ERROR_MODAL:
              return {...state, isLoginFailed: false };
+        case SET_EMPLOYEES: 
+             return {...state, employees: action.payload.result }
         default: return state;
 
     }

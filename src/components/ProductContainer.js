@@ -27,33 +27,47 @@ class ProductContainer extends React.Component {
 	}
 
 	render() {
-        const { classes, hoc, products } = this.props; 
+		const { classes, hoc, products } = this.props;
 		return (
-			<Grid style={{marginLeft: 25, marginTop: 80 }} container className={classes.root}>
+			<Grid style={{ marginLeft: 25, marginTop: 80 }} container className={classes.root}>
 				<Grid item xs={12}>
 					<Grid
 						container
 						spacing={16}
 						className={classes.demo}
-						alignItems={"flex-start"}
-						direction={"row"}
-						justify={"flex-start"}
-                        spacing={32}
+						alignItems={'flex-start'}
+						direction={'row'}
+						justify={'flex-start'}
+						spacing={32}
 					>
-                        {products.map((product, index) => {
-                            let Item = hoc(ProductCard);
-                            return (
-                                <Grid key={index} item>
-                                    <Item
-									key={index}
-									name={product.bilesenAdi} 
-									id={product.bilesenID}
-									category={product.kategoriAdi}
-									brand={product.markaAdi}
-									/>
-                                </Grid>
-                            );
-                        })}
+						{products.map((product, index) => {
+							let Item = hoc(ProductCard);
+							if (product['Tip'] === 'Bileşen') {
+								return (
+									<Grid key={index} item>
+										<Item
+											key={index}
+											name={product.bilesenAdi}
+											id={"B-"+product.bilesenID}
+											category={product.kategoriAdi}
+											brand={product.markaAdi}
+										/>
+									</Grid>
+								);
+							} else {
+								return (
+									<Grid key={index} item>
+										<Item
+											key={index}
+											name={product.pcAdi}
+											id={"P-"+product.pcID}
+											category={'Hazır PC'}
+											brand={product.markaAdi}
+										/>
+									</Grid>
+								);
+							}
+						})}
 					</Grid>
 				</Grid>
 			</Grid>

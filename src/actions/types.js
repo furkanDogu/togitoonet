@@ -7,6 +7,12 @@ export const HIDE_ERROR_MODAL = 'hide_error_modal';
 
 export const GET_UNREGISTERED_PRODUCTS = 'get_unregistered_products';
 export const SET_UNREGISTERED_PRODUCTS = 'fetch_unregistered_products';
+export const SET_UNREGISTERED_PC_COMPONENTS = 'set_unregistered_pc_components';
 
+
+export const GET_EMPLOYEES = 'get_employees';
+export const SET_EMPLOYEES = 'set_employees';
+
+export const REGISTER_PRODUCT = 'register_product';
 
 

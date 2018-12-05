@@ -71,7 +71,8 @@ router.post('/register/:id',verifyToken, verifyTitle, (req, res, next) => {
         });
     });
 });
-
+// helps us check if user's token is stil valid and user just refreshed the page. 
+// to check client passes us the token if it's valid, we return corresponding data in token (after decoding the token)
 router.post('/check', (req, res, next) => {
     console.log(req.body);
     jwt.verify(req.body.token, process.env.JWT_KEY, (error, decoded) => {
@@ -82,6 +83,16 @@ router.post('/check', (req, res, next) => {
             name: decoded.name,
             userID: decoded.userID,
             role: decoded.role
+        });
+    });
+});
+
+router.get('/', verifyToken, (req, res, next) => {
+    return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
+        let queryString = 'SELECT * FROM view_personeller';
+        global.db.query(queryString, (error, result) => {
+            if (error) return res.status(500).json({ error });
+            res.status(200).json({ result });
         });
     });
 });

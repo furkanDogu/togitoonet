@@ -27,7 +27,6 @@ const styles = {
 		marginBottom: 4
 	}
 };
-
 function ProductCard(props) {
 	const { classes, name, buttons, id, category, brand } = props;
 
@@ -42,7 +41,7 @@ function ProductCard(props) {
 					</Grid>
 					<Grid item>
 						<Typography variant="button" className={classes.typo}>
-							ID: {id}
+							{id}
 						</Typography>
 					</Grid>
 				</Grid>
@@ -65,7 +64,7 @@ function ProductCard(props) {
 ProductCard.propTypes = {
 	classes: PropTypes.object.isRequired,
 	name: PropTypes.string.isRequired,
-	id: PropTypes.number.isRequired,
+	id: PropTypes.string.isRequired,
 	category: PropTypes.string.isRequired,
 	brand: PropTypes.string.isRequired
 };

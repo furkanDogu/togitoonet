@@ -1,4 +1,9 @@
-import { FETCH_USER_INFO, CHECK_IF_AUTHENTICATED, LOG_OUT, HIDE_ERROR_MODAL } from './types';
+import { FETCH_USER_INFO, 
+	CHECK_IF_AUTHENTICATED, 
+	LOG_OUT, 
+	HIDE_ERROR_MODAL,
+	GET_EMPLOYEES
+} from './types';
 
 export const fetchUserInfo = ({ email, password }) => ({
 	type: FETCH_USER_INFO,
@@ -14,6 +19,10 @@ export const logOut = () => ({
 
 export const hideLoginErrorModal = () => ({
 	type: HIDE_ERROR_MODAL,
+});
+
+export const getEmployees = () => ({
+	type: GET_EMPLOYEES
 });
 
 

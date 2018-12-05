@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { registerProduct } from '../actions/productActions';
 import DetailModal from '../components/DetailModal';
+import RegisterationModal from '../components/RegisterationModal';
 
 const unregisteredProduct = WrappedComponent => {
 	class UnregisteredProduct extends React.Component {
@@ -10,20 +12,46 @@ const unregisteredProduct = WrappedComponent => {
 				detailModalOpen: false,
 				registerationModalOpen: false,
 				chosenForDetail: null,
+				pcComponents: null,
+				chosenForRegisteration: null
 			};
 			this.handleDetailModal = this.handleDetailModal.bind(this);
 			this.handleRegisterationModal = this.handleRegisterationModal.bind(this);
+			this.onSubmitClicked = this.onSubmitClicked.bind(this);
 		}
-		filterChosenProduct(id) {
-			return this.props.unregisteredProductsData.find(product => product.bilesenID === id);
+		onSubmitClicked(employeeID) {
+			// chosenForRegisteration içinde seçilen product var 
+			//zimmetleneceği personelin id'side parametre olarak registeration modelden geliyor.
+			console.log(employeeID);
+			console.log(this.state.chosenForRegisteration);
 		}
-		handleRegisterationModal() {
+		filterChosenProduct(id, IDtype) {
+			// searches for the product with given ID and type 
+			const type = IDtype === 'B' ? 'bilesenID' : 'pcID';
+			return this.props.unregisteredProductsData.find(product => product[type] === id);
+		}
+		filterChosenPcComponents(id) {
+			return this.props.unregisteredPcComponents.filter(product => product.pcID === id);
+		}
+		handleRegisterationModal(id) {
+			if (id) {
+				const ID = this.splitID(id);
+				this.setState({ chosenForRegisteration: this.filterChosenProduct(ID[0], ID[1]) });
+			} 
 			this.setState(state => ({ registerationModalOpen: !state.registerationModalOpen }));
+		}
+		splitID (id) {
+			let splittedID = id.split('-');
+			return [parseInt(splittedID[1]), splittedID[0]];
 		}
 		handleDetailModal(id) {
 			if (id) {
-				this.setState({ chosenForDetail: this.filterChosenProduct(id) });
-			}
+				const ID = this.splitID(id);
+				this.setState({ chosenForDetail: this.filterChosenProduct(ID[0], ID[1]) }, () => {
+					this.setState({ pcComponents: this.filterChosenPcComponents(ID[0]) });
+				});
+				
+			} 
 			this.setState(state => ({ detailModalOpen: !state.detailModalOpen }));
 		}
 		render() {
@@ -46,6 +74,13 @@ const unregisteredProduct = WrappedComponent => {
 						product={this.state.chosenForDetail}
 						isOpen={this.state.detailModalOpen}
 						onClose={this.handleDetailModal}
+						pcComponents={this.state.pcComponents}
+					/>
+					<RegisterationModal
+						isOpen={this.state.registerationModalOpen}
+						onClose={this.handleRegisterationModal}
+						onSubmitClicked={this.onSubmitClicked}
+						product={this.state.chosenForRegisteration}
 					/>
 				</div>
 			);
@@ -53,7 +88,11 @@ const unregisteredProduct = WrappedComponent => {
 	}
 	const mapStateToProps = state => ({
 		unregisteredProductsData: state.productReducer.unregisteredProducts,
+		unregisteredPcComponents: state.productReducer.unregisteredPcComponents
 	});
-	return connect(mapStateToProps)(UnregisteredProduct);
+	const mapDispatchToProps = {
+		registerProduct
+	};
+	return connect(mapStateToProps, mapDispatchToProps)(UnregisteredProduct);
 };
 export default unregisteredProduct;
