@@ -3,7 +3,8 @@ import {
     ON_LOGIN_FAIL,
     SET_UNREGISTERED_PRODUCTS,
     SET_UNREGISTERED_PC_COMPONENTS,
-    SET_EMPLOYEES
+    SET_EMPLOYEES,
+    SET_REGISTERED_PRODUCTS
 } from '../actions/types';
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
@@ -86,12 +87,10 @@ export function* getEmployeesAsync(action) {
     }
 }
 export function* registerProductsAsync(action) {
-    
     const { product, employeeID, token } = action.payload;
     let type = null;
     let id = null;
     let endPoint = null;
-    
 
     if (product.Tip === 'Bileşen') { // if product is only a component then we need to read bilesenID property
         type = 'component';
@@ -113,7 +112,21 @@ export function* registerProductsAsync(action) {
         } catch(e) {
             console.log(e);
         }
-    
+}
 
+export function* getRegisteredProductsAsync(action) {
+    let config = {
+        headers: {
+          'web-token': action.payload
+        }
+    }
+    try {   
+        const endPoint = URL+'/product/registered';
+        const response = yield axios.get(endPoint, config);
+        yield put({ type: SET_REGISTERED_PRODUCTS, payload: response.data });
+
+    } catch(e) {
+        console.log(e);
+    }
 }
 

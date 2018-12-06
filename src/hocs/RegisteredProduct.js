@@ -21,7 +21,7 @@ const registeredProduct = WrappedComponent => {
 
             ]
             return (
-                <WrappedComponent buttons={buttons} {...this.props} />
+                <WrappedComponent buttons={buttons} {...this.props}/>
             );
         }
 

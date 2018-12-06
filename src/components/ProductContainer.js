@@ -27,7 +27,7 @@ class ProductContainer extends React.Component {
 	render() {
 		const { classes, hoc, products } = this.props;
 		return (
-			<Grid style={{ marginLeft: 25, marginTop: 80 }} container className={classes.root}>
+			<Grid style={{ marginLeft: 25, marginTop: 30 }} container className={classes.root}>
 				<Grid item xs={12}>
 					<Grid
 						container
@@ -49,6 +49,8 @@ class ProductContainer extends React.Component {
 											category={product.kategoriAdi}
 											brand={product.markaAdi}
 											stockAmount={product.stokMiktari}
+											registerationDate={product.zimmetTarihi}
+											registeredPerson={product.personelAdi}
 										/>
 									</Grid>
 								);

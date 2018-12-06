@@ -4,7 +4,8 @@ import {
     fetchUserInfoAsync, 
     getUnregisteredProductsAsync, 
     getEmployeesAsync,
-    registerProductsAsync
+    registerProductsAsync,
+    getRegisteredProductsAsync
 } from './workers';
 
 import {
@@ -12,7 +13,8 @@ import {
     CHECK_IF_AUTHENTICATED,
     GET_UNREGISTERED_PRODUCTS,
     GET_EMPLOYEES,
-    REGISTER_PRODUCT
+    REGISTER_PRODUCT,
+    GET_REGISTERED_PRODUCTS
 } from '../actions/types';
 
 
@@ -22,6 +24,7 @@ export default function* rootSaga() {
         takeLatest(FETCH_USER_INFO, fetchUserInfoAsync),
         takeLatest(GET_UNREGISTERED_PRODUCTS, getUnregisteredProductsAsync),
         takeLatest(GET_EMPLOYEES, getEmployeesAsync),
-        takeLatest(REGISTER_PRODUCT, registerProductsAsync)
+        takeLatest(REGISTER_PRODUCT, registerProductsAsync),
+        takeLatest(GET_REGISTERED_PRODUCTS, getRegisteredProductsAsync)
     ]);
 }

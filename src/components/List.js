@@ -19,16 +19,12 @@ class SelectedListItem extends React.Component {
             searchKey: '',
             enteredKey: false
         };
-        this.handleSearchClick = this.handleSearchClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 	handleListItemClick = (event, index, personelID) => {
 		this.setState({ selectedIndex: index });
 		this.props.setChosenEmployee(personelID);
     };
-    handleSearchClick() {
-        this.setState({ enteredKey: true });
-    }
     mapEmployees(employees) {
         return employees.map((item, index) => (
             <ListItem
@@ -94,7 +90,7 @@ class SelectedListItem extends React.Component {
                 {this.renderSearchBar()}
                 <List>
                 {this.mapEmployees(items.filter((item) => {
-                if(item.personelAdi.toLowerCase().includes(this.state.searchKey.toLocaleLowerCase())) {
+                if(item.personelAdi.toLowerCase().includes(this.state.searchKey.toLowerCase())) {
                     return true;
                 }
             }))}
