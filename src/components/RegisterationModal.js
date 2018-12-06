@@ -1,28 +1,30 @@
 import React from 'react';
 import List from './List';
 import { connect } from 'react-redux';
-import { getEmployees } from '../actions/userActions';
 import { Modal, Button } from 'react-bootstrap';
+import ErrorModal from './ErrorModal';
 
 class RegisterationModal extends React.Component {
 	 constructor(props) {
         super(props);
         this.state = {
-            chosenEmployee: null
+			chosenEmployee: null,
+			warningModalOpen: false
         }
-        this.setChosenEmployee = this.setChosenEmployee.bind(this);
-    } 
+		this.setChosenEmployee = this.setChosenEmployee.bind(this);
+		this.handleWarningModal = this.handleWarningModal.bind(this);
+	}
+	handleWarningModal() {
+		this.setState(state => ({ warningModalOpen: !state.warningModalOpen }));
+	}
     setChosenEmployee(id) {
         //List will pass id of the chosen employee, then set it to state.
         this.setState({ chosenEmployee: id });
     }
-	componentDidMount() {
-		this.props.getEmployees();
-	}
 	render() {
 		const { isOpen, onClose, employees, onSubmitClicked } = this.props;
 		return (
-			
+			<div>
 				<Modal
                     style={{ marginTop: 70 }}
                     height="200px"
@@ -40,10 +42,24 @@ class RegisterationModal extends React.Component {
                         <List setChosenEmployee={this.setChosenEmployee} items={employees} />
 					</Modal.Body>
 					<Modal.Footer>
-                        <Button bsStyle="success" onClick={() => onSubmitClicked(this.state.chosenEmployee)}>Zimmetle</Button>
+                        <Button bsStyle="success" onClick={() => {
+							if (this.state.chosenEmployee) {
+								onSubmitClicked(this.state.chosenEmployee)
+							} else {
+								this.handleWarningModal();
+							}
+						}}>Zimmetle</Button>
 						<Button onClick={() => onClose()}>Kapat</Button>
 					</Modal.Footer>
 				</Modal>
+				<ErrorModal
+                    text="Lütfen ürünün zimmetleneceği personeli seçiniz"
+                    isOpen={this.state.warningModalOpen}
+                    onClose={this.handleWarningModal} 
+                    header="Eksik Personel Seçimi"
+                />
+			</div>
+				
 
 		);
 	}
@@ -53,12 +69,9 @@ class RegisterationModal extends React.Component {
 const mapStateToProps = state => ({
 	employees: state.userReducer.employees,
 });
-const mapDispatchToProps = {
-	getEmployees,
-};
 
 export default connect(
 	mapStateToProps,
-	mapDispatchToProps
+	null
 )(RegisterationModal);
 

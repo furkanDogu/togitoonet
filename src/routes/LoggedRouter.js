@@ -22,8 +22,8 @@ const LoggedRouter = () => {
 						)}
 					/>
 					<Route
-						path="/registeredProducts"
-						render={() => <UnregisteredProduct hoc={unregisteredProduct} />}
+						path="/unregisteredProducts"
+						render={() => <UnregisteredProduct hoc={unregisteredProduct} productType={'unregisteredProduct'}/>}
 					/>
 				</Switch>
 			</Dashboard>

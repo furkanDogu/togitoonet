@@ -8,7 +8,8 @@ export const getUnregisteredProducts = (token) => ({
 	payload: token,
 });
 
-export const registerProduct = ({ product, employeeID }) => ({
+export const registerProduct = ({ product, employeeID, token }) => ({
 	type: REGISTER_PRODUCT,
-	payload: { product, employeeID }
+	payload: { product, employeeID, token },
+
 });

@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 
-const ErrorModal = ({ text, isOpen, onClose }) => {
+const ErrorModal = ({ text, isOpen, onClose, title, header }) => {
 	return (
-		<div className="modal-container" style={{ height: 200 }}>
-			<Modal show={isOpen} onHide={() => onClose()} container={this} aria-labelledby="contained-modal-title">
+		<div className="modal-container">
+			<Modal style={{ marginTop: 70 }} show={isOpen} onHide={() => onClose()} container={this} aria-labelledby="contained-modal-title">
 				<Modal.Header closeButton>
 					<Modal.Title style={{ color: '#2196f3' }} id="contained-modal-title">
-						Hatalı Giriş
+						{header}
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>

@@ -67,7 +67,7 @@ class DrawerMenu extends React.Component {
 									<ListItem
 										button
 										style={{ paddingLeft: 35 }}
-										onClick={() => this.props.history.push('/registeredProducts')}
+										onClick={() => this.props.history.push('/unregisteredProducts')}
 									>
 										<ListItemIcon>
 											<LockOpenIcon />

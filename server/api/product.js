@@ -103,22 +103,25 @@ function tempAddPCInfo(components, satinAlinanAdet, pcID, tedarikciID, satinAlan
     });
 }
 
-// registering a product to a person 
-router.post('/register/:type/:id', verifyToken, verifyQuantity, (req, res, next) => {
 
+
+// registering a product to a person
+// takes; - id wiht URL param  -personelID with body
+router.post('/register/:type/:id', verifyToken, verifyQuantity, (req, res, next) => {
+    console.log(req);
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = null;
         if (req.params.type === 'component') {
             queryString = 'CALL bilesen_zimmetle(?, ?)';
             global.db.query(queryString, [req.params.id, parseInt(req.body.personelID)], (error, result)=> {
                 if (error) return res.status(500).json({ error: error });
-                res.status(200).json({ ok: 'harbiden ekledi mi bakalım ? '});
+                res.status(200).json({ ok: ' component successfully registered '});
             });
         } else if(req.params.type === 'allOne') {
             queryString = 'CALL hazir_pc_zimmetle(?, ?)';
             global.db.query(queryString, [req.params.id, parseInt(req.body.personelID)], (error, result) => {
                 if (error) return res.status(500).json({ error: error });
-                res.status(200).json({ ok: 'hazir_pc zimmetlendi '});
+                res.status(200).json({ ok: 'All in one pc is successfully registered '});
             });
         } else {
             // invalid type entered

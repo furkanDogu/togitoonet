@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { registerProduct } from '../actions/productActions';
 import DetailModal from '../components/DetailModal';
 import RegisterationModal from '../components/RegisterationModal';
+import { withRouter } from 'react-router-dom';
 
 const unregisteredProduct = WrappedComponent => {
 	class UnregisteredProduct extends React.Component {
@@ -22,8 +23,11 @@ const unregisteredProduct = WrappedComponent => {
 		onSubmitClicked(employeeID) {
 			// chosenForRegisteration içinde seçilen product var 
 			//zimmetleneceği personelin id'side parametre olarak registeration modelden geliyor.
-			console.log(employeeID);
-			console.log(this.state.chosenForRegisteration);
+			this.props.registerProduct({ 
+				employeeID,
+				product: this.state.chosenForRegisteration,
+				token: this.props.token,
+			});
 		}
 		filterChosenProduct(id, IDtype) {
 			// searches for the product with given ID and type 
@@ -67,9 +71,10 @@ const unregisteredProduct = WrappedComponent => {
 					bsStyle: 'primary',
 				},
 			];
+			// wrapped component = given product container
 			return (
 				<div>
-					<WrappedComponent buttons={buttons} {...this.props} />
+					<WrappedComponent buttons={buttons} {...this.props} /> 
 					<DetailModal
 						product={this.state.chosenForDetail}
 						isOpen={this.state.detailModalOpen}
@@ -88,11 +93,14 @@ const unregisteredProduct = WrappedComponent => {
 	}
 	const mapStateToProps = state => ({
 		unregisteredProductsData: state.productReducer.unregisteredProducts,
-		unregisteredPcComponents: state.productReducer.unregisteredPcComponents
+		unregisteredPcComponents: state.productReducer.unregisteredPcComponents,
+		token: state.userReducer.token,
+		employees: state.userReducer.employees
+
 	});
 	const mapDispatchToProps = {
-		registerProduct
+		registerProduct,
 	};
-	return connect(mapStateToProps, mapDispatchToProps)(UnregisteredProduct);
+	return withRouter(connect(mapStateToProps, mapDispatchToProps)(UnregisteredProduct));
 };
 export default unregisteredProduct;

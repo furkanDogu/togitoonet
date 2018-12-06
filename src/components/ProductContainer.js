@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ProductCard from './ProductCard';
 
+//styles that will be used in grid
 const styles = theme => ({
 	root: {
 		flexGrow: 1,
@@ -21,11 +21,9 @@ const styles = theme => ({
 	},
 });
 
+// This component will render product cards for the given product list but first
+//it will use given hoc for attach the bussiness logic to product card
 class ProductContainer extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		const { classes, hoc, products } = this.props;
 		return (
@@ -38,7 +36,6 @@ class ProductContainer extends React.Component {
 						alignItems={'flex-start'}
 						direction={'row'}
 						justify={'flex-start'}
-						spacing={32}
 					>
 						{products.map((product, index) => {
 							let Item = hoc(ProductCard);
@@ -51,6 +48,7 @@ class ProductContainer extends React.Component {
 											id={"B-"+product.bilesenID}
 											category={product.kategoriAdi}
 											brand={product.markaAdi}
+											stockAmount={product.stokMiktari}
 										/>
 									</Grid>
 								);
@@ -63,6 +61,7 @@ class ProductContainer extends React.Component {
 											id={"P-"+product.pcID}
 											category={'Hazır PC'}
 											brand={product.markaAdi}
+											stockAmount={product.stokMiktari}z	
 										/>
 									</Grid>
 								);

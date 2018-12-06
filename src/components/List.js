@@ -15,7 +15,7 @@ class SelectedListItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedIndex: 1,
+            selectedIndex: -1,
             searchKey: '',
             enteredKey: false
         };
@@ -32,11 +32,12 @@ class SelectedListItem extends React.Component {
     mapEmployees(employees) {
         return employees.map((item, index) => (
             <ListItem
+                key={index}
                 button
                 selected={this.state.selectedIndex === index + 1}
                 onClick={event => this.handleListItemClick(event, index + 1, item.personelID)}
             >
-                <Grid container direction={'row'} alignItems={'center'} justify={'center'} xs={12}>
+                <Grid container direction={'row'} alignItems={'center'} justify={'center'}>
                     <Grid item xs={1}>
                         <ListItemIcon>
                             <PersonIcon />
@@ -64,21 +65,24 @@ class SelectedListItem extends React.Component {
     renderSearchBar() {
         return (
             <div style={{ flexGrow: 1 }}>
-                 <Grid container alignItems='center' justify='center'>
-                    <Grid item xs={1} >
-                        <SearchIcon />
+                <Paper>
+                    <Grid container>
+                        <Grid item xs={1} >
+                            <SearchIcon />
+                        </Grid>
+                        <Grid item xs={11}>
+                        
+                            <InputBase
+                                fullWidth
+                                placeholder="İsim giriniz..." 
+                                value={this.state.searchKey} 
+                                onChange={this.handleChange} 
+                                name="searchKey"
+                                />
+                            
+                        </Grid>
                     </Grid>
-                    <Grid item xs={11}>
-                        <InputBase
-                        placeholder="İsim giriniz..." 
-                        value={this.state.searchKey} 
-                        onChange={this.handleChange} 
-                        name="searchKey"
-                        style={{ maxWidth: 200 }}
-
-                        />
-                    </Grid>
-			    </Grid>
+                </Paper>  
             </div>
         );
     }
