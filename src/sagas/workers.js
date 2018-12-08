@@ -75,7 +75,6 @@ export function* getUnregisteredProductsAsync(action) {
 
 }
 
-
 export function* getEmployeesAsync(action) {
     
     try {

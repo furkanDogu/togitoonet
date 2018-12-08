@@ -103,10 +103,9 @@ function tempAddPCInfo(components, satinAlinanAdet, pcID, tedarikciID, satinAlan
     });
 }
 
-
-
 // registering a product to a person
 // takes; - id wiht URL param  -personelID with body
+//pcID for allOne and bilesenID for components
 router.post('/register/:type/:id', verifyToken, verifyQuantity, (req, res, next) => {
     console.log(req);
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
@@ -134,9 +133,8 @@ router.post('/register/:type/:id', verifyToken, verifyQuantity, (req, res, next)
 
 
 // removing a registeration from a person
-// takes zimmetID for components and takes pc id for all in one pcS as id parameter
-router.post('/removereg/:type/:id', verifyToken, verifyIfRegistered, (req, res, next) => {
-
+// takes zimmetID for components and takes zimmetID too for all in one pcS as id parameter
+router.post('/removereg/:type/:id', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = null;
         if (req.params.type === 'component') {
@@ -144,32 +142,14 @@ router.post('/removereg/:type/:id', verifyToken, verifyIfRegistered, (req, res, 
             queryString = 'CALL bilesen_zimmet_kaldir(?)';
             global.db.query(queryString, [req.params.id], (error) => {
                 if (error) return res.status(500).json({ error: error });
-                res.status(200).json({ message: 'Successfully removed registeration' });
+                res.status(200).json({ message: 'Successfully removed registeration from component' });
             });
         } else if (req.params.type === 'allOne') {
-            let db = global.db;
-            let queryString = 'SELECT NOW() as now'
-            db.query(queryString, (er, response) => {
-                // this code block will make 'aktifMi' feature of all components that belongs to a all in one pc passive
-                queryString = 'UPDATE' + db.escapeId('tbl_zimmetli_urun') +' SET '+ db.escapeId('aktifMi')+' = '+db.escape(0) + ', '+ db.escapeID('zimmetKaldirmaTarihi') +' = '+response[0]['now']+' WHERE '+ db.escapeId('zimmetID') +' IN';
-                queryString = queryString.concat(createEscapeStr(findAttrCount(req.body.zimmetIDs)));
-                // update tbl_zimmetli_urun set aktifMi = 0 where zimmetID in (1,2,3,4);
-                db.query(queryString, convertIdToIntArray(req.body.zimmetIDs), (error) => {
-                    if (error) return res.status(500).json({ error: error });
-                    queryString = 'UPDATE' + db.escapeId('tbl_bilesen') +' SET '+ db.escapeId('stokMiktari')+' = '+ db.escapeId('stokMiktari')+ '+' +db.escape(1)+' WHERE '+ db.escapeId('bilesenID') +' IN';
-                    queryString = queryString.concat(createEscapeStr(findAttrCount(req.body.bilesenIDs)));
-                    db.query(queryString, convertIdToIntArray(req.body.bilesenIDs), (error) => {
-                        if (error) return res.status(500).json({ error: error });
-                        queryString = 'UPDATE ?? SET ?? = ?? + ? WHERE ?? = ?';
-                        db.query(queryString, ['tbl_hazir_pc', 'stokMiktari', 'stokMiktari', 1, 'pcID', req.params.id], (error) => {
-                            if (error) return res.status(500).json({ error: error });
-                            res.status(200).json({ message: 'inanmam'});
-                        });
-                    })    
-
-                });
+            queryString = 'CALL sp_hazir_pc_zimmet_kaldir(?)';
+            global.db.query(queryString, [req.params.id], (error) => {
+                if(error) return res.status(500).json({ error });
+                res.status(200).json({ message: 'Succesfully removed registeration from all in one pc '});
             });
-            
         } else {
             return res.status(400).json({
                 message: 'Bad removing registeration request'
@@ -179,7 +159,7 @@ router.post('/removereg/:type/:id', verifyToken, verifyIfRegistered, (req, res, 
 });
 
 // adding broken product
-// takes zimmetID for components and ..
+// takes zimmetID for components and  takes bilesenIDs, zimmetIDs and broken product zimmetID for all in one pc
 router.post('/broken/:type/:id', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = null;
@@ -189,60 +169,12 @@ router.post('/broken/:type/:id', verifyToken, (req, res, next) => {
                 if (error) return res.status(400).json({ error });
                 res.status(200).json({ message: 'added broken product successfully' });
             });
-
-
         } else if (req.params.type === 'allOne') {
-            let db = global.db;
-            let queryString = null;
-            // add broken all in one pc
-            //-- 1) zimmetIDs, bilesenIDs, arizalıparçaId al+
-            //-- 2) arızalı parçayı arızalı bileşenler tablosuna ekle +
-            //-- 3) zimmetli ürünler tablosunda tüm bileşenlerin aktifliğini 0 yap.+
-            //-- 4) stokmiktari ve satinalinanadedi 0 olan yeni bileşenler ekle +
-            //-- 5) yeni bileşenler eskileriyle aynı olacak ancak farklı id. +
-            //-- 6) bu yeni bileşenlerin pc idleri -1 olacak +
-            //-- 7) bu yeni bileşenler aynı personele zimmetlenecek. 
-            queryString = 'SELECT ?? FROM ?? WHERE ?? = ?';
-
-            db.query(queryString, ['bilesenID', 'tbl_zimmetli_urun', 'zimmetID', req.params.id], (error, result) => {
-                if (error) return res.status(400).json({ error: error });
-                const brokenProductID = result[0].bilesenID;
-
-                let bilesenIDs = req.body.bilesenIDs;
-                Object.keys(bilesenIDs).map(key => { // deleting broken product from bilesenIDs
-                    if (parseInt(bilesenIDs[key]) === brokenProductID ) delete bilesenIDs[key];
-                });
-
-                queryString = 'CALL arizali_bilesen_ekle(?, ?)';
-                db.query(queryString, [req.params.id, req.body.desc], (error, result) => { // adding the broken product
-                    if (error) return res.status(400).json({ error: error });
-                    const productCount = findAttrCount(req.body.zimmetIDs);
-                    queryString = 'UPDATE ' + db.escapeId('tbl_zimmetli_urun') + ' SET ' + db.escapeId('aktifMi') + ' = ' + db.escape(0) + ' WHERE ' + db.escapeId('zimmetID') + ' IN';
-                    queryString = queryString.concat(createEscapeStr(productCount));
-                    // update tbl_zimmetli_urun set aktifMi = 0 where zimmetID in (?,?)
-                    db.query(queryString, convertIdToIntArray(req.body.zimmetIDs), (error, result) => { // removing all registeration from products
-                        if (error) return res.status(400).json({ error: error });
-                        queryString = 'INSERT INTO '+ db.escapeId('tbl_bilesen') +' (bilesenAdi, kategoriID, markaID, tedarikciID, satinAlinanAdet, stokMiktari, fiyat, satinAlmaTarihi) ';
-                        queryString = queryString.concat('SELECT '+ db.escapeId('bilesenAdi') +', '+ db.escapeId('kategoriID')+', '+ db.escapeId('markaID') +', '+ db.escapeId('tedarikciID') +', 0, 0, '+ db.escapeId('fiyat') +', ');
-                        queryString = queryString.concat(db.escapeId('satinAlmaTarihi') + ' FROM '+ db.escapeId('tbl_bilesen') +' WHERE ');
-                        queryString = queryString.concat(db.escapeId('bilesenID') + ' IN');
-                        queryString = queryString.concat(createEscapeStr(findAttrCount(bilesenIDs)));
-                        db.query(queryString, convertIdToIntArray(bilesenIDs), (error, result) => {
-                            if (error) return res.status(400).json({ error: error });
-                            queryString = 'CALL son_eklenen_n_bilesen_zimmetle(?, ?)';
-                            // we need to subtract 1 from total product count because we don't want to register the broken product to a person.
-                            db.query(queryString, [productCount - 1, parseInt(req.params.id)], (error, result) => {
-                                if (error) return res.status(400).json({ error });
-                                res.status(200).json({ message: 'hasiktir lan '});
-                            });
-
-                        });
-                                
-                    });
-                
-                });
-        });
-
+            queryString = 'CALL sp_arizali_hazir_pc_bileseni_ekle(?, ?)';
+            global.db.query(queryString, [parseInt(req.params.id), req.body.desc], (error, result) => {
+                if (error) return res.status(400).json({ error });
+                res.status(200).json({ message: 'added broken computer part successfully'});
+            });
         } else {
             return res.status(400).json({ message: 'Invalid type entered' });
         }

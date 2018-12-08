@@ -23,6 +23,7 @@ const unregisteredProduct = WrappedComponent => {
 		onSubmitClicked(employeeID) {
 			// chosenForRegisteration içinde seçilen product var 
 			//zimmetleneceği personelin id'side parametre olarak registeration modelden geliyor.
+			console.log(this.state.chosenForRegisteration);
 			this.props.registerProduct({ 
 				employeeID,
 				product: this.state.chosenForRegisteration,

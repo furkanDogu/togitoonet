@@ -23,7 +23,7 @@ export default WrappedComponent => {
 			if (productType === 'unregisteredProduct') {
 				return this.filterProductsWithKey(this.props.unregisteredProducts);
 			} else if (productType === 'registeredProduct') {
-				return this.props.registeredProducts;
+				return this.filterProductsWithKey(this.props.registeredProducts);
 			} else {
 				//return this.props.brokenProducts
 			}
@@ -41,13 +41,28 @@ export default WrappedComponent => {
 						itemInfo = itemInfo.concat(item.pcAdi, ' ', 'P-' +item.pcID);
 					}
 					itemInfo = itemInfo.replace(/ +/g, "");
-					let searchKeyNew = this.state.searchKey;
-					searchKeyNew = searchKeyNew.replace(/ +/, "");
+					let searchKeyNew = this.state.searchKey.replace(/ +/, "");
 					return itemInfo.toLowerCase().trim().includes(searchKeyNew.toLowerCase().trim());
 					
 				});
 			} else {
-				return products;
+				// id isim departman
+				filteredProducts = products.filter((item) => {
+					let itemInfo = null;
+					itemInfo = item.kategoriAdi;
+					if (item.Tip === 'Bileşen') { // if current product's tip = bileşen we need to change the way we look for id and name.
+						itemInfo = itemInfo.concat(item.bilesenAdi, 'B-', item.bilesenID);
+					} else {
+						itemInfo = itemInfo.concat(item.pcAdi, ' ', 'P-' +item.pcID);
+					}
+					itemInfo = itemInfo.concat(item.personelAdi);
+					itemInfo = itemInfo.concat(item.departmanAdi);
+					itemInfo = itemInfo.replace(/ +/, "");
+					let searchKeyNew = this.state.searchKey.replace(/ +/, "");
+					console.log(itemInfo);
+					return itemInfo.toLowerCase().trim().includes(searchKeyNew.toLowerCase().trim());
+					
+				});
 			}
 			return filteredProducts;
 			
@@ -55,7 +70,7 @@ export default WrappedComponent => {
 		giveTextsToSearchBar() {
 			const { productType } = this.props;
 			 if (productType === 'registeredProduct') {
-				return ['Lütfen personele ait anahtar giriniz', 'ID / İsim / Departman'];
+				return ['Lütfen personele ya da ürüne ait anahtar giriniz', 'ID / İsim / Departman'];
 			} else {
 				return ['Lütfen ürüne ait anahtar giriniz', 'ID / Model / Kategori' ];
 			}
@@ -73,7 +88,6 @@ export default WrappedComponent => {
 			}
 		}
 		render() {
-			console.log(this.props.productType);
 			const { hoc } = this.props;
 			return (
 				<div>

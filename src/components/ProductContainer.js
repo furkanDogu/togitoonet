@@ -63,7 +63,7 @@ class ProductContainer extends React.Component {
 											id={"P-"+product.pcID}
 											category={'Hazır PC'}
 											brand={product.markaAdi}
-											stockAmount={product.stokMiktari}z	
+											stockAmount={product.stokMiktari}
 										/>
 									</Grid>
 								);

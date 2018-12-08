@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { Button } from 'react-bootstrap';
 import Grid from '@material-ui/core/Grid';
 
+
 const styles = {
 	card: {
 		minWidth: 275,
