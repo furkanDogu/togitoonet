@@ -15,7 +15,7 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
         // if coming request wants to save a new component
         let queryString = null;
         if (req.params.type === 'component') {
-            queryString = 'CALL bilesen_ekle(?, ?, ?, ?, ?, ?, ?, ?);';
+            queryString = 'CALL sp_bilesen_ekle(?, ?, ?, ?, ?, ?, ?, ?);';
             global.db.query(queryString, 
             [
                 req.body.bilesenAdi,
@@ -41,7 +41,7 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
             
         } else if (req.params.type === 'allOne') {
             // if coming requres want to save a new all in one
-            queryString = 'CALL hazir_pc_ekle(?, ?, ?, ?, ?, ?, ?);';
+            queryString = 'CALL sp_hazir_pc_ekle(?, ?, ?, ?, ?, ?, ?);';
             global.db.query(queryString,
                 [
                     parseInt(req.body.pcMarkaID),
@@ -111,13 +111,13 @@ router.post('/register/:type/:id', verifyToken, verifyQuantity, (req, res, next)
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = null;
         if (req.params.type === 'component') {
-            queryString = 'CALL bilesen_zimmetle(?, ?)';
+            queryString = 'CALL sp_bilesen_zimmetle(?, ?)';
             global.db.query(queryString, [req.params.id, parseInt(req.body.personelID)], (error, result)=> {
                 if (error) return res.status(500).json({ error: error });
                 res.status(200).json({ ok: ' component successfully registered '});
             });
         } else if(req.params.type === 'allOne') {
-            queryString = 'CALL hazir_pc_zimmetle(?, ?)';
+            queryString = 'CALL sp_hazir_pc_zimmetle(?, ?)';
             global.db.query(queryString, [req.params.id, parseInt(req.body.personelID)], (error, result) => {
                 if (error) return res.status(500).json({ error: error });
                 res.status(200).json({ ok: 'All in one pc is successfully registered '});
@@ -139,7 +139,7 @@ router.post('/removereg/:type/:id', verifyToken, (req, res, next) => {
         let queryString = null;
         if (req.params.type === 'component') {
             // removing a component registeration from a person
-            queryString = 'CALL bilesen_zimmet_kaldir(?)';
+            queryString = 'CALL sp_bilesen_zimmet_kaldir(?)';
             global.db.query(queryString, [req.params.id], (error) => {
                 if (error) return res.status(500).json({ error: error });
                 res.status(200).json({ message: 'Successfully removed registeration from component' });
@@ -159,12 +159,12 @@ router.post('/removereg/:type/:id', verifyToken, (req, res, next) => {
 });
 
 // adding broken product
-// takes zimmetID for components and  takes bilesenIDs, zimmetIDs and broken product zimmetID for all in one pc
+// takes zimmetID for components and  takes zimmetID for allOne pc part
 router.post('/broken/:type/:id', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = null;
         if (req.params.type === 'component') {
-            queryString = 'CALL arizali_bilesen_ekle(?, ?)';
+            queryString = 'CALL sp_arizali_bilesen_ekle(?, ?)';
             global.db.query(queryString, [parseInt(req.params.id), req.body.desc], (error, result) => {
                 if (error) return res.status(400).json({ error });
                 res.status(200).json({ message: 'added broken product successfully' });
@@ -207,10 +207,22 @@ router.get('/unregistered', verifyToken, (req, res, next) => {
 router.get('/registered', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin','sales'], req, res, () => {
         let queryString = 'SELECT * from view_zimmetli_bilesenler';
-        global.db.query(queryString, (error, result) => {
+        global.db.query(queryString, (error, b_result) => {
             if (error) return res.status(500).json({ error });
-            res.status(200).json({ result });
-
+            //res.status(200).json({ result });
+            queryString = 'SELECT * FROM view_zimmetli_hazir_pcler';
+            global.db.query(queryString, (error, h_result) => {
+                if (error) return res.status(500).json({ error });
+                const result = [...h_result, ...b_result];
+                queryString = 'SELECT * FROM view_zimmetli_pc_parcalari';
+                global.db.query(queryString, (error, response) => {
+                    if (error) return res.status(500).json({ error });
+                    res.status(200).json({
+                        result,
+                        'parcalar': response
+                    });
+                });
+            });
         });
     });
 });

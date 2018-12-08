@@ -14,8 +14,13 @@ export const GET_EMPLOYEES = 'get_employees';
 export const SET_EMPLOYEES = 'set_employees';
 
 export const REGISTER_PRODUCT = 'register_product';
+export const REMOVE_REGISTERATION = 'remove_registeration';
 
 export const GET_REGISTERED_PRODUCTS = 'get_registered_products';
 export const SET_REGISTERED_PRODUCTS = 'set_registered_products';
+export const SET_REGISTERED_PC_COMPONENTS = 'set_registered_pc_components';
+
+
+
 
 

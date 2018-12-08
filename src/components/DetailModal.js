@@ -23,7 +23,7 @@ const renderProductName = (product) => {
 const renderComponents = pcComponents => {
 	const { subHeader, component } = styles;
 	return pcComponents.map((product, index) => (
-		<div style={component}>
+		<div key={index} style={component}>
 			<Grid container spacing={8} alignItems={'center'} direction={'row'}>
 				<Grid item xs={4}>
 					<h4 style={subHeader}>Model: </h4>

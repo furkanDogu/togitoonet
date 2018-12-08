@@ -51,6 +51,7 @@ class ProductContainer extends React.Component {
 											stockAmount={product.stokMiktari}
 											registerationDate={product.zimmetTarihi}
 											registeredPerson={product.personelAdi}
+											registerationID={product.zimmetID}
 										/>
 									</Grid>
 								);
@@ -64,6 +65,9 @@ class ProductContainer extends React.Component {
 											category={'Hazır PC'}
 											brand={product.markaAdi}
 											stockAmount={product.stokMiktari}
+											registerationDate={product.zimmetTarihi}
+											registeredPerson={product.personelAdi}
+											registerationID={product.zimmetID}
 										/>
 									</Grid>
 								);

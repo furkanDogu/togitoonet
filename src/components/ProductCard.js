@@ -28,8 +28,8 @@ const styles = {
 		marginBottom: 4
 	}
 };
-const renderSpecialProp = (stockAmount, registerationDate, registeredPerson, styles ) => {
-	if (stockAmount) {
+const renderSpecialProp = (stockAmount, registerationDate, registeredPerson, styles) => {
+	if (stockAmount && !registerationDate) {
 		return <Typography variant="subheading" className={styles.typo}>Stok Miktarı: {stockAmount}</Typography>;
 	} else if (registerationDate) {
 		return (
@@ -41,7 +41,7 @@ const renderSpecialProp = (stockAmount, registerationDate, registeredPerson, sty
 	} else return null;
 }
 function ProductCard(props) {
-	const { classes, name, buttons, id, category, brand, stockAmount, registerationDate, registeredPerson } = props;
+	const { classes, name, buttons, id, category, brand, stockAmount, registerationDate, registeredPerson, registerationID } = props;
 
 	return (
 		<Card className={classes.card}>
@@ -67,7 +67,7 @@ function ProductCard(props) {
 			</CardContent>
 			<CardActions>
 				{buttons.map((button, index) => (
-					<Button bsStyle={button.bsStyle} onClick={() => button.onClick(id)} key={index}>
+					<Button bsStyle={button.bsStyle} onClick={() => button.onClick(id, registerationID, registeredPerson)} key={index}>
 						{button.text}
 					</Button>
 				))}

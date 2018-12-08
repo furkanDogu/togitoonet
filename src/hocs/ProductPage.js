@@ -53,13 +53,12 @@ export default WrappedComponent => {
 					if (item.Tip === 'Bileşen') { // if current product's tip = bileşen we need to change the way we look for id and name.
 						itemInfo = itemInfo.concat(item.bilesenAdi, 'B-', item.bilesenID);
 					} else {
-						itemInfo = itemInfo.concat(item.pcAdi, ' ', 'P-' +item.pcID);
+						itemInfo = itemInfo.concat(item.pcAdi, 'P-' + item.pcID);
 					}
 					itemInfo = itemInfo.concat(item.personelAdi);
 					itemInfo = itemInfo.concat(item.departmanAdi);
-					itemInfo = itemInfo.replace(/ +/, "");
-					let searchKeyNew = this.state.searchKey.replace(/ +/, "");
-					console.log(itemInfo);
+					itemInfo = itemInfo.replace(/ +/g, "");
+					let searchKeyNew = this.state.searchKey.replace(/ +/g, "");
 					return itemInfo.toLowerCase().trim().includes(searchKeyNew.toLowerCase().trim());
 					
 				});

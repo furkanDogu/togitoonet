@@ -57,6 +57,7 @@ class RegisterationModal extends React.Component {
                     isOpen={this.state.warningModalOpen}
                     onClose={this.handleWarningModal} 
                     header="Eksik Personel Seçimi"
+					renderOkayButton={false}
                 />
 			</div>
 				

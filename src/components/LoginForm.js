@@ -89,12 +89,14 @@ class LoginForm extends React.Component {
                     isOpen={this.props.isLoginFailed}
                     onClose={this.props.hideLoginErrorModal}
                     header={"Hatalı Giriş"}
+                    renderOkayButton={false}
                 />
                 <ErrorModal
                     text="Lütfen geçerli e posta ve şifre giriniz"
                     isOpen={this.state.isInputInvalid}
                     onClose={this.hideInvalidErrorModal} 
                     header="Geçersiz Giriş"
+                    renderOkayButton={false}
                     
                 />
             </div>

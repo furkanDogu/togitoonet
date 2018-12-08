@@ -62,7 +62,7 @@ router.post('/register/:id',verifyToken, verifyTitle, (req, res, next) => {
     return auth.doOnlyWith(['admin'], req, res, () => {
         bcrypt.hash(req.body.password, 10, (error, hash) => {
             if (error) return res.status(400).json({ error });
-            let queryString = 'CALL user_ekle(?, ?, ?)';
+            let queryString = 'CALL sp_user_ekle(?, ?, ?)';
             global.db.query(queryString, [parseInt(req.params.id), hash, req.newUserRole], (error, result) => {
                 if (error) return res.status(400).json({ error });
                 res.status(200).json({ message: 'User succesfully added' });

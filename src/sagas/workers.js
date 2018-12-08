@@ -4,7 +4,8 @@ import {
     SET_UNREGISTERED_PRODUCTS,
     SET_UNREGISTERED_PC_COMPONENTS,
     SET_EMPLOYEES,
-    SET_REGISTERED_PRODUCTS
+    SET_REGISTERED_PRODUCTS,
+    SET_REGISTERED_PC_COMPONENTS
 } from '../actions/types';
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
@@ -18,7 +19,8 @@ function getTokenFromStorage() {
     return config;
 }
 
-
+// CATCH BLOKLARININ İÇİNE HERHANGİ BİR HATA DURUMUNDA AÇILACAK OLAN HER DRAWER'A KONULMUŞ BİR MODAL İÇİN GÖRÜNÜRLÜĞÜ TRUE YAPAN BİR ACTİON KOY.
+// BAŞARILI GERÇEKLEŞEN İŞLEMLERİN SONUNA DA BAŞARI BELİRTECEK BİR MODAL YAP VE ONUN GÖRÜNÜRLÜĞÜNÜ TRUE
 const URL = 'http://localhost:3001';
 export function* fetchUserInfoAsync(action) {
     try {
@@ -113,19 +115,38 @@ export function* registerProductsAsync(action) {
         }
 }
 
-export function* getRegisteredProductsAsync(action) {
-    let config = {
-        headers: {
-          'web-token': action.payload
-        }
-    }
+export function* getRegisteredProductsAsync() {
+    
     try {   
         const endPoint = URL+'/product/registered';
-        const response = yield axios.get(endPoint, config);
+        const response = yield axios.get(endPoint, getTokenFromStorage());
         yield put({ type: SET_REGISTERED_PRODUCTS, payload: response.data });
+        yield put({ type: SET_REGISTERED_PC_COMPONENTS, payload: response.data });
 
     } catch(e) {
         console.log(e);
     }
 }
+// this async function will call the api and remove the registeration for any given product id.
+export function* removeRegisterationAsync(action) {
+    const { productID, registerationID } = action.payload;
+    let splittedID = productID.split('-');
+    let endPoint = null;
+    let productType = null;
+    if (splittedID[0] === 'B') {
+         // if we are removing component registeration from a person
+        productType = "component";
+    } else {
+        // if we are removing all in one pc's registeration 
+        productType = "allOne";
+    }
+    try {
+        endPoint = `${URL}/product/removereg/${productType}/${parseInt(registerationID)}`;
+        yield axios.post(endPoint, { }, getTokenFromStorage())
+        yield getRegisteredProductsAsync();
+
+    } catch(e) {
+        console.log(e);
+    }
+} 
 

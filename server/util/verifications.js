@@ -32,7 +32,7 @@ const verifyQuantity = (req, res, next) => {
             next();
          });
     } else if (req.params.type === 'allOne') {
-        queryString = 'CALL hazir_pc_miktar_kontrol(?)';
+        queryString = 'CALL sp_hazir_pc_miktar_kontrol(?)';
         global.db.query(queryString, [req.params.id], (error, result) => {
             if (error) {
                 return res.status(400).json({ error: error });
