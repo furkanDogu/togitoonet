@@ -226,5 +226,13 @@ router.get('/registered', verifyToken, (req, res, next) => {
         });
     });
 });
-
+router.get('/broken', verifyToken, (req,res,next) => {
+    return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
+        let queryString = 'SELECT * from view_arizali_bilesenler';
+        global.db.query(queryString, (error, result) => {
+            if (error) return res.status(500).json({ error });
+            res.status(200).json({ result });
+        });
+    });
+});
 module.exports = router;

@@ -7,7 +7,8 @@ import {
     registerProductsAsync,
     getRegisteredProductsAsync,
     removeRegisterationAsync,
-    addBrokenProductAsync
+    addBrokenProductAsync,
+    getBrokenProductsAsync
 } from './workers';
 
 import {

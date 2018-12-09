@@ -74,17 +74,21 @@ class DrawerMenu extends React.Component {
 										</ListItemIcon>
 										<ListItemText inset primary="Zimmetsiz" />
 									</ListItem>
-									<ListItem 
-									button 
-									style={{ paddingLeft: 35 }}
-									onClick={() => this.props.history.push('/registeredProducts')}
+									<ListItem
+										button
+										style={{ paddingLeft: 35 }}
+										onClick={() => this.props.history.push('/registeredProducts')}
 									>
 										<ListItemIcon>
 											<LockIcon />
 										</ListItemIcon>
 										<ListItemText inset primary="Zimmetli" />
 									</ListItem>
-									<ListItem button style={{ paddingLeft: 35 }}>
+									<ListItem 
+										button 
+										style={{ paddingLeft: 35 }}
+										onClick={() => this.props.history.push('/brokenProducts')}
+									>
 										<ListItemIcon>
 											<DeleteIcon />
 										</ListItemIcon>

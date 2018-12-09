@@ -2,7 +2,8 @@ import {
     SET_UNREGISTERED_PRODUCTS, 
     SET_UNREGISTERED_PC_COMPONENTS,
     SET_REGISTERED_PRODUCTS,
-    SET_REGISTERED_PC_COMPONENTS
+    SET_REGISTERED_PC_COMPONENTS,
+    SET_BROKEN_PRODUCTS
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -24,6 +25,8 @@ export default (state = INITIAL_STATE, action) => {
             return {...state, registeredProducts: [...action.payload.result]};
         case SET_REGISTERED_PC_COMPONENTS:
             return {...state, registeredPcComponents: [...action.payload.parcalar]};
+        case SET_BROKEN_PRODUCTS:
+            return {...state, brokenProducts: [...action.payload.result]};
         default: return state;
     }
 }

@@ -13,7 +13,6 @@ const brokenProduct = WrappedComponent => {
                     text: 'Detay Gör',
                     bsStyle: 'primary'
                 }
-
             ]
             return (
                 <WrappedComponent buttons={buttons} {...this.props} />

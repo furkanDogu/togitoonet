@@ -5,7 +5,8 @@ import {
     SET_UNREGISTERED_PC_COMPONENTS,
     SET_EMPLOYEES,
     SET_REGISTERED_PRODUCTS,
-    SET_REGISTERED_PC_COMPONENTS
+    SET_REGISTERED_PC_COMPONENTS,
+    SET_BROKEN_PRODUCTS
 } from '../actions/types';
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
@@ -162,6 +163,13 @@ export function* addBrokenProductAsync(action) {
 }
 
 export function* getBrokenProductsAsync() {
-    //
+    let endPoint = URL + '/product/broken';
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_BROKEN_PRODUCTS, payload: result.data });
+
+    } catch(e) {
+        console.log(e);
+    }
 }
 

@@ -17,20 +17,22 @@ const styles = {
 		marginBottom: 4
 	}
 };
-const renderSpecialProp = (stockAmount, registerationDate, registeredPerson, styles) => {
+const renderSpecialProp = (stockAmount, registerationDate, registeredPerson, styles, errorDate) => {
 	if (stockAmount && !registerationDate) {
 		return <Typography variant="subheading" className={styles.typo}>Stok Miktarı: {stockAmount}</Typography>;
 	} else if (registerationDate) {
 		return (
 			<div>
 				<Typography variant="subheading" className={styles.typo}>Zimmet Tarihi: {registerationDate}</Typography>
-				<Typography variant="subheading" className={styles.typo}>Zimmetlenen Kişi: {registeredPerson}</Typography>
+				
 			</div>
 		);
+	} else if (errorDate) {
+		return <Typography variant="subheading" className={styles.typo}>ArızaTarihi: {errorDate}</Typography>;
 	} else return null;
 }
 function ProductCard(props) {
-	const { classes, name, buttons, id, category, brand, stockAmount, registerationDate, registeredPerson, registerationID } = props;
+	const { classes, name, buttons, id, category, brand, stockAmount, registerationDate, registeredPerson, registerationID, errorDate } = props;
 
 	return (
 		<Card className={classes.card}>
@@ -51,7 +53,7 @@ function ProductCard(props) {
 					{category}
 				</Typography>
 				<Typography variant="subheading" className={classes.typo}>Marka: {brand}</Typography>
-				{renderSpecialProp(stockAmount, registerationDate, registeredPerson, classes )}
+				{renderSpecialProp(stockAmount, registerationDate, registeredPerson, classes, errorDate )}
 				
 			</CardContent>
 			<CardActions>

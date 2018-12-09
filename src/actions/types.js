@@ -22,6 +22,7 @@ export const SET_REGISTERED_PC_COMPONENTS = 'set_registered_pc_components';
 
 export const ADD_BROKEN_PRODUCT = 'add_broken_product';
 export const GET_BROKEN_PRODUCTS = 'get_broken_products';
+export const SET_BROKEN_PRODUCTS = 'set_broken_products';
 
 
 

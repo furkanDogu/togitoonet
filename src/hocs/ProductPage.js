@@ -25,7 +25,7 @@ export default WrappedComponent => {
 			} else if (productType === 'registeredProduct') {
 				return this.filterProductsWithKey(this.props.registeredProducts);
 			} else {
-				//return this.props.brokenProducts
+				return this.filterProductsWithKey(this.props.brokenProducts);
 			}
 		}
 		filterProductsWithKey(products) {
@@ -76,14 +76,14 @@ export default WrappedComponent => {
 		}
 		componentDidMount() {
 			
-			const { getUnregisteredProducts, getEmployees, productType, getRegisteredProducts } = this.props;
+			const { getUnregisteredProducts, getEmployees, productType, getRegisteredProducts, getBrokenProducts } = this.props;
 			if (productType === 'unregisteredProduct') {
 				getUnregisteredProducts();
 				getEmployees();
 			} else if (productType === 'registeredProduct') {
 				getRegisteredProducts();
 			} else {
-				//getBrokenProducts
+				getBrokenProducts();
 			}
 		}
 		render() {

@@ -134,7 +134,8 @@ export default ({ isOpen, onClose, product, pcComponents }) => {
 						<h4>{product ? product.markaAdi : null}</h4>
 					</Grid>
 				</Grid>
-				<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+				{product ? product.zimmetID ? null : (
+					<Grid container spacing={8} alignItems={'center'} direction={'row'}>
 					<Grid item xs={4}>
 						<h4 style={subHeader}>Satın Alan Personel: </h4>
 					</Grid>
@@ -142,6 +143,41 @@ export default ({ isOpen, onClose, product, pcComponents }) => {
 						<h4>{product ? product.personelAdi : null}</h4>
 					</Grid>
 				</Grid>
+				) :null }
+				{product ? product.personelID ? (
+					<div>
+						<Grid container spacing={8} alignItems={'center'} direction={'row'} justify={'space-between'}>
+							<Grid item>
+								<h3 style={header}>Zimmet Bilgileri</h3>
+							</Grid>
+						</Grid>
+						<Divider />
+						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+							<Grid item xs={4}>
+								<h4 style={subHeader}>Zimmetlenen Kişi: </h4>
+							</Grid>
+							<Grid item xs={8}>
+								<h4>{product.personelAdi}</h4>
+							</Grid>
+						</Grid>
+						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+							<Grid item xs={4}>
+								<h4 style={subHeader}>Departmanı: </h4>
+							</Grid>
+							<Grid item xs={8}>
+								<h4>{product.departmanAdi}</h4>
+							</Grid>
+						</Grid>
+						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+							<Grid item xs={4}>
+								<h4 style={subHeader}>Zimmet Tarihi: </h4>
+							</Grid>
+							<Grid item xs={8}>
+								<h4>{product.zimmetTarihi}</h4>
+							</Grid>
+						</Grid>
+					</div>
+				) :null :null}
 				{Tip === 'Hazır PC' ? (
 					<div>
 						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
