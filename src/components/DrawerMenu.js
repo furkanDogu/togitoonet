@@ -105,7 +105,12 @@ class DrawerMenu extends React.Component {
 							</ListItem>
 							<Collapse in={addProductOptionOpen} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									<ListItem button style={{ paddingLeft: 35 }}>
+									<ListItem 
+										button 
+										style={{ paddingLeft: 35 }}
+										onClick={() => this.props.history.push('/newComponent')}
+
+									>
 										<ListItemIcon>
 											<MemoryIcon />
 										</ListItemIcon>

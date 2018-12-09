@@ -15,50 +15,71 @@ const styles = {
 	},
 	typo: {
 		marginBottom: 4
-	}
+	},
+	
 };
 const renderSpecialProp = (stockAmount, registerationDate, registeredPerson, styles, errorDate) => {
-	if (stockAmount && !registerationDate) {
+	if (stockAmount && !registerationDate && !errorDate) {
 		return <Typography variant="subheading" className={styles.typo}>Stok Miktarı: {stockAmount}</Typography>;
 	} else if (registerationDate) {
 		return (
 			<div>
-				<Typography variant="subheading" className={styles.typo}>Zimmet Tarihi: {registerationDate}</Typography>
-				
+			<Grid container wrap="nowrap" alignItems={'center'} style={{ width: 280, whiteSpace: 'nowrap', marginBottom: 5 }} direction={'row'} justify={'space-between'}>
+					<Grid item xs={6}>
+						<span style={{ fontSize: 15, fontWeight: '500' }}>Zimmet Tarihi: </span>
+					</Grid>
+					<Grid item xs={8} style={{ textOverflow: 'ellipsis', overflow: 'hidden'}}>
+						<span style={{ fontSize: 15 }}>{registerationDate}</span>
+					</Grid>
+			</Grid>
+			<Grid container wrap="nowrap" alignItems={'center'} style={{ width: 280, whiteSpace: 'nowrap', marginBottom: 5 }} direction={'row'} justify={'space-between'}>
+					<Grid item xs={6} style={{ marginRight: 15 }}>
+						<span style={{ fontSize: 15, fontWeight: '500' }}>Zimmetlenen Kişi: </span>
+					</Grid>
+					<Grid item xs={8} style={{ textOverflow: 'ellipsis', overflow: 'hidden'}}>
+						<span style={{ fontSize: 15 }}>{registeredPerson}</span>
+					</Grid>
+				</Grid>
+			
 			</div>
 		);
 	} else if (errorDate) {
-		return <Typography variant="subheading" className={styles.typo}>ArızaTarihi: {errorDate}</Typography>;
+		return <Typography variant="subheading" className={styles.typo}>ArızaTarihi: {errorDate}</Typography>; 
 	} else return null;
 }
 function ProductCard(props) {
-	const { classes, name, buttons, id, category, brand, stockAmount, registerationDate, registeredPerson, registerationID, errorDate } = props;
+	const { classes, name, buttons, id, category, brand, stockAmount, registerationDate, registeredPerson, registerationID, errorDate, errorID } = props;
 
 	return (
 		<Card className={classes.card}>
 			<CardContent>
-				<Grid container justify={'space-between'}>
-					<Grid item>
-						<Typography className={classes.typo} variant="h5" >
-							{name}
-						</Typography>
+				<Grid container wrap="nowrap" alignItems={'center'} style={{ width: 200, whiteSpace: 'nowrap', marginBottom: 5 }} direction={'row'} justify={'space-between'}>
+					<Grid item xs={8} style={{ textOverflow: 'ellipsis', overflow: 'hidden'}}>
+						<span style={{ fontSize: 20 }}>{name}</span>
 					</Grid>
-					<Grid item>
-						<Typography variant="button" className={classes.typo}>
-							{id}
-						</Typography>
+					<Grid item xs={4} style={{ 'flexBasis': 'auto' }}>
+						{id}
 					</Grid>
 				</Grid>
-				<Typography variant="caption" className={classes.typo}>
-					{category}
-				</Typography>
-				<Typography variant="subheading" className={classes.typo}>Marka: {brand}</Typography>
+				<Grid container wrap="nowrap" alignItems={'center'} style={{ width: 200, whiteSpace: 'nowrap', marginBottom: 5 }} direction={'row'} >
+					<Grid item xs={8} style={{ textOverflow: 'ellipsis', overflow: 'hidden'}}>
+						<span style={{ fontSize: 15 }}>{category}</span>
+					</Grid>
+				</Grid>
+				<Grid container wrap="nowrap" alignItems={'center'} style={{ width: 200, whiteSpace: 'nowrap', marginBottom: 5	 }} direction={'row'} >
+					<Grid item xs={4} style={{ textOverflow: 'ellipsis', overflow: 'hidden'}}>
+						<span style={{ fontSize: 15, fontWeight: '500' }}>Marka:</span>
+					</Grid>
+					<Grid item xs={8} style={{ textOverflow: 'ellipsis', overflow: 'hidden'}}>
+						<span style={{ fontSize: 15 }}>{brand}</span>
+					</Grid>
+				</Grid>
 				{renderSpecialProp(stockAmount, registerationDate, registeredPerson, classes, errorDate )}
 				
 			</CardContent>
 			<CardActions>
 				{buttons.map((button, index) => (
-					<Button bsStyle={button.bsStyle} onClick={() => button.onClick(id, registerationID, registeredPerson)} key={index}>
+					<Button bsStyle={button.bsStyle} onClick={() => button.onClick(id, registerationID, registeredPerson, errorID)} key={index}>
 						{button.text}
 					</Button>
 				))}

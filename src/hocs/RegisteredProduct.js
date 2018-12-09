@@ -51,9 +51,9 @@ const registeredProduct = WrappedComponent => {
                 
         }
         handleBrokenModal(id, registerationID) {
-            if (id) {
+            if (registerationID) {
                 const ID = this.splitID(id);
-                this.setState({ chosen: this.filterChosenProduct(ID[0], ID[1])}, () => {
+                this.setState({ chosen: this.filterChosenProduct(parseInt(registerationID))}, () => {
                     if (this.state.chosen.Tip === 'Hazır PC') {
                         this.setState({ pcComponents: this.filterChosenPcComponents(registerationID) });
                     }
@@ -62,10 +62,8 @@ const registeredProduct = WrappedComponent => {
             this.setState(state => ({ brokenModalOpen: !state.brokenModalOpen }));
         }
         // searches for the product with given ID and type 
-        filterChosenProduct(id, IDtype) {
-			
-			const type = IDtype === 'B' ? 'bilesenID' : 'pcID';
-			return this.props.registeredProductsData.find(product => product[type] === id);
+        filterChosenProduct(id) {
+			return this.props.registeredProductsData.find(product => product.zimmetID === id);
         }
         // finds components of all in one pc. It is needed because we need to show components of all in one pc in detail modal
         filterChosenPcComponents(id) {
@@ -79,9 +77,9 @@ const registeredProduct = WrappedComponent => {
         }
          // will take id as parameter and detect which product's details will be shown in detail modal then make detail modal visible
         handleDetailModal(id, registerationID) {
-			if (id) {
+			if (id ,registerationID) {
                 const ID = this.splitID(id);
-				this.setState({ chosen: this.filterChosenProduct(ID[0], ID[1]) }, () => {
+				this.setState({ chosen: this.filterChosenProduct(parseInt(registerationID))}, () => {
                     if (this.state.chosen.Tip === 'Hazır PC') {
                         this.setState({ pcComponents: this.filterChosenPcComponents(registerationID) });
                     }
@@ -131,11 +129,11 @@ const registeredProduct = WrappedComponent => {
                 <div>
                     <WrappedComponent buttons={buttons} {...this.props}/>
                     <DetailModal
-                            product={this.state.chosen}
-                            isOpen={this.state.detailModalOpen}
-                            onClose={this.handleDetailModal}
-                            pcComponents={this.state.pcComponents}
-                        />
+                        product={this.state.chosen}
+                        isOpen={this.state.detailModalOpen}
+                        onClose={this.handleDetailModal}
+                        pcComponents={this.state.pcComponents}
+                    />
                     <ErrorModal 
                         text={this.state.productID +" numaralı ürünün zimmetini " + this.state.registeredPerson + " kişisi üzerinden kaldırmak üzeresiniz"}
                         isOpen={this.state.errorModalOpen}

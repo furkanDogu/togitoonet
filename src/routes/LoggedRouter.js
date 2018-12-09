@@ -29,6 +29,10 @@ const LoggedRouter = () => {
 						path="/brokenProducts"
 						render={() => <BrokenProduct hoc={brokenProduct} productType={'brokenProduct'} />}
 					/>
+					<Route
+						path="/newComponent"
+						render={() => <div style={{ marginTop: 80 }}>Yeni ürün ekleme</div>}
+					/>
 				</Switch>
 			</Dashboard>
 		</BrowserRouter>

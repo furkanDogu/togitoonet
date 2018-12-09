@@ -1,27 +1,52 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import BrokenPartDetail from '../components/BrokenPartDetail';
 
 const brokenProduct = WrappedComponent => {
     class BrokenProduct extends React.Component {
         constructor(props) {
             super(props);
+            this.state = {
+                chosen: null,
+                detailModalOpen: false,
+            };
+            this.handleDetailModal = this.handleDetailModal.bind(this);
+        }
+        filterChosenProduct(id) {
+			return this.props.brokenProducts.find(product => product.arizaID  === id);
+        }
+        handleDetailModal(id, registerationID, registeredPerson, errorID) {
+            if (errorID) {
+                this.setState({ chosen: this.filterChosenProduct(errorID) });
+            } 
+            this.setState(state => ({ detailModalOpen: !state.detailModalOpen }));
         }
         render() {
             const buttons = [
                 {
-                    onClick: () => console.log("clicked to info button"),
+                    onClick: this.handleDetailModal,
                     text: 'Detay Gör',
                     bsStyle: 'primary'
                 }
             ]
             return (
-                <WrappedComponent buttons={buttons} {...this.props} />
+                <div>
+                    <WrappedComponent buttons={buttons} {...this.props} />
+                    <BrokenPartDetail
+                        product={this.state.chosen}
+                        isOpen={this.state.detailModalOpen}
+                        onClose={this.handleDetailModal}
+                    />
+                </div>
             );
         }
 
 
     }
-    return BrokenProduct;
+    const mapStateToProps = state => ({
+        brokenProducts: state.productReducer.brokenProducts
+    });
+    return connect(mapStateToProps)(BrokenProduct);
     
 }
 export default brokenProduct;

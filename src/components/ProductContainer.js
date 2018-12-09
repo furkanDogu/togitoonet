@@ -53,6 +53,7 @@ class ProductContainer extends React.Component {
 											registeredPerson={product.personelAdi}
 											registerationID={product.zimmetID}
 											errorDate={product.arizaTarihi}
+											errorID={product.arizaID}
 										/>
 									</Grid>
 								);
