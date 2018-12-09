@@ -60,15 +60,11 @@ export function* checkIfAuthAsync() {
     }
 }
 
-export function* getUnregisteredProductsAsync(action) {
-    let config = {
-        headers: {
-          'web-token': action.payload
-        }
-    }
+export function* getUnregisteredProductsAsync() {
+
     try {   
         const endPoint = URL+'/product/unregistered';
-        const response = yield axios.get(endPoint, config);
+        const response = yield axios.get(endPoint, getTokenFromStorage());
         yield put({ type: SET_UNREGISTERED_PRODUCTS, payload: response.data });
         yield put({ type: SET_UNREGISTERED_PC_COMPONENTS, payload: response.data });
     } catch(e) {
@@ -77,7 +73,7 @@ export function* getUnregisteredProductsAsync(action) {
 
 }
 
-export function* getEmployeesAsync(action) {
+export function* getEmployeesAsync() {
     
     try {
         const endPoint = URL+'/user';
@@ -88,7 +84,7 @@ export function* getEmployeesAsync(action) {
     }
 }
 export function* registerProductsAsync(action) {
-    const { product, employeeID, token } = action.payload;
+    const { product, employeeID } = action.payload;
     let type = null;
     let id = null;
     let endPoint = null;
@@ -101,15 +97,12 @@ export function* registerProductsAsync(action) {
         id = product['pcID'];
     }
         try {
-            const action = {
-                payload: token
-            };
             endPoint = `${URL}/product/register/${type}/${id}`;
             yield axios.post(endPoint, {
                 personelID: employeeID
             },getTokenFromStorage());
             
-            yield getUnregisteredProductsAsync(action);
+            yield getUnregisteredProductsAsync();
         } catch(e) {
             console.log(e);
         }
@@ -149,4 +142,26 @@ export function* removeRegisterationAsync(action) {
         console.log(e);
     }
 } 
+
+export function* addBrokenProductAsync(action) {
+    const { desc, registerationID, type } = action.payload;
+    let endPoint = null;
+    try {
+        if (type === 'component') {
+            endPoint = `${URL}/product/broken/component/${parseInt(registerationID)}`;
+            yield axios.post(endPoint, { desc }, getTokenFromStorage());
+            
+        } else {
+            endPoint = `${URL}/product/broken/allOne/${parseInt(registerationID)}`;
+            yield axios.post(endPoint, { desc }, getTokenFromStorage());
+        }
+        yield getRegisteredProductsAsync();
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* getBrokenProductsAsync() {
+    //
+}
 

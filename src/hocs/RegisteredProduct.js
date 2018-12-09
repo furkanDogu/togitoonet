@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import DetailModal from '../components/DetailModal';
 import ErrorModal from '../components/ErrorModal';
-import { removeRegisteration } from '../actions/productActions';
+import { removeRegisteration, addBrokenProduct } from '../actions/productActions';
 import BrokenModal from '../components/BrokenModal';
 
 const registeredProduct = WrappedComponent => {
@@ -13,7 +13,7 @@ const registeredProduct = WrappedComponent => {
         constructor(props) {
             super(props);
             this.state= {
-                chosenForDetail: null, // if user clicks any product card's 'detail' button, then this will be set 
+                chosen: null, // if user clicks any product card's 'detail' button, then this will be set 
                 detailModalOpen: false,
                 registeredPerson: null, // if user clicks any product card's 'remove reg.' button, then this will be set 
                 productID: null,  // if user clicks any product card's 'remove reg.' button, then this will be set 
@@ -28,6 +28,27 @@ const registeredProduct = WrappedComponent => {
             this.handleErrorModal = this.handleErrorModal.bind(this);
             this.handleRemovingRegisteration = this.handleRemovingRegisteration.bind(this);
             this.handleBrokenModal = this.handleBrokenModal.bind(this);
+            this.onBrokenClicked = this.onBrokenClicked.bind(this);
+        }
+        // if registeration id is not sent , that means it's just a component and we can directly add the chosen to broken parts
+        // but if registerationID is sent, that means it's an all in one pc component so we just need to remove specific part of all in one pc
+        onBrokenClicked(desc, registerationID) {
+            let id = null;
+            let type = null;
+            if (registerationID) {
+                id = registerationID;
+                type = 'allOne';
+            } else {
+                id = this.state.chosen.zimmetID
+                type = 'component';
+            }
+            
+            this.props.addBrokenProduct({
+                desc,
+                registerationID: id,
+                type
+            });
+                
         }
         handleBrokenModal(id, registerationID) {
             if (id) {
@@ -128,6 +149,7 @@ const registeredProduct = WrappedComponent => {
                         isOpen={this.state.brokenModalOpen}
                         product={this.state.chosen}
                         pcComponents={this.state.pcComponents}
+                        onBroken={this.onBrokenClicked}
                     />
                 </div>
                 
@@ -141,7 +163,8 @@ const registeredProduct = WrappedComponent => {
         registeredPcComponents: state.productReducer.registeredPcComponents
     });
     const mapDispatchToProps = {
-        removeRegisteration
+        removeRegisteration,
+        addBrokenProduct
     };
     return withRouter(connect(mapStateToProps, mapDispatchToProps)(RegisteredProduct));
 }

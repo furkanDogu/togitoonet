@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUnregisteredProducts, getRegisteredProducts } from '../actions/productActions';
+import { getUnregisteredProducts, getRegisteredProducts, getBrokenProducts } from '../actions/productActions';
 import { getEmployees } from '../actions/userActions';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -76,12 +76,12 @@ export default WrappedComponent => {
 		}
 		componentDidMount() {
 			
-			const { getUnregisteredProducts, token, getEmployees, productType, getRegisteredProducts } = this.props;
+			const { getUnregisteredProducts, getEmployees, productType, getRegisteredProducts } = this.props;
 			if (productType === 'unregisteredProduct') {
-				getUnregisteredProducts(token);
+				getUnregisteredProducts();
 				getEmployees();
 			} else if (productType === 'registeredProduct') {
-				getRegisteredProducts(token);
+				getRegisteredProducts();
 			} else {
 				//getBrokenProducts
 			}
@@ -115,12 +115,13 @@ export default WrappedComponent => {
 	const mapStateToProps = state => ({
 		unregisteredProducts: state.productReducer.unregisteredProducts,
 		registeredProducts: state.productReducer.registeredProducts,
-		token: state.userReducer.token,
+		brokenProducts: state.productReducer.brokenProducts,
 	});
 	const mapDispatchToProps = {
 		getUnregisteredProducts,
-		getEmployees,
-		getRegisteredProducts
+		getRegisteredProducts,
+		getBrokenProducts,
+		getEmployees
 	};
 	return connect(
 		mapStateToProps,

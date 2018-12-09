@@ -6,7 +6,8 @@ import {
     getEmployeesAsync,
     registerProductsAsync,
     getRegisteredProductsAsync,
-    removeRegisterationAsync
+    removeRegisterationAsync,
+    addBrokenProductAsync
 } from './workers';
 
 import {
@@ -16,7 +17,9 @@ import {
     GET_EMPLOYEES,
     REGISTER_PRODUCT,
     GET_REGISTERED_PRODUCTS,
-    REMOVE_REGISTERATION
+    REMOVE_REGISTERATION,
+    ADD_BROKEN_PRODUCT,
+    GET_BROKEN_PRODUCTS
 } from '../actions/types';
 
 
@@ -28,6 +31,8 @@ export default function* rootSaga() {
         takeLatest(GET_EMPLOYEES, getEmployeesAsync),
         takeLatest(REGISTER_PRODUCT, registerProductsAsync),
         takeLatest(GET_REGISTERED_PRODUCTS, getRegisteredProductsAsync),
-        takeLatest(REMOVE_REGISTERATION, removeRegisterationAsync)
+        takeLatest(REMOVE_REGISTERATION, removeRegisterationAsync),
+        takeLatest(ADD_BROKEN_PRODUCT, addBrokenProductAsync),
+        takeLatest(GET_BROKEN_PRODUCTS, getBrokenProductsAsync)
     ]);
 }

@@ -13,17 +13,6 @@ const styles = {
 	card: {
 		minWidth: 275,
 	},
-	bullet: {
-		display: 'inline-block',
-		margin: '0 2px',
-		transform: 'scale(0.8)',
-	},
-	title: {
-		fontSize: 14,
-	},
-	pos: {
-		marginBottom: 12,
-	},
 	typo: {
 		marginBottom: 4
 	}
@@ -48,8 +37,8 @@ function ProductCard(props) {
 			<CardContent>
 				<Grid container justify={'space-between'}>
 					<Grid item>
-						<Typography className={classes.typo} variant="h5">
-								{name}
+						<Typography className={classes.typo} variant="h5" >
+							{name}
 						</Typography>
 					</Grid>
 					<Grid item>
