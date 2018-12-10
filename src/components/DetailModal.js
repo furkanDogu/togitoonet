@@ -17,16 +17,16 @@ const checkIfHasProducts = pcComponents => {
 	}
 	return false;
 };
-const renderProductName = (product) => {
+const renderProductName = product => {
 	return Tip === 'Bileşen' ? product.bilesenAdi : product.pcAdi;
-}
+};
 const renderComponents = pcComponents => {
 	const { subHeader, component, gridStyle, spanStyle } = styles;
 	return pcComponents.map((product, index) => (
 		<div key={index} style={component}>
 			<Grid container spacing={8} alignItems={'center'} direction={'row'}>
 				<Grid item xs={4}>
-                	<h4 style={subHeader}>Model: </h4>
+					<h4 style={subHeader}>Model: </h4>
 				</Grid>
 				<Grid item xs={8} style={gridStyle}>
 					<span style={spanStyle}>{product.bilesenAdi}</span>
@@ -52,7 +52,7 @@ const renderComponents = pcComponents => {
 	));
 };
 export default ({ isOpen, onClose, product, pcComponents }) => {
-	const { header, subHeader, gridStyle, spanStyle  } = styles;
+	const { header, subHeader, gridStyle, spanStyle } = styles;
 	return (
 		<Modal
 			style={{ marginTop: 70 }}
@@ -80,7 +80,7 @@ export default ({ isOpen, onClose, product, pcComponents }) => {
 				</Grid>
 				<Grid container spacing={8} alignItems={'center'} direction={'row'}>
 					<Grid item xs={4}>
-					<h4 style={subHeader}>Tip:</h4>
+						<h4 style={subHeader}>Tip:</h4>
 					</Grid>
 					<Grid item xs={8} style={gridStyle}>
 						<span style={spanStyle}>{product ? product.Tip : null}</span>
@@ -134,16 +134,18 @@ export default ({ isOpen, onClose, product, pcComponents }) => {
 						<span style={spanStyle}>{product ? product.markaAdi : null}</span>
 					</Grid>
 				</Grid>
-				{product ? product.zimmetID ? null : (
-					<Grid container spacing={8} alignItems={'center'} direction={'row'}>
-						<Grid item xs={4}>
-							<h4 style={subHeader}>Satın Alan Personel: </h4>
+				{product ? (
+					product.zimmetID ? null : (
+						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+							<Grid item xs={4}>
+								<h4 style={subHeader}>Satın Alan Personel: </h4>
+							</Grid>
+							<Grid item xs={8} style={gridStyle}>
+								<span style={spanStyle}>{product ? product.personelAdi : null}</span>
+							</Grid>
 						</Grid>
-						<Grid item xs={8} style={gridStyle}>
-							<span style={spanStyle}>{product ? product.personelAdi : null}</span>
-						</Grid>
-					</Grid>
-				) :null }
+					)
+				) : null}
 				{Tip === 'Hazır PC' ? (
 					<div>
 						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
@@ -158,74 +160,82 @@ export default ({ isOpen, onClose, product, pcComponents }) => {
 					</div>
 				) : null}
 				{checkIfHasProducts(pcComponents) ? renderComponents(pcComponents) : null}
-				{product ? product.personelID ? (
-					<div>
-						<Grid container spacing={8} alignItems={'center'} direction={'row'} justify={'space-between'}>
-							<Grid item>
-								<h3 style={header}>Zimmet Bilgileri</h3>
+				{product ? (
+					product.personelID ? (
+						<div>
+							<Grid
+								container
+								spacing={8}
+								alignItems={'center'}
+								direction={'row'}
+								justify={'space-between'}
+							>
+								<Grid item>
+									<h3 style={header}>Zimmet Bilgileri</h3>
+								</Grid>
 							</Grid>
-						</Grid>
-						<Divider />
-						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
-							<Grid item xs={4}>
-								<h4 style={subHeader}>Zimmetlenen Kişi: </h4>
+							<Divider />
+							<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+								<Grid item xs={4}>
+									<h4 style={subHeader}>Zimmetlenen Kişi: </h4>
+								</Grid>
+								<Grid item xs={8} style={gridStyle}>
+									<span style={spanStyle}>{product.personelAdi}</span>
+								</Grid>
 							</Grid>
-							<Grid item xs={8} style={gridStyle}>
-								<span style={spanStyle}>{product.personelAdi}</span>
+							<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+								<Grid item xs={4}>
+									<h4 style={subHeader}>Departmanı: </h4>
+								</Grid>
+								<Grid item xs={8} style={gridStyle}>
+									<span style={spanStyle}>{product.departmanAdi}</span>
+								</Grid>
 							</Grid>
-						</Grid>
-						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
-							<Grid item xs={4}>
-								<h4 style={subHeader}>Departmanı: </h4>
+							<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+								<Grid item xs={4}>
+									<h4 style={subHeader}>Zimmet Tarihi: </h4>
+								</Grid>
+								<Grid item xs={8}>
+									<span style={spanStyle}>{product.zimmetTarihi}</span>
+								</Grid>
 							</Grid>
-							<Grid item xs={8} style={gridStyle}>
-								<span style={spanStyle}>{product.departmanAdi}</span>
-							</Grid>
-						</Grid>
-						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
-							<Grid item xs={4}>
-								<h4 style={subHeader}>Zimmet Tarihi: </h4>
-							</Grid>
-							<Grid item xs={8}>
-								<span style={spanStyle}>{product.zimmetTarihi}</span>
-							</Grid>
-						</Grid>
-					</div>
-				) :null :null}
+						</div>
+					) : null
+				) : null}
 				<h3 style={header}>Tedarikçi Bilgileri</h3>
 				<Divider />
-					<Grid container spacing={8} alignItems={'center'} direction={'row'}>
-						<Grid item xs={4}>
-								<h4 style={subHeader}>Tedarikçi Adı: </h4>
-						</Grid>
-						<Grid item xs={8} style={gridStyle}>
-								<span style={spanStyle}>{product ? product.tedarikciAdi : null}</span>
-						</Grid>
+				<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+					<Grid item xs={4}>
+						<h4 style={subHeader}>Tedarikçi Adı: </h4>
 					</Grid>
-					<Grid container spacing={8} alignItems={'center'} direction={'row'}>
-						<Grid item xs={4}>
-							<h4 style={subHeader}>İl Adı: </h4>
-						</Grid>
-						<Grid item xs={8} style={gridStyle}>
-							<span style={spanStyle}>{product ? product.ilAdi : null}</span>
-						</Grid>
+					<Grid item xs={8} style={gridStyle}>
+						<span style={spanStyle}>{product ? product.tedarikciAdi : null}</span>
 					</Grid>
-					<Grid container spacing={8} alignItems={'center'} direction={'row'}>
-						<Grid item xs={4}>
-							<h4 style={subHeader}>İlçe Adı: </h4>
-						</Grid>
-						<Grid item xs={8} style={gridStyle}>
-							<span style={spanStyle}>{product ? product.ilceAdi : null}</span>
-						</Grid>
+				</Grid>
+				<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+					<Grid item xs={4}>
+						<h4 style={subHeader}>İl Adı: </h4>
 					</Grid>
-					<Grid container spacing={8} alignItems={'center'} direction={'row'}>
-						<Grid item xs={4}>
-							<h4 style={subHeader}>Tedarikçi Tel no: </h4>
-						</Grid>
-						<Grid item xs={8} style={gridStyle}>
-							<span style={spanStyle}>{product ? product.telNo : null}</span>
-						</Grid>
+					<Grid item xs={8} style={gridStyle}>
+						<span style={spanStyle}>{product ? product.ilAdi : null}</span>
 					</Grid>
+				</Grid>
+				<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+					<Grid item xs={4}>
+						<h4 style={subHeader}>İlçe Adı: </h4>
+					</Grid>
+					<Grid item xs={8} style={gridStyle}>
+						<span style={spanStyle}>{product ? product.ilceAdi : null}</span>
+					</Grid>
+				</Grid>
+				<Grid container spacing={8} alignItems={'center'} direction={'row'}>
+					<Grid item xs={4}>
+						<h4 style={subHeader}>Tedarikçi Tel no: </h4>
+					</Grid>
+					<Grid item xs={8} style={gridStyle}>
+						<span style={spanStyle}>{product ? product.telNo : null}</span>
+					</Grid>
+				</Grid>
 			</Modal.Body>
 			<Modal.Footer>
 				<Button bsStyle="danger" onClick={() => onClose()}>
@@ -247,13 +257,13 @@ const styles = {
 		borderRadius: 8,
 		marginBottom: 5,
 		marginTop: 5,
-		padding: 5
+		padding: 5,
 	},
 	gridStyle: {
-		overflow: 'hidden', 
-		'wordBreak': 'break-all'
+		overflow: 'hidden',
+		wordBreak: 'break-all',
 	},
 	spanStyle: {
-        fontWeight: '400'
-    }
+		fontWeight: '400',
+	},
 };

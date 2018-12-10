@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { createEscapeStr, findAttrCount, convertIdToIntArray } = require('../util/queryHelper');
+
 
 // a middleware that checks if the token is expired.
 const verifyToken = (req, res, next) => {
@@ -52,59 +52,6 @@ const verifyQuantity = (req, res, next) => {
     
 }
 
-// a middleware that helps us detect if the product is registered to a person.
-const verifyIfRegistered = (req, res, next) => {
-    let queryString = null;
-    if (req.params.type === 'component') {
-        //verify component registeration
-        queryString = 'SELECT ?? FROM ?? WHERE ?? = ?';
-        global.db.query(queryString, ['aktifMi', 'tbl_zimmetli_urun','zimmetID', req.params.id], (error, result) => {
-            if (error) return res.status(400).json({ error: error });
-            //if the requested item doesn't have registeration or item doesn't registered at all
-            if (result.length === 0 || result[0].aktifMi === 0) {
-                return res.status(400).json({ message: 'There is no item registered with given ID' });
-            }
-            next();
-        });
-        
-    } else {
-        // verify all in one pc registeration
-        let queryString = null;
-        //first verify given pcID parameter by checking if there is a pc with that ID
-        queryString = 'SELECT * FROM ?? WHERE ?? = ?';
-
-        global.db.query(queryString, ['tbl_hazir_pc', 'pcID', req.params.id], (error, result) => {
-            if (error) return res.status(400).json({ error: error });
-            if (result.length === 0) {
-                return res.status(400).json({ message: 'There is no all in one pc with given ID' });
-            }
-
-            //then verify if they there are enough parameter for components of pc.
-            if (req.body.hasOwnProperty("zimmetIDs") && req.body.hasOwnProperty("bilesenIDs")) {
-                //select * from tbl_zimmetli_urun where zimmetID IN (8,50) AND aktifMi = 1
-                const parameterCount = findAttrCount(req.body.zimmetIDs);
-                queryString = 'SELECT * FROM '+ global.db.escapeId('tbl_zimmetli_urun')+ ' WHERE '+ global.db.escapeId('zimmetID') +' IN';
-                queryString = queryString.concat(createEscapeStr(parameterCount));
-                queryString = queryString.concat(' AND ' + global.db.escapeId('aktifMi') + ' = ' + global.db.escape(1));
-
-                global.db.query(queryString, convertIdToIntArray(req.body.zimmetIDs), (error, result) => {
-                    if (error) return res.status(400).json({ error: error });
-                    if (result.length !== parameterCount) {
-                        return res.status(400).json({ message: 'There were lack of parameters '});
-                    }
-                    next();
-                });
-            } else {
-                return res.status(400).json({ message: 'There were lack of parameters '});
-            }
-
-        }); 
-
-
-        
-    }
-}
-
 // a middleware that helps us check if person has enough title to be a user of program.
 const verifyTitle = (req, res, next) => {
     let queryString = null;
@@ -131,9 +78,52 @@ const verifyTitle = (req, res, next) => {
     });
 }
 
+const verifyIfBrandExists = (req, res, next) => {
+    let queryString = 'SELECT * FROM tbl_marka';
+        global.db.query(queryString, (error, result) => {
+            if (error) return res.status(500).json({ error });
+            if (!req.body.brandName) return res.status(500).json({ message: 'Empty brand name' });
+            let brandName = req.body.brandName;
+            brandName = brandName.toLowerCase();
+            result.forEach((brand) => {
+                if (brand.markaAdi.toLowerCase() === brandName) return res.status(500).json({ message: 'Brand name is already being used'});
+            });
+            next();
+        });
+}
+const verifyIfCategoryExists = (req, res, next) => {
+    let queryString = 'SELECT * FROM tbl_kategori';
+        global.db.query(queryString, (error, result) => {
+            if (error) return res.status(500).json({ error });
+            if (!req.body.categoryName) return res.status(500).json({ message: 'Empty category name' });
+            let categoryName = req.body.categoryName;
+            categoryName = categoryName.toLowerCase();
+            result.forEach((category) => {
+                if (category.kategoriAdi.toLowerCase() === categoryName) return res.status(500).json({ message: 'Category name is already being used'});
+            });
+            next();
+        });
+}
+
+const verifyIfSupplierExists = (req, res, next) => {
+    let queryString = 'SELECT * FROM view_tedarikciler';
+    global.db.query(queryString, (error, result) => {
+        if (error) return res.status(500).json({ error });
+        // There can't be 2 suppliers with same name in one city so we check this
+        result.forEach((supplier) => {
+            if (supplier.tedarikciAdi.toLowerCase() === req.body.supplierName.toLowerCase() && parseInt(supplier.ilID) === parseInt(req.body.ilID)) {
+                return res.status(500).json({ message: "There can't be 2 suppliers with same name in one city"});
+            }
+        });
+        next();
+    });
+}
+
 module.exports = {
     verifyToken,
     verifyQuantity,
-    verifyIfRegistered,
-    verifyTitle
+    verifyTitle,
+    verifyIfBrandExists,
+    verifyIfCategoryExists,
+    verifyIfSupplierExists
 }

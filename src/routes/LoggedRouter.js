@@ -6,11 +6,13 @@ import registeredProduct from '../hocs/RegisteredProduct';
 import brokenProduct from '../hocs/BrokenProduct';
 import ProductContainer from '../components/ProductContainer';
 import ProductPage from '../hocs/ProductPage';
+import NewComponent from '../components/NewComponent';
 
 
 const UnregisteredProduct = ProductPage(ProductContainer);
 const RegisteredProduct = ProductPage(ProductContainer);
 const BrokenProduct = ProductPage(ProductContainer);
+
 
 const LoggedRouter = () => {
 	return (
@@ -31,7 +33,7 @@ const LoggedRouter = () => {
 					/>
 					<Route
 						path="/newComponent"
-						render={() => <div style={{ marginTop: 80 }}>Yeni ürün ekleme</div>}
+						render={() => <NewComponent />}
 					/>
 				</Switch>
 			</Dashboard>

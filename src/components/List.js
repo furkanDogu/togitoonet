@@ -16,8 +16,7 @@ class SelectedListItem extends React.Component {
         super(props);
         this.state = {
             selectedIndex: -1,
-            searchKey: '',
-            enteredKey: false
+            searchKey: ''
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -61,7 +60,7 @@ class SelectedListItem extends React.Component {
     renderSearchBar() {
         return (
             <div style={{ flexGrow: 1 }}>
-                <Paper>
+                <Paper style={{ marginBottom: 5, height: 40 }}>
                     <Grid container>
                         <Grid item xs={1} >
                             <SearchIcon />
@@ -75,7 +74,6 @@ class SelectedListItem extends React.Component {
                                 onChange={this.handleChange} 
                                 name="searchKey"
                                 />
-                            
                         </Grid>
                     </Grid>
                 </Paper>  
@@ -86,8 +84,8 @@ class SelectedListItem extends React.Component {
         const { classes, items } = this.props;
         return (
             <div className={classes.root}>
+            {this.renderSearchBar()}
             <Paper style={{ height: 400, overflow: 'auto' }}>
-                {this.renderSearchBar()}
                 <List>
                 {this.mapEmployees(items.filter((item) => {
                 if(item.personelAdi.toLowerCase().includes(this.state.searchKey.toLowerCase())) {

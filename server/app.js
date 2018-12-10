@@ -6,8 +6,12 @@ const mysql = require('mysql');
 const database_config = require('./database_config');
 
 
+
 const userRoutes = require('./api/user');
 const productRoutes = require('./api/product');
+const categoryRoutes = require('./api/category');
+const brandRoutes = require('./api/brand');
+const supplierRoutes = require('./api/supplier');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -37,6 +41,9 @@ app.use((req, res, next) => {
 
 app.use('/user', userRoutes);
 app.use('/product', productRoutes);
+app.use('/category', categoryRoutes);
+app.use('/brand', brandRoutes);
+app.use('/supplier', supplierRoutes);
 //
 //
 

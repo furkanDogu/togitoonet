@@ -3,10 +3,9 @@ const router = express.Router();
 const multer = require('multer'); // helps us to handle form data.
 const upload = multer(); 
 
-const queryHelper = require('../util/queryHelper');
 const auth = require('../util/auth');
 const verifications = require('../util/verifications');
-const { verifyToken, verifyQuantity, verifyIfRegistered } = verifications;
+const { verifyToken, verifyQuantity } = verifications;
 
 // adding a product (either a component or an all in one pc)
 router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
