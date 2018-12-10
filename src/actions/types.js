@@ -24,6 +24,31 @@ export const ADD_BROKEN_PRODUCT = 'add_broken_product';
 export const GET_BROKEN_PRODUCTS = 'get_broken_products';
 export const SET_BROKEN_PRODUCTS = 'set_broken_products';
 
+export const GET_BRANDS = 'get_brands';
+export const SET_BRANDS = 'set_brands';
+export const ADD_BRAND = 'add_brand';
+
+export const GET_CATEGORIES = 'get_categories';
+export const SET_CATEGORIES = 'set_categories';
+export const ADD_CATEGORY = 'add_category';
+
+export const GET_SUPPLIERS = 'get_suppliers';
+export const SET_SUPPLIERS = 'set_suppliers';
+export const ADD_SUPPLIER = 'add_supplier';
+
+export const GET_CITIES = 'get_cities';
+export const SET_CITIES = 'set_cities';
+
+export const GET_TOWNS = 'get_towns';
+export const SET_TOWNS = 'set_towns';
+
+export const ADD_NEW_COMPONENT = 'add_new_component';
+
+
+
+
+
+
 
 
 

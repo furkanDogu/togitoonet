@@ -6,7 +6,7 @@ import registeredProduct from '../hocs/RegisteredProduct';
 import brokenProduct from '../hocs/BrokenProduct';
 import ProductContainer from '../components/ProductContainer';
 import ProductPage from '../hocs/ProductPage';
-import NewComponent from '../components/NewComponent';
+import NewProduct from '../components/NewProduct';
 
 
 const UnregisteredProduct = ProductPage(ProductContainer);
@@ -33,8 +33,12 @@ const LoggedRouter = () => {
 					/>
 					<Route
 						path="/newComponent"
-						render={() => <NewComponent />}
+						render={() => <NewProduct type="component" />}
 					/>
+					<Route
+						path="/newAllOne"
+						render={() => <NewProduct type="allOne" />}
+					/>	
 				</Switch>
 			</Dashboard>
 		</BrowserRouter>

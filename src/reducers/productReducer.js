@@ -3,7 +3,12 @@ import {
     SET_UNREGISTERED_PC_COMPONENTS,
     SET_REGISTERED_PRODUCTS,
     SET_REGISTERED_PC_COMPONENTS,
-    SET_BROKEN_PRODUCTS
+    SET_BROKEN_PRODUCTS,
+    SET_BRANDS,
+    SET_CATEGORIES,
+    SET_SUPPLIERS,
+    SET_CITIES,
+    SET_TOWNS
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -11,7 +16,12 @@ const INITIAL_STATE = {
     registeredProducts: [],
     brokenProducts: [],
     unregisteredPcComponents: [],
-    registeredPcComponents: []
+    registeredPcComponents: [],
+    brands: [],
+    categories: [],
+    suppliers: [],
+    cities: [],
+    towns: []
 };
 
 
@@ -27,6 +37,16 @@ export default (state = INITIAL_STATE, action) => {
             return {...state, registeredPcComponents: [...action.payload.parcalar]};
         case SET_BROKEN_PRODUCTS:
             return {...state, brokenProducts: [...action.payload.result]};
+        case SET_BRANDS:
+            return {...state, brands: [...action.payload.result]};
+        case SET_CATEGORIES: 
+            return {...state, categories: [...action.payload.result]};
+        case SET_SUPPLIERS:
+            return {...state, suppliers: [...action.payload.result]};
+        case SET_CITIES:
+            return {...state, cities: [...action.payload.result]};
+        case SET_TOWNS:
+            return {...state, towns: [...action.payload.result]};
         default: return state;
     }
 }

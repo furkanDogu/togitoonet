@@ -6,7 +6,13 @@ import {
     SET_EMPLOYEES,
     SET_REGISTERED_PRODUCTS,
     SET_REGISTERED_PC_COMPONENTS,
-    SET_BROKEN_PRODUCTS
+    SET_BROKEN_PRODUCTS,
+    SET_BRANDS,
+    SET_CATEGORIES,
+    SET_SUPPLIERS,
+    SET_CITIES,
+    SET_TOWNS,
+    GET_SUPPLIERS
 } from '../actions/types';
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
@@ -172,4 +178,106 @@ export function* getBrokenProductsAsync() {
         console.log(e);
     }
 }
+
+export function* getBrandsAsync() {
+    let endPoint = URL + '/brand';
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_BRANDS, payload: result.data });
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* getCategoriesAsync() {
+    let endPoint = URL + '/category';
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_CATEGORIES, payload: result.data });
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* getSuppliersAsync() {
+    let endPoint = URL + '/supplier';
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_SUPPLIERS, payload: result.data });
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* addBrandAsync(action) {
+    let endPoint = URL + '/brand';
+    try {
+        yield axios.post(endPoint, { brandName: action.payload}, getTokenFromStorage());
+        yield getBrandsAsync();
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* addCategoryAsync(action) {
+    let endPoint = URL + '/category';
+    try {
+        yield axios.post(endPoint, { categoryName: action.payload}, getTokenFromStorage());
+        yield getCategoriesAsync();
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* getCitiesAsync() {
+    let endPoint = URL + '/supplier/cities';
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_CITIES, payload: result.data });
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* getTownsAsync(action) {
+    let endPoint = `${URL}/supplier/towns/${action.payload}`;
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_TOWNS, payload: result.data });
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* addSupplierAsync(action) {
+    let endPoint = URL + '/supplier';
+    try {
+        yield axios.post(endPoint, {
+            supplierName: action.payload.supplierName,
+            ilceID: action.payload.ilceID,
+            ilID: action.payload.ilID,
+            telNo: action.payload.telNo
+        }, getTokenFromStorage());
+        yield getSuppliersAsync();
+    } catch(e) {
+        console.log(e);
+    }
+}
+export function* addNewComponentAsync(action) {
+    let endPoint = URL + '/product/add/component';
+    try {
+
+        yield axios.post(endPoint, {
+            bilesenAdi: action.payload.productName,
+            kategoriID: action.payload.category,
+            markaID: action.payload.brand,
+            tedarikciID: action.payload.supplier,
+            satinAlinanAdet: action.payload.amount,
+            fiyat: action.payload.cost
+        }, getTokenFromStorage());
+    } catch(e) {
+        console.log(e);
+    }
+}
+
 

@@ -116,7 +116,11 @@ class DrawerMenu extends React.Component {
 										</ListItemIcon>
 										<ListItemText inset primary="Bileşen" />
 									</ListItem>
-									<ListItem button style={{ paddingLeft: 35 }}>
+									<ListItem 
+										button 
+										style={{ paddingLeft: 35 }}
+										onClick={() => this.props.history.push('/newAllOne')}
+									>
 										<ListItemIcon>
 											<DesktopMacIcon />
 										</ListItemIcon>
