@@ -13,6 +13,7 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
         // if coming request wants to save a new component
         let queryString = null;
         if (req.params.type === 'component') {
+            console.log(req.body);
             queryString = 'CALL sp_bilesen_ekle(?, ?, ?, ?, ?, ?, ?, ?);';
             global.db.query(queryString, 
             [
@@ -39,6 +40,7 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
             
         } else if (req.params.type === 'allOne') {
             // if coming requres want to save a new all in one
+            
             queryString = 'CALL sp_hazir_pc_ekle(?, ?, ?, ?, ?, ?, ?);';
             global.db.query(queryString,
                 [
@@ -48,7 +50,7 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
                     req.body.pcAdi,
                     parseInt(req.body.pcSatinAlinanAdet),
                     parseInt(req.body.pcTedarikciID),
-                    parseInt(req.body.pcSatinAlanID)
+                    parseInt(req.userID)
                 ], (err, pcID) => {
                     if (err) {
                         return res.status(501).json({
@@ -62,7 +64,7 @@ router.post('/add/:type', verifyToken, upload.none() ,(req, res, next) => {
                     var copyOfBilesenler = req.body.bilesenler.map(function(arr) {
                         return arr.slice();
                     });
-                    tempAddPCInfo(copyOfBilesenler, parseInt(req.body.pcSatinAlinanAdet), parseInt(pcID[0][0]['id']), parseInt(req.body.pcTedarikciID), parseInt(req.body.pcSatinAlanID),(addedOne) => {
+                    tempAddPCInfo(copyOfBilesenler, parseInt(req.body.pcSatinAlinanAdet), parseInt(pcID[0][0]['id']), parseInt(req.body.pcTedarikciID), parseInt(req.userID),(addedOne) => {
                         global.db.query(queryString, ['tbl_bilesen',addedOne], (err) => {
                             if (err) { 
                                 return res.status(501).json({ error: err }); 

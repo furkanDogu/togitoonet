@@ -8,6 +8,8 @@ import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import MatGrid from '@material-ui/core/Grid';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import MemoryIcon from '@material-ui/icons/Memory';
+import NewPcComponentModal from './NewPcComponentModal';
 import {
 	getBrands,
 	getCategories,
@@ -15,14 +17,14 @@ import {
 	addBrand,
 	addCategory,
 	addSupplier,
-	addNewComponent,
+    addNewAllOne
 } from '../actions/productActions';
-import { verifyProductName, isSelectValid, isAmountValid, isCostValid } from '../util/validations';
+import { verifyProductName, isSelectValid, isAmountValid, isCostValid, isNewPropNameValid } from '../util/validations';
 import NewProductPropModal from './NewProductPropModal';
 import NewSupplierModal from './NewSupplierModal';
 import { giveSupplierIconColor } from '../util/colors';
 
-class NewComponent extends React.Component {
+class NewAllOne extends React.Component {
 	constructor(prop) {
 		super(prop);
 		this.state = {
@@ -34,13 +36,16 @@ class NewComponent extends React.Component {
 			amount: '',
 			cost: '',
 			supplier: null,
+			pcComponents: [],
+			pcColor: '',
 			selecttedIndex: -1,
 			isProdutNameValid: 'error',
 			isCategoryValid: 'error',
 			isBrandValid: 'error',
 			isAmountValid: 'error',
 			isCostValid: 'error',
-			isSupplierValid: 'error',
+            isSupplierValid: 'error',
+            isPcColorValid: 'error',
 			isBrandModalOpen: false,
 			isCategoryModalOpen: false,
 			isSupplierModalOpen: false,
@@ -50,13 +55,21 @@ class NewComponent extends React.Component {
 		this.handleBrandModal = this.handleBrandModal.bind(this);
 		this.handleCategoryModal = this.handleCategoryModal.bind(this);
 		this.handleSupplierModal = this.handleSupplierModal.bind(this);
+		this.handlePcComponentModal = this.handlePcComponentModal.bind(this);
 		this.addNewProp = this.addNewProp.bind(this);
 		this.addNewSupplier = this.addNewSupplier.bind(this);
 		this.handleFormSubmit = this.handleFormSubmit.bind(this);
+		this.handleNewPcComponent = this.handleNewPcComponent.bind(this);
 	}
 	handlePcComponentModal() {
 		this.setState(state => ({ isPcComponentModalOpen: !state.isPcComponentModalOpen}));
-	}
+    }
+    mapPcComponents() {
+        let pcComponents = this.state.pcComponents.map((comp) => {
+            return [comp.pcComponentName, comp.pcComponentCategoryID, comp.pcComponentBrandID];
+        });
+        return pcComponents;
+    }
 	checkIfAnyError() {
 		const {
 			isProdutNameValid,
@@ -88,6 +101,8 @@ class NewComponent extends React.Component {
 			amount: '',
 			cost: '',
 			supplier: null,
+			pcComponents: [],
+			pcColor: '',
 			selecttedIndex: -1,
 			isProdutNameValid: 'error',
 			isCategoryValid: 'error',
@@ -101,12 +116,53 @@ class NewComponent extends React.Component {
 			isSupplierModalOpen: false,
 		});
 	}
+	handleNewPcComponent(pcComponent) {
+		this.setState({ pcComponents: [...this.state.pcComponents, pcComponent]}, () => {
+			this.handlePcComponentModal();
+		});
+	}
+	renderPcComponents() {
+		if (this.state.pcComponents) {
+			const pcComponents = this.state.pcComponents;
+			return pcComponents.map((comp, index) => (
+				<ListItem
+					key={index}	
+				>
+					<MatGrid container direction={'row'} alignItems={'center'} justify={'center'}>
+						<MatGrid item xs={1}>
+							<ListItemIcon>
+								<MemoryIcon />
+							</ListItemIcon>
+						</MatGrid>
+						<MatGrid item xs={4}>
+							<ListItemText primary={comp.pcComponentName} />
+						</MatGrid>
+						<MatGrid item xs={3}>
+							<ListItemText primary={comp.pcComponentBrand} />
+						</MatGrid>
+						<MatGrid item xs={2}>
+							<ListItemText primary={comp.pcComponentCategory} />
+						</MatGrid>
+					</MatGrid>
+				</ListItem>
+			));
+		}
+		
+	}
 	handleFormSubmit(e) {
 		e.preventDefault();
-		if (!this.checkIfAnyError()) {
-			const { productName, brand, category, amount, cost, supplier } = this.state;
-			this.props.addNewComponent({ productName, brand, category, amount, cost, supplier });
-			this.cleanAreas();
+		if (!this.checkIfAnyError() && this.state.pcComponents.length !== 0) {
+            const allOne = {
+                pcMarkaID: this.state.brand,
+                pcRenk: this.state.pcColor,
+                pcFiyat: this.state.cost,
+                pcAdi: this.state.productName,
+                pcSatinAlinanAdet: this.state.amount,
+                pcTedarikciID: this.state.supplier,
+                bilesenler: this.mapPcComponents(this.state.pcComponents)
+            }
+            this.props.addNewAllOne(allOne);
+            this.cleanAreas();
 		}
 	}
 	addNewSupplier(props) {
@@ -148,9 +204,7 @@ class NewComponent extends React.Component {
 		} else if (target.name === 'category' || target.name === 'brand') {
 			selectValidation = isSelectValid(target.value);
 		}
-		if (target.name === 'category') {
-			this.setState({ isCategoryValid: selectValidation });
-		} else if (target.name === 'brand') {
+        if (target.name === 'brand') {
 			this.setState({ isBrandValid: selectValidation });
 		}
 		if (target.name === 'amount') {
@@ -158,6 +212,9 @@ class NewComponent extends React.Component {
 		}
 		if (target.name === 'cost') {
 			this.setState({ isCostValid: isCostValid(target.value) });
+		}
+		if (target.name === 'pcColor') {
+			this.setState({ isPcColorValid: isNewPropNameValid(target.value)});
 		}
 		this.setState({ [target.name]: target.value }, () => {
 			console.log(this.state);
@@ -217,6 +274,7 @@ class NewComponent extends React.Component {
 		this.props.getBrands();
 		this.props.getCategories();
 		this.props.getSuppliers();
+		this.setState({ category: 'Hazır PC', isCategoryValid: 'success'});	
 	}
 	//search bar
 	renderSearchBar() {
@@ -350,39 +408,31 @@ class NewComponent extends React.Component {
 					</Row>
 						<React.Fragment>
 							<Row style={rowStyle}>
-								<Col>
-									<span style={fontStyle}>Kategori: </span>
-								</Col>
-							</Row>
-							<Row style={rowStyle}>
-								<Col xs={9} style={{ padding: 0 }}>
-									<FormGroup validationState={this.state.isCategoryValid}>
-										<FormControl
-											style={{ height: 40 }}
-											componentClass="select"
-											onChange={this.handleChange}
-											value={this.state.category}
-											name="category"
-										>
-											{this.renderCategoryOptions()}
-										</FormControl>
-										<FormControl.Feedback style={{ marginRight: 6 }} />
-										<HelpBlock>
-											Lütfen varolan ya da yeni ekleyeceğiniz kategorilerden birini seçiniz
-										</HelpBlock>
-									</FormGroup>
-								</Col>
-								<Col xs={3} style={{ paddingLeft: '1%', paddingRight: 0 }}>
-									<Button
-										onClick={this.handleCategoryModal}
-										bsStyle="success"
-										style={{ width: '99%', height: 40 }}
-									>
-										Yeni Ekle
-									</Button>
-								</Col>
-							</Row>
-						</React.Fragment>
+							<Col>
+								<span style={fontStyle}>Renk: </span>
+							</Col>
+						</Row>
+						<Row style={rowStyle}>
+							<Col>
+								<FormGroup controlId="formBasicText" validationState={this.state.isPcColorValid}>
+									<FormControl
+										style={{ height: 40 }}
+										type="text"
+										onChange={this.handleChange}
+										name="pcColor"
+										value={this.state.pcColor}
+										maxLength="40"
+									/>
+									<FormControl.Feedback />
+									<HelpBlock>
+										Lütfen Türkçe karakter kullanımı ve 40 karakterden uzun model tanımı yapmayınız
+										<br />
+										Renk tanımı en az 5 karakterden oluşmalıdır
+									</HelpBlock>
+								</FormGroup>
+							</Col>
+						</Row>
+					</React.Fragment>
 					<Row style={rowStyle}>
 						<Col>
 							<span style={fontStyle}>Satın Alınan Adet: </span>
@@ -435,6 +485,50 @@ class NewComponent extends React.Component {
 							</FormGroup>
 						</Col>
 					</Row>
+						<React.Fragment>
+							<Row style={rowStyle}>
+								<Col xs={3} style={{ marginLeft: 0, paddingLeft: 0 }}>
+									<span style={fontStyle}>Bileşenler: </span>
+									{	this.state.pcComponents.length === 0 ? (<span style={{ display: 'block', color: '#a94442'}}>En az 1 bileşen eklemelisiniz</span>): null}
+								</Col>
+								<Col xs={3} style={{ paddingLeft: '1%', paddingRight: 0 }}>
+									<Button
+										onClick={this.handleCategoryModal}
+										bsStyle="success"
+										style={{ width: '99%', height: 40 }}
+									>
+										Bileşen için yeni kategori
+									</Button>
+								</Col>
+								<Col xs={3} style={{ paddingLeft: '1%', paddingRight: 0 }}>
+									<Button
+										onClick={this.handleBrandModal}
+										bsStyle="success"
+										style={{ width: '99%', height: 40 }}
+									>
+										Bileşen için yeni marka
+									</Button>
+								</Col>
+								<Col xs={3} style={{ paddingLeft: '1%', paddingRight: 0 }}>
+									<Button
+										onClick={this.handlePcComponentModal}
+										bsStyle="success"
+										style={{ width: '99%', height: 40 }}
+									>
+										Bileşen Ekle
+									</Button>
+								</Col>
+							</Row>
+							<Row style={rowStyle}>
+								<Col>
+									<Paper style={{ height: 350, overflow: 'auto' }}>
+										<List>
+											{this.renderPcComponents()}
+										</List>
+									</Paper>
+								</Col>
+							</Row>
+						</React.Fragment>
 					<Row style={rowStyle}>
 						<Col style={{ marginBottom: 20 }}>
 							<span style={fontStyle}>Tedarikçi: </span>
@@ -477,6 +571,13 @@ class NewComponent extends React.Component {
 					onClose={this.handleSupplierModal}
 					onOkay={this.addNewSupplier}
 				/>
+				<NewPcComponentModal
+					isOpen={this.state.isPcComponentModalOpen}
+					onClose={this.handlePcComponentModal}
+					categories={this.props.categories}
+					brands={this.props.brands}
+					onOkay={this.handleNewPcComponent}
+				/>
 			</Grid>
 		);
 	}
@@ -502,9 +603,9 @@ const mapDispatchToProps = {
 	addBrand,
 	addCategory,
 	addSupplier,
-	addNewComponent,
+    addNewAllOne
 };
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(NewComponent);
+)(NewAllOne);

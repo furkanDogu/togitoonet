@@ -54,6 +54,7 @@ class LoginForm extends React.Component {
                                     className="form-control"
                                     type="text" 
                                     name="email"
+                                    maxLength="64"
                                     value={this.state.email}
                                     placeholder="E-postanızı buraya yazın" 
                                     onChange={this.handleChange}
@@ -68,7 +69,8 @@ class LoginForm extends React.Component {
                                     <FormControl
                                     className="form-control"
                                     type="password" 
-                                    name="password" 
+                                    name="password"
+                                    maxLength="64"
                                     placeholder="Şifrenizi buraya yazın" 
                                     value={this.state.password}
                                     onChange={this.handleChange}

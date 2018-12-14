@@ -7,11 +7,13 @@ import brokenProduct from '../hocs/BrokenProduct';
 import ProductContainer from '../components/ProductContainer';
 import ProductPage from '../hocs/ProductPage';
 import NewProduct from '../components/NewProduct';
+import NewAllOne from '../components/NewAllOne';
 
 
 const UnregisteredProduct = ProductPage(ProductContainer);
 const RegisteredProduct = ProductPage(ProductContainer);
 const BrokenProduct = ProductPage(ProductContainer);
+
 
 
 const LoggedRouter = () => {
@@ -33,11 +35,11 @@ const LoggedRouter = () => {
 					/>
 					<Route
 						path="/newComponent"
-						render={() => <NewProduct type="component" />}
+						render={() => <NewProduct />}
 					/>
 					<Route
 						path="/newAllOne"
-						render={() => <NewProduct type="allOne" />}
+						render={() => <NewAllOne />}
 					/>	
 				</Switch>
 			</Dashboard>

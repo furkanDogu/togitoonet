@@ -280,4 +280,14 @@ export function* addNewComponentAsync(action) {
     }
 }
 
+export function* addNewAllOneAsync(action) {
+    let endPoint = URL + '/product/add/allOne';
+    try {
+        console.log(action.payload);
+        yield axios.post(endPoint, action.payload, getTokenFromStorage());
+    } catch(e) {
+        console.log(e);
+    }
+}
+
 

@@ -17,7 +17,8 @@ import {
     getCitiesAsync,
     getTownsAsync,
     addSupplierAsync,
-    addNewComponentAsync
+    addNewComponentAsync,
+    addNewAllOneAsync
 } from './workers';
 
 import {
@@ -38,7 +39,8 @@ import {
     GET_CITIES,
     GET_TOWNS,
     ADD_SUPPLIER,
-    ADD_NEW_COMPONENT
+    ADD_NEW_COMPONENT,
+    ADD_NEW_ALL_ONE
 } from '../actions/types';
 
 
@@ -62,5 +64,6 @@ export default function* rootSaga() {
         takeLatest(GET_TOWNS, getTownsAsync),
         takeLatest(ADD_SUPPLIER, addSupplierAsync),
         takeLatest(ADD_NEW_COMPONENT, addNewComponentAsync),
+        takeLatest(ADD_NEW_ALL_ONE, addNewAllOneAsync),
     ]);
 }

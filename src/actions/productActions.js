@@ -13,7 +13,8 @@ import {
 	GET_CITIES,
 	GET_TOWNS,
 	ADD_SUPPLIER,
-	ADD_NEW_COMPONENT
+	ADD_NEW_COMPONENT,
+	ADD_NEW_ALL_ONE
 } from './types';
 
 export const getUnregisteredProducts = () => ({
@@ -83,4 +84,9 @@ export const addNewComponent = (component) => ({
 	type: ADD_NEW_COMPONENT,
 	payload: component
 });
+
+export const addNewAllOne = (allOne) => ({
+	type: ADD_NEW_ALL_ONE,
+	payload: allOne
+})
 

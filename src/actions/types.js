@@ -43,6 +43,7 @@ export const GET_TOWNS = 'get_towns';
 export const SET_TOWNS = 'set_towns';
 
 export const ADD_NEW_COMPONENT = 'add_new_component';
+export const ADD_NEW_ALL_ONE = 'add_new_all_one';
 
 
 
