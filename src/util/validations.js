@@ -58,3 +58,8 @@ export const isTelNoValid = (telNo) => {
     if (telNo.charAt(0) !== '0' || telNo.length < 11 || telNo.length > 11) return 'error';
     return 'success';
 }
+
+export const isPasswordValid = (password) => {
+    if (password.length < 5 || password.length > 40) return 'error';
+    return 'success';
+}

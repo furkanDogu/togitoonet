@@ -8,7 +8,8 @@ import ProductContainer from '../components/ProductContainer';
 import ProductPage from '../hocs/ProductPage';
 import NewProduct from '../components/NewProduct';
 import NewAllOne from '../components/NewAllOne';
-
+import NewUser from '../components/NewUser';
+import UserReport from '../components/UserReport';
 
 const UnregisteredProduct = ProductPage(ProductContainer);
 const RegisteredProduct = ProductPage(ProductContainer);
@@ -40,7 +41,15 @@ const LoggedRouter = () => {
 					<Route
 						path="/newAllOne"
 						render={() => <NewAllOne />}
-					/>	
+					/>
+					<Route
+						path="/newUser"
+						render={() => <NewUser />}
+					/>
+					<Route
+						path="/userReport"
+						render={() => <UserReport />}
+					/>
 				</Switch>
 			</Dashboard>
 		</BrowserRouter>

@@ -3,7 +3,9 @@ import {
     ON_LOGIN_FAIL,
     LOG_OUT,
     HIDE_ERROR_MODAL,
-    SET_EMPLOYEES
+    SET_EMPLOYEES,
+    SET_CANDIDATES_AND_USERS,
+    SET_REGISTERED_BY_USER
 } from '../actions/types';
 const INITIAL_STATE = {
     email: '',
@@ -11,8 +13,12 @@ const INITIAL_STATE = {
     name: '',
     userID: '',
     role: '',
+    departmanID: '',
     isLoginFailed: false,
-    employees: []
+    employees: [],
+    candidates: [],
+    users: [],
+    registeredProductsByUser: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -24,7 +30,8 @@ export default (state = INITIAL_STATE, action) => {
                 name: action.payload.name,
                 userID: action.payload.userID,
                 email: action.payload.email,
-                role: action.payload.role
+                role: action.payload.role,
+                departmanID: action.payload.departmanID
              };
         case LOG_OUT:
             sessionStorage.removeItem('jwtToken');
@@ -34,7 +41,15 @@ export default (state = INITIAL_STATE, action) => {
         case HIDE_ERROR_MODAL:
              return {...state, isLoginFailed: false };
         case SET_EMPLOYEES: 
-             return {...state, employees: action.payload.result }
+             return {...state, employees: action.payload.result };
+        case SET_CANDIDATES_AND_USERS:
+             return {...state, 
+                users: action.payload.users,
+                candidates: action.payload.candidates
+            };
+        case SET_REGISTERED_BY_USER:
+            console.log(action.payload.result);
+            return {...state, registeredProductsByUser: action.payload.result };
         default: return state;
 
     }

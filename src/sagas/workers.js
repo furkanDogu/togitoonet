@@ -12,7 +12,8 @@ import {
     SET_SUPPLIERS,
     SET_CITIES,
     SET_TOWNS,
-    GET_SUPPLIERS
+    SET_CANDIDATES_AND_USERS,
+    SET_REGISTERED_BY_USER
 } from '../actions/types';
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
@@ -285,6 +286,36 @@ export function* addNewAllOneAsync(action) {
     try {
         console.log(action.payload);
         yield axios.post(endPoint, action.payload, getTokenFromStorage());
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* getCandidatesAndUsersAsync() {
+    let endPoint = URL + '/user/candidates';
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_CANDIDATES_AND_USERS, payload: result.data });
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* addNewUserAsync(action) {
+    let endPoint = `${URL}/user/register/${action.payload.employeeID}`;
+    try {
+        yield axios.post(endPoint, { password: action.payload.password}, getTokenFromStorage());
+        yield getCandidatesAndUsersAsync();
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export function* getRegisteredByUserAsync(action) {
+    let endPoint = `${URL}/product/registered/users/${action.payload}`;
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_REGISTERED_BY_USER, payload: result.data });
     } catch(e) {
         console.log(e);
     }

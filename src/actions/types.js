@@ -45,6 +45,14 @@ export const SET_TOWNS = 'set_towns';
 export const ADD_NEW_COMPONENT = 'add_new_component';
 export const ADD_NEW_ALL_ONE = 'add_new_all_one';
 
+export const GET_CANDIDATES_AND_USERS = 'get_candidates_and_users';
+export const SET_CANDIDATES_AND_USERS = 'set_candidates_and_users';
+export const ADD_NEW_USER = 'add_new_user';
+
+export const GET_REGISTERED_BY_USER = 'get_registered_by_user';
+export const SET_REGISTERED_BY_USER = 'set_registered_by_user';
+
+
 
 
 

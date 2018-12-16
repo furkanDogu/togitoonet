@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const auth = require('../util/auth');
 const { verifyTitle, verifyToken } = require('../util/verifications');
 
-
 router.post('/login', (req, res, next) => {
     const failedMessage = {
         auth: false 
@@ -25,7 +24,9 @@ router.post('/login', (req, res, next) => {
             const email = user[0].email,
             name = user[0].personelAdi,
             userID = user[0].userID,
-            role = auth.giveFirstAuthority(user[0].rolID);
+            role = auth.giveFirstAuthority(user[0].rolID),
+            departmanID = user[0].departmanID;
+            console.log(user);
             
             if (result) {
                 // create token that expires in 1 hour
@@ -36,7 +37,7 @@ router.post('/login', (req, res, next) => {
                     name,
                     userID,
                     role,
-
+                    departmanID
                 },
                 process.env.JWT_KEY,
                 {
@@ -49,7 +50,8 @@ router.post('/login', (req, res, next) => {
                     email,
                     name,
                     userID,
-                    role
+                    role,
+                    departmanID
                 });
             }
             // if passwords aren't matched
@@ -82,18 +84,37 @@ router.post('/check', (req, res, next) => {
             email: decoded.email,
             name: decoded.name,
             userID: decoded.userID,
-            role: decoded.role
+            role: decoded.role,
+            departmanID: decoded.departmanID
         });
     });
 });
 
 router.get('/', verifyToken, (req, res, next) => {
-    return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
+    return auth.doOnlyWith(['admin', 'sales', 'chief'], req, res, () => {
         let queryString = 'SELECT * FROM view_personeller';
         global.db.query(queryString, (error, result) => {
             if (error) return res.status(500).json({ error });
             res.status(200).json({ result });
         });
+    });
+});
+
+router.get('/candidates', verifyToken, (req, res, next) => {
+    return auth.doOnlyWith(['admin'], req, res, () => {
+        let queryString = "SELECT * FROM view_user_adaylari";
+        global.db.query(queryString, (error, result_candidates) => {
+            if (error) return res.status(500).json({ error });
+            queryString = 'SELECT U.userID, U.email, R.rolAdi FROM tbl_user U INNER JOIN tbl_rol R ON R.rolID = U.rolID';
+            global.db.query(queryString, (error, result_users) => {
+                if (error) return res.status(500).json({ error });
+                res.status(200).json({
+                    candidates: result_candidates,
+                    users: result_users
+                });
+            });
+        });
+    
     });
 });
 

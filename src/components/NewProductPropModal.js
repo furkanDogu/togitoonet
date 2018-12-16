@@ -39,7 +39,6 @@ class NewProductPropModal extends React.Component {
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						
 							<Row>
 								<Col xs={3}>{text}</Col>
 								<Col xs={7}>
@@ -50,6 +49,7 @@ class NewProductPropModal extends React.Component {
 											onChange={this.handleChange}
 											value={this.state.value}
 											name="value"
+											maxLength="40"
 										/>
 										<FormControl.Feedback style={{ marginRight: 6 }} />
 										<HelpBlock>

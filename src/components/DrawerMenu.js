@@ -141,7 +141,7 @@ class DrawerMenu extends React.Component {
 				</ListItem>
 				<Collapse in={reportsOptionOpen} timeout="auto" unmountOnExit>
 					<List component="div" disablePadding>
-						<ListItem button style={{ paddingLeft: 35 }}>
+						<ListItem button style={{ paddingLeft: 35 }} onClick={() => this.props.history.push('/userReport')}>
 							<ListItemIcon>
 								<PersonIcon />
 							</ListItemIcon>
@@ -157,7 +157,7 @@ class DrawerMenu extends React.Component {
 				</Collapse>
 				<List>
 					{role === 'admin' ? (
-						<ListItem button key={'Kullanıcılar'} onClick={() => this.props.history.push('/a')}>
+						<ListItem button key={'Kullanıcılar'} onClick={() => this.props.history.push('/newUser')}>
 							<ListItemIcon>
 								<PersonAddIcon />
 							</ListItemIcon>

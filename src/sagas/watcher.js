@@ -18,7 +18,10 @@ import {
     getTownsAsync,
     addSupplierAsync,
     addNewComponentAsync,
-    addNewAllOneAsync
+    addNewAllOneAsync,
+    getCandidatesAndUsersAsync,
+    addNewUserAsync,
+    getRegisteredByUserAsync
 } from './workers';
 
 import {
@@ -40,7 +43,10 @@ import {
     GET_TOWNS,
     ADD_SUPPLIER,
     ADD_NEW_COMPONENT,
-    ADD_NEW_ALL_ONE
+    ADD_NEW_ALL_ONE,
+    GET_CANDIDATES_AND_USERS,
+    ADD_NEW_USER,
+    GET_REGISTERED_BY_USER
 } from '../actions/types';
 
 
@@ -65,5 +71,8 @@ export default function* rootSaga() {
         takeLatest(ADD_SUPPLIER, addSupplierAsync),
         takeLatest(ADD_NEW_COMPONENT, addNewComponentAsync),
         takeLatest(ADD_NEW_ALL_ONE, addNewAllOneAsync),
+        takeLatest(GET_CANDIDATES_AND_USERS, getCandidatesAndUsersAsync),
+        takeLatest(ADD_NEW_USER, addNewUserAsync),
+        takeLatest(GET_REGISTERED_BY_USER, getRegisteredByUserAsync)
     ]);
 }

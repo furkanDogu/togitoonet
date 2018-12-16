@@ -235,4 +235,41 @@ router.get('/broken', verifyToken, (req,res,next) => {
         });
     });
 });
+
+router.get('/registered/:type/:id', verifyToken, (req,res,next) =>{
+    return auth.doOnlyWith(['admin', 'sales', 'chief'], req, res, () => {
+        let queryString = '';
+        if (req.params.type === 'users') {
+            // get user's registeration report from db and return
+            queryString = 'SELECT * FROM view_personele_zimmetli_bilesenler WHERE ?? = ?';
+            global.db.query(queryString, ['personelID',parseInt(req.params.id)], (error, b_result) => {
+                if (error) return res.status(500).json({ error });
+                queryString = 'SELECT * FROM view_personele_zimmetli_hazir_pcler WHERE ?? = ?';
+                global.db.query(queryString, ['personelID',parseInt(req.params.id)], (error, h_result) => {
+                    if (error) return res.status(500).json({ error });
+                    const result = [...b_result, ...h_result];
+                    console.log(result);
+                    res.status(200).json({ result });
+                });
+            });
+        } else if (req.params.type === 'departments') {
+            // get department's registeration report from db and return
+            queryString = 'SELECT * FROM view_personele_zimmetli_bilesenler WHERE ?? = ?';
+            global.db.query(queryString, ['departmanID', parseInt(req.params.id)], (error, b_result) => {
+                if (error) return res.status(500).json({ error });
+                queryString = 'SELECT * FROM view_personele_zimmetli_hazir_pcler WHERE ?? = ?';
+                global.db.query(queryString, ['departmanID', parseInt(req.params.id)], (error, h_result) => {
+                    if (error) return res.status(500).json({ error });
+                    const result = [...b_result, ...h_result];
+                    res.status(200).json({ result });
+                });
+            });
+        } else {
+            // invalid type given
+            res.status(500).json({ message: 'Given type is invalid'});
+        } 
+    });
+});
 module.exports = router;
+
+
