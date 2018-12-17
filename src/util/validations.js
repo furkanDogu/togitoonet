@@ -43,7 +43,7 @@ export const isCostValid = (cost) => {
 
 export const isNewPropNameValid = (name) => {
     name = name.replace(/ +/g, "");
-    if (name.length > 40 || name.length < 5) return 'error';
+    if (name.length > 40 || name.length < 3) return 'error';
 
     let onlyCharatersAndNumbers = /[^A-Za-z0-9]+/g;
     if (onlyCharatersAndNumbers.test(name)) return 'error';

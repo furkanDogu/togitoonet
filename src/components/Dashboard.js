@@ -13,6 +13,8 @@ import Hidden from '@material-ui/core/Hidden';
 import MenuIcon from '@material-ui/icons/Menu';
 import Business from '@material-ui/icons/Business';
 import DrawerMenu from './DrawerMenu';
+import ErrorModal from './ErrorModal';
+import { closeFailModal, closeSuccessModal } from '../actions/userActions';
 
 
 const drawerWidth = 240;
@@ -63,8 +65,7 @@ class Dashboard extends React.Component {
 	}
 
 	render() {
-		//() => this.props.history.push("/a")
-		const { classes, theme, role, history } = this.props;
+		const { classes, theme, role } = this.props;
 
 		return (
 			<div className={classes.root}>
@@ -119,6 +120,20 @@ class Dashboard extends React.Component {
 				<main className={classes.content}>
 					<div className={classes.toolbar}>{this.props.children}</div>
 				</main>
+				<ErrorModal 
+					text="İşleminiz başarıyla gerçekleştirildi"
+					header="Başarı"
+					isOpen={this.props.isSuccessModalOpen}
+					onClose={this.props.closeSuccessModal}
+					closeAnimation={true}
+				/>
+				<ErrorModal 
+					text="İşlemizi gerçekleştirirken bir aksilik oluştu"
+					header="Hay aksi !"
+					isOpen={this.props.isFailModalOpen}
+					onClose={this.props.closeFailModal}
+					closeAnimation={true}
+				/>
 			</div>
 		);
 	}
@@ -128,7 +143,13 @@ Dashboard.propTypes = {
 	container: PropTypes.object,
 	theme: PropTypes.object.isRequired,
 };
+const mapDispatchToProps = {
+	closeFailModal,
+	closeSuccessModal
+}
 const mapStateToProps = state => ({
 	role: state.userReducer.role,
+	isFailModalOpen: state.userReducer.isFailModalOpen,
+	isSuccessModalOpen: state.userReducer.isSuccessModalOpen
 });
-export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Dashboard)));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Dashboard)));

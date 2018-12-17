@@ -21,7 +21,10 @@ import {
     addNewAllOneAsync,
     getCandidatesAndUsersAsync,
     addNewUserAsync,
-    getRegisteredByUserAsync
+    getRegisteredByUserAsync,
+    getEmployeesIncPassiveAsync,
+    getDepartmentsAsync,
+    getRegisteredByDepartment
 } from './workers';
 
 import {
@@ -46,8 +49,12 @@ import {
     ADD_NEW_ALL_ONE,
     GET_CANDIDATES_AND_USERS,
     ADD_NEW_USER,
-    GET_REGISTERED_BY_USER
+    GET_REGISTERED_BY_USER,
+    GET_EMPLOYEES_INC_PASSIVE,
+    GET_DEPARTMENTS,
+    GET_REGISTERED_BY_DEPARTMENT
 } from '../actions/types';
+
 
 
 export default function* rootSaga() {
@@ -73,6 +80,9 @@ export default function* rootSaga() {
         takeLatest(ADD_NEW_ALL_ONE, addNewAllOneAsync),
         takeLatest(GET_CANDIDATES_AND_USERS, getCandidatesAndUsersAsync),
         takeLatest(ADD_NEW_USER, addNewUserAsync),
-        takeLatest(GET_REGISTERED_BY_USER, getRegisteredByUserAsync)
+        takeLatest(GET_REGISTERED_BY_USER, getRegisteredByUserAsync),
+        takeLatest(GET_EMPLOYEES_INC_PASSIVE, getEmployeesIncPassiveAsync),
+        takeLatest(GET_DEPARTMENTS, getDepartmentsAsync),
+        takeLatest(GET_REGISTERED_BY_DEPARTMENT, getRegisteredByDepartment),
     ]);
 }

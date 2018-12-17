@@ -12,6 +12,8 @@ export const SET_UNREGISTERED_PC_COMPONENTS = 'set_unregistered_pc_components';
 
 export const GET_EMPLOYEES = 'get_employees';
 export const SET_EMPLOYEES = 'set_employees';
+export const GET_EMPLOYEES_INC_PASSIVE = 'get_employees_inc_passive';
+export const SET_EMPLOYEES_INC_PASSIVE = 'set_employees_inc_passive';
 
 export const REGISTER_PRODUCT = 'register_product';
 export const REMOVE_REGISTERATION = 'remove_registeration';
@@ -51,6 +53,18 @@ export const ADD_NEW_USER = 'add_new_user';
 
 export const GET_REGISTERED_BY_USER = 'get_registered_by_user';
 export const SET_REGISTERED_BY_USER = 'set_registered_by_user';
+
+export const GET_REGISTERED_BY_DEPARTMENT = 'get_registered_by_department';
+export const SET_REGISTERED_BY_DEPARTMENT = 'set_registered_by_department';
+
+export const GET_DEPARTMENTS = 'get_departments';
+export const SET_DEPARTMENTS = 'set_departments';
+
+export const CLOSE_SUCCESS_MODAL = 'close_success_modal';
+export const CLOSE_FAIL_MODAL = 'close_fail_modal';
+
+export const OPEN_SUCCESS_MODAL = 'open_success_modal';
+export const OPEN_FAIL_MODAL = 'open_fail_modal';
 
 
 

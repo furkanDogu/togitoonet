@@ -53,7 +53,7 @@ class NewProductPropModal extends React.Component {
 										/>
 										<FormControl.Feedback style={{ marginRight: 6 }} />
 										<HelpBlock>
-											Maksimum 40 minimum 5 karakterli Türkçe karakter içermeyen tanımlamalar yapılabilir
+											Maksimum 40 minimum 3 karakterli Türkçe karakter içermeyen tanımlamalar yapılabilir
 											<br />
 										</HelpBlock>
 									</FormGroup>

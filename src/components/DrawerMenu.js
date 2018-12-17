@@ -147,7 +147,7 @@ class DrawerMenu extends React.Component {
 							</ListItemIcon>
 							<ListItemText inset primary="Kişi Bazlı" />
 						</ListItem>
-						<ListItem button style={{ paddingLeft: 35 }}>
+						<ListItem button style={{ paddingLeft: 35 }} onClick={() => this.props.history.push('/departmentReport')}>
 							<ListItemIcon>
 								<PeopleIcon />
 							</ListItemIcon>

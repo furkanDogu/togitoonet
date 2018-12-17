@@ -5,7 +5,14 @@ import {
     HIDE_ERROR_MODAL,
     SET_EMPLOYEES,
     SET_CANDIDATES_AND_USERS,
-    SET_REGISTERED_BY_USER
+    SET_REGISTERED_BY_USER,
+    SET_EMPLOYEES_INC_PASSIVE,
+    SET_DEPARTMENTS,
+    SET_REGISTERED_BY_DEPARTMENT,
+    CLOSE_SUCCESS_MODAL,
+    CLOSE_FAIL_MODAL,
+    OPEN_FAIL_MODAL,
+    OPEN_SUCCESS_MODAL
 } from '../actions/types';
 const INITIAL_STATE = {
     email: '',
@@ -16,9 +23,14 @@ const INITIAL_STATE = {
     departmanID: '',
     isLoginFailed: false,
     employees: [],
+    employeesIncPassive: [],
+    departments: [],
     candidates: [],
     users: [],
-    registeredProductsByUser: []
+    registeredProductsByUser: [],
+    registeredProductsByDepartment: [],
+    isFailModalOpen: false,
+    isSuccessModalOpen: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -48,8 +60,21 @@ export default (state = INITIAL_STATE, action) => {
                 candidates: action.payload.candidates
             };
         case SET_REGISTERED_BY_USER:
-            console.log(action.payload.result);
             return {...state, registeredProductsByUser: action.payload.result };
+        case SET_EMPLOYEES_INC_PASSIVE:
+            return {...state, employeesIncPassive: action.payload.result };
+        case SET_DEPARTMENTS: 
+            return {...state, departments: action.payload.result };
+        case SET_REGISTERED_BY_DEPARTMENT:
+            return {...state, registeredProductsByDepartment: action.payload.result }; 
+        case CLOSE_SUCCESS_MODAL:
+            return {...state, isSuccessModalOpen: false };
+        case CLOSE_FAIL_MODAL: 
+            return {...state, isFailModalOpen: false };
+        case OPEN_FAIL_MODAL: 
+            return {...state, isFailModalOpen: true };
+        case OPEN_SUCCESS_MODAL: 
+            return {...state, isSuccessModalOpen: true };
         default: return state;
 
     }

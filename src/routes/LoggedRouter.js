@@ -10,6 +10,7 @@ import NewProduct from '../components/NewProduct';
 import NewAllOne from '../components/NewAllOne';
 import NewUser from '../components/NewUser';
 import UserReport from '../components/UserReport';
+import DepartmentReport from '../components/DepartmentReport';
 
 const UnregisteredProduct = ProductPage(ProductContainer);
 const RegisteredProduct = ProductPage(ProductContainer);
@@ -49,6 +50,10 @@ const LoggedRouter = () => {
 					<Route
 						path="/userReport"
 						render={() => <UserReport />}
+					/>
+					<Route
+						path="/departmentReport"
+						render={() => <DepartmentReport />}
 					/>
 				</Switch>
 			</Dashboard>

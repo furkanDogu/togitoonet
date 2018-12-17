@@ -13,7 +13,12 @@ import {
     SET_CITIES,
     SET_TOWNS,
     SET_CANDIDATES_AND_USERS,
-    SET_REGISTERED_BY_USER
+    SET_REGISTERED_BY_USER,
+    SET_EMPLOYEES_INC_PASSIVE,
+    SET_DEPARTMENTS,
+    SET_REGISTERED_BY_DEPARTMENT,
+    OPEN_SUCCESS_MODAL,
+    OPEN_FAIL_MODAL
 } from '../actions/types';
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
@@ -76,7 +81,7 @@ export function* getUnregisteredProductsAsync() {
         yield put({ type: SET_UNREGISTERED_PRODUCTS, payload: response.data });
         yield put({ type: SET_UNREGISTERED_PC_COMPONENTS, payload: response.data });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 
 }
@@ -88,7 +93,7 @@ export function* getEmployeesAsync() {
         const response = yield axios.get(endPoint, getTokenFromStorage());
         yield put({ type: SET_EMPLOYEES, payload: response.data });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 export function* registerProductsAsync(action) {
@@ -111,8 +116,9 @@ export function* registerProductsAsync(action) {
             },getTokenFromStorage());
             
             yield getUnregisteredProductsAsync();
+            yield put({ type: OPEN_SUCCESS_MODAL });
         } catch(e) {
-            console.log(e);
+            yield put({ type: OPEN_FAIL_MODAL });
         }
 }
 
@@ -125,7 +131,7 @@ export function* getRegisteredProductsAsync() {
         yield put({ type: SET_REGISTERED_PC_COMPONENTS, payload: response.data });
 
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 // this async function will call the api and remove the registeration for any given product id.
@@ -145,9 +151,10 @@ export function* removeRegisterationAsync(action) {
         endPoint = `${URL}/product/removereg/${productType}/${parseInt(registerationID)}`;
         yield axios.post(endPoint, { }, getTokenFromStorage())
         yield getRegisteredProductsAsync();
+        yield put({ type: OPEN_SUCCESS_MODAL });
 
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 } 
 
@@ -164,8 +171,9 @@ export function* addBrokenProductAsync(action) {
             yield axios.post(endPoint, { desc }, getTokenFromStorage());
         }
         yield getRegisteredProductsAsync();
+        yield put({ type: OPEN_SUCCESS_MODAL });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -176,7 +184,7 @@ export function* getBrokenProductsAsync() {
         yield put({ type: SET_BROKEN_PRODUCTS, payload: result.data });
 
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -186,7 +194,7 @@ export function* getBrandsAsync() {
         const result = yield axios.get(endPoint, getTokenFromStorage());
         yield put({ type: SET_BRANDS, payload: result.data });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -196,7 +204,7 @@ export function* getCategoriesAsync() {
         const result = yield axios.get(endPoint, getTokenFromStorage());
         yield put({ type: SET_CATEGORIES, payload: result.data });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -206,7 +214,7 @@ export function* getSuppliersAsync() {
         const result = yield axios.get(endPoint, getTokenFromStorage());
         yield put({ type: SET_SUPPLIERS, payload: result.data });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -215,8 +223,9 @@ export function* addBrandAsync(action) {
     try {
         yield axios.post(endPoint, { brandName: action.payload}, getTokenFromStorage());
         yield getBrandsAsync();
+        yield put({ type: OPEN_SUCCESS_MODAL });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -225,8 +234,9 @@ export function* addCategoryAsync(action) {
     try {
         yield axios.post(endPoint, { categoryName: action.payload}, getTokenFromStorage());
         yield getCategoriesAsync();
+        yield put({ type: OPEN_SUCCESS_MODAL });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -236,7 +246,7 @@ export function* getCitiesAsync() {
         const result = yield axios.get(endPoint, getTokenFromStorage());
         yield put({ type: SET_CITIES, payload: result.data });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -246,7 +256,7 @@ export function* getTownsAsync(action) {
         const result = yield axios.get(endPoint, getTokenFromStorage());
         yield put({ type: SET_TOWNS, payload: result.data });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -260,8 +270,9 @@ export function* addSupplierAsync(action) {
             telNo: action.payload.telNo
         }, getTokenFromStorage());
         yield getSuppliersAsync();
+        yield put({ type: OPEN_SUCCESS_MODAL });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 export function* addNewComponentAsync(action) {
@@ -276,8 +287,9 @@ export function* addNewComponentAsync(action) {
             satinAlinanAdet: action.payload.amount,
             fiyat: action.payload.cost
         }, getTokenFromStorage());
+        yield put({ type: OPEN_SUCCESS_MODAL });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -286,8 +298,9 @@ export function* addNewAllOneAsync(action) {
     try {
         console.log(action.payload);
         yield axios.post(endPoint, action.payload, getTokenFromStorage());
+        yield put({ type: OPEN_SUCCESS_MODAL });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -306,8 +319,9 @@ export function* addNewUserAsync(action) {
     try {
         yield axios.post(endPoint, { password: action.payload.password}, getTokenFromStorage());
         yield getCandidatesAndUsersAsync();
+        yield put({ type: OPEN_SUCCESS_MODAL });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
@@ -317,8 +331,35 @@ export function* getRegisteredByUserAsync(action) {
         const result = yield axios.get(endPoint, getTokenFromStorage());
         yield put({ type: SET_REGISTERED_BY_USER, payload: result.data });
     } catch(e) {
-        console.log(e);
+        yield put({ type: OPEN_FAIL_MODAL });
+    }
+}
+export function* getEmployeesIncPassiveAsync() {
+    let endPoint = URL + '/user/all';
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_EMPLOYEES_INC_PASSIVE, payload: result.data });
+    } catch(e) {
+        yield put({ type: OPEN_FAIL_MODAL });
     }
 }
 
+export function* getDepartmentsAsync() {
+    let endPoint = URL + '/user/departments';
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_DEPARTMENTS, payload: result.data });
+    } catch(e) {
+        yield put({ type: OPEN_FAIL_MODAL });
+    }
+}
+export function* getRegisteredByDepartment(action) {
+    let endPoint = `${URL}/product/registered/departments/${action.payload}`;
+    try {
+        const result = yield axios.get(endPoint, getTokenFromStorage());
+        yield put({ type: SET_REGISTERED_BY_DEPARTMENT, payload: result.data });
+    } catch(e) {
+        yield put({ type: OPEN_FAIL_MODAL });
+    }
+}
 

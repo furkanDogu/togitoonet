@@ -15,6 +15,9 @@ router.post('/login', (req, res, next) => {
         if (user.length === 0) {
             return res.status(404).json(failedMessage);
         }
+        if(user[0].aktifMi === 0) {
+            return res.status(404).json(failedMessage);
+        }
         bcrypt.compare(req.body.password, user[0].userPassword, (err, result) => {
             // if there is an error while comparing the passwords
             if (err) {
@@ -92,6 +95,15 @@ router.post('/check', (req, res, next) => {
 
 router.get('/', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales', 'chief'], req, res, () => {
+        let queryString = 'SELECT * FROM view_personeller WHERE aktifMi = 1';
+        global.db.query(queryString, (error, result) => {
+            if (error) return res.status(500).json({ error });
+            res.status(200).json({ result });
+        });
+    });
+});
+router.get('/all', verifyToken, (req, res, next) => {
+    return auth.doOnlyWith(['admin', 'sales', 'chief'], req, res, () => {
         let queryString = 'SELECT * FROM view_personeller';
         global.db.query(queryString, (error, result) => {
             if (error) return res.status(500).json({ error });
@@ -99,13 +111,12 @@ router.get('/', verifyToken, (req, res, next) => {
         });
     });
 });
-
 router.get('/candidates', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin'], req, res, () => {
         let queryString = "SELECT * FROM view_user_adaylari";
         global.db.query(queryString, (error, result_candidates) => {
             if (error) return res.status(500).json({ error });
-            queryString = 'SELECT U.userID, U.email, R.rolAdi FROM tbl_user U INNER JOIN tbl_rol R ON R.rolID = U.rolID';
+            queryString = 'SELECT U.userID, U.email, R.rolAdi FROM tbl_user U INNER JOIN tbl_rol R ON R.rolID = U.rolID WHERE U.aktifMi = 1';
             global.db.query(queryString, (error, result_users) => {
                 if (error) return res.status(500).json({ error });
                 res.status(200).json({
@@ -115,6 +126,16 @@ router.get('/candidates', verifyToken, (req, res, next) => {
             });
         });
     
+    });
+});
+
+router.get('/departments', verifyToken, (req, res, next) => {
+    return auth.doOnlyWith(['admin', 'sales', 'chief'], req, res, () => {
+        let queryString = "SELECT * FROM tbl_departman";
+        global.db.query(queryString, (error, result) => {
+            if(error) return res.status(500).json({ error });
+            res.status(200).json({ result });
+        });
     });
 });
 

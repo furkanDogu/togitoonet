@@ -3,50 +3,50 @@ import { Grid, Row, Col, Button, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import GridMat from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
-import { getRegisteredByUser, getEmployeesIncPassive } from '../actions/userActions';
+import { getRegisteredByDepartment, getDepartments } from '../actions/userActions';
 
-class UserReport extends React.Component {
+class DepartmentReport extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			searchKey: '',
 			selectedIndex: -1,
-			personelID: '',
-			personelAdi: '',
-			isPersonelActive: 'notSetYet'
+			departmanID: '',
+			departmanAdi: '',
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleListItemClick = this.handleListItemClick.bind(this);
 	}
 	componentDidMount() {
-		this.props.getEmployeesIncPassive();
+		if(this.props.role === 'chief') {
+			console.log('evet');
+			this.setState({ departmanID: this.props.departmanID}, () => {
+				this.props.getRegisteredByDepartment(this.state.departmanID);
+			});
+		} else {
+			this.props.getDepartments();
+		}
 	}
 	componentDidUpdate(prevProps) {
-		if (this.props.registeredProductsByUser !== prevProps.registeredProductsByUser) {
-			if (this.props.registeredProductsByUser.length > 0) {
-				this.setState({ isPersonelActive: this.props.registeredProductsByUser[0].personelDurumu });
-			}
-		}
+
 	}
 	handleListItemClick(event, index, item) {
 		this.setState({ selectedIndex: index });
-		this.setState({ personelAdi: item.personelAdi });
-		this.setState({ personelID: item.personelID }, () => {
-			this.props.getRegisteredByUser(this.state.personelID);
+		this.setState({ departmanAdi: item.departmanAdi });
+		this.setState({ departmanID: item.departmanID }, () => {
+			this.props.getRegisteredByDepartment(this.state.departmanID);
 		});
 	}
 	handleChange({ target }) {
 		this.setState({ [target.name]: target.value });
 	}
-	renderUsers(users) {
-		return users.map((item, index) => (
+	renderAll(departments) {
+		return departments.map((item, index) => (
 			<ListItem
 				key={index}
 				button
@@ -54,47 +54,32 @@ class UserReport extends React.Component {
 				onClick={event => this.handleListItemClick(event, index + 1, item)}
 			>
 				<GridMat container direction={'row'} alignItems={'center'} justify={'center'}>
-					<GridMat item xs={1}>
+					<GridMat item xs={4}>
 						<ListItemIcon>
 							<PersonIcon />
 						</ListItemIcon>
 					</GridMat>
-					<GridMat item xs={1}>
-						<ListItemText primary={item.personelID} />
-					</GridMat>
 					<GridMat item xs={4}>
-						<ListItemText primary={item.personelAdi} />
+						<ListItemText primary={item.departmanID} />
 					</GridMat>
 					<GridMat item xs={4}>
 						<ListItemText primary={item.departmanAdi} />
-					</GridMat>
-					<GridMat item xs={2}>
-						<ListItemText primary={item.unvanAdi} />
 					</GridMat>
 				</GridMat>
 			</ListItem>
 		));
 	}
-
-	giveValidUsers(employees) {
-		if (this.props.role === 'chief') {
-			return employees.filter(employee => {
-				if (this.props.departmanID === employee.departmanID) return true;
-			});
-		} else {
-			// give all amployee's
-			return employees;
-		}
-	}
 	renderData() {
 		const { colItem } = styles;
-		if (this.state.personelID) {
-			if (this.props.registeredProductsByUser) {
-				return this.props.registeredProductsByUser.map((item, index) => {
+		if (this.state.departmanID) {
+			if (this.props.registeredProductsByDepartment) {
+				return this.props.registeredProductsByDepartment.map((item, index) => {
 					console.log(item);
 					return (
 						<tr key={index}>
 							<td style={colItem}>{item.personelID}</td>
+							<td style={colItem}>{item.personelAdi}</td>
+							<td style={colItem}>{item.personelDurumu}</td>
 							<td style={colItem}>{item.urunID}</td>
 							<td style={colItem}>{item.urunAdi}</td>
 							<td style={colItem}>{item.kategoriAdi}</td>
@@ -115,56 +100,35 @@ class UserReport extends React.Component {
 		newWin.print();
 		newWin.close();
 	}
-	renderSearchBar() {
+	renderDepartments(departments) {
+		if (this.props.role !== 'chief') {
 		return (
-			<div style={{ flexGrow: 1, marginTop: 10 }}>
-				<Paper style={{ marginBottom: 5, height: 40 }}>
-					<GridMat container>
-						<GridMat item xs={1}>
-							<SearchIcon />
-						</GridMat>
-						<GridMat item xs={11}>
-							<InputBase
-								fullWidth
-								placeholder="İsim giriniz..."
-								value={this.state.searchKey}
-								onChange={this.handleChange}
-								name="searchKey"
-							/>
-						</GridMat>
-					</GridMat>
-				</Paper>
-			</div>
+			<Paper style={{ height: 300, overflow: 'auto', marginTop: 10, marginBottom: 20 }}>
+				<List>{this.renderAll(departments)}</List>
+			</Paper>
 		);
+		} 
 	}
 	render() {
-		// this.props.employeesIncPassive
 		const { colItem, textStyle } = styles;
 		return (
 			<Grid style={{ marginTop: 80 }}>
 				
 				<Row>
+					{this.props.role === 'chief' ? <div style={{ marginBottom: 10 }}><span style={{ fontSize: 15, fontWeight: '400' }}>Departmanınıza ait rapor</span></div>: null }
 					<Col xs={12}>
-						<span style={{ fontSize: 15, fontWeight: '400' }}>Aşağıda bulunan listeden bir personel seçerek ilgili raporu görüntüleyebilirsiniz.</span>
-						{this.renderSearchBar()}
-						<Paper style={{ height: 300, overflow: 'auto' }}>
-							<List>{this.renderUsers(this.giveValidUsers(this.props.employeesIncPassive.filter((item) => {
-                if(item.personelAdi.toLowerCase().includes(this.state.searchKey.toLowerCase())) {
-                    return true;
-                }
-            })))}</List>
-						</Paper>
+						{this.props.role !== 'chief' ? 
+						(<span style={{ fontSize: 15, fontWeight: '400' }}>Aşağıda bulunan listeden bir departman seçerek ilgili raporu görüntüleyebilirsiniz.</span>) : null}
+						{this.renderDepartments(this.props.departments)}
 					</Col>
 				</Row>
 				<Row>
 					<div id="tbl">
 						<Col xs={10}>
-							
 							{this.state.personelAdi ? (
 								<div style={{ marginTop: 40, marginBottom: 10 }}>
 									<span style={textStyle}>Personel: </span>
 									<span style={textStyle}>{this.state.personelAdi}</span>
-									<span style={{ marginLeft: 10 }}>{this.state.isPersonelActive !== 'notSetYet' ? this.state.isPersonelActive === 'Aktif' ? '(Aktif olarak çalışıyor)' : '(Eski çalışan)' : null}</span>
 								</div>
 							) : null}
 						</Col>
@@ -177,15 +141,17 @@ class UserReport extends React.Component {
 						</Col>
 						<Table>
 							<tbody>
-								{this.state.personelID ? (
+								{this.state.departmanID ? (
 									<tr>
 										<th style={colItem}>Personel ID</th>
+										<th style={colItem}>Personel Adı</th>
+										<th style={colItem}>Personel Durumu</th>
 										<th style={colItem}>Ürün ID</th>
 										<th style={colItem}>Ürün Adı</th>
 										<th style={colItem}>Kategori Adı</th>
 										<th style={colItem}>Zimmet Tarihi</th>
 										<th style={colItem}>Zimmet Kaldırma Tarihi</th>
-										<th style={colItem}>Durum</th>
+										<th style={colItem}>Zimmet Durumu</th>
 										<th style={colItem}>Süre</th>
 									</tr>
 								) : null}
@@ -193,18 +159,22 @@ class UserReport extends React.Component {
 							</tbody>
 						</Table>
 					</div>
-					{this.state.personelAdi ? (<Button onClick={() => this.printTable()}>Yazdır</Button>) : null}
+					{this.state.departmanID ? (<Button onClick={() => this.printTable()}>Yazdır</Button>) : null}
 				</Row>
 			</Grid>
 		);
 	}
 }
 const mapStateToProps = state => ({
-	employeesIncPassive: state.userReducer.employeesIncPassive,
 	departmanID: state.userReducer.departmanID,
+	departments: state.userReducer.departments,
 	role: state.userReducer.role,
-	registeredProductsByUser: state.userReducer.registeredProductsByUser,
+	registeredProductsByDepartment: state.userReducer.registeredProductsByDepartment,
 });
+const mapDispatchToProps = {
+	getRegisteredByDepartment,
+	getDepartments,
+};
 const styles = {
 	colItem: {
 		padding: 15,
@@ -217,13 +187,8 @@ const styles = {
 		fontWeight: '500',
 	},
 };
-const mapDispatchToProps = {
-	getRegisteredByUser,
-	getEmployeesIncPassive,
-};
-
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(UserReport);
+)(DepartmentReport);
