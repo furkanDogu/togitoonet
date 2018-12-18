@@ -427,7 +427,7 @@ class NewAllOne extends React.Component {
 									<HelpBlock>
 										Lütfen Türkçe karakter kullanımı ve 40 karakterden uzun model tanımı yapmayınız
 										<br />
-										Renk tanımı en az 5 karakterden oluşmalıdır
+										Renk tanımı en az 3 karakterden oluşmalıdır
 									</HelpBlock>
 								</FormGroup>
 							</Col>

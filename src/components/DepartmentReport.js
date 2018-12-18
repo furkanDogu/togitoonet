@@ -124,18 +124,18 @@ class DepartmentReport extends React.Component {
 				</Row>
 				<Row>
 					<div id="tbl">
-						<Col xs={10}>
-							{this.state.personelAdi ? (
+						<Col xs={9}>
+							{this.state.departmanAdi ? (
 								<div style={{ marginTop: 40, marginBottom: 10 }}>
-									<span style={textStyle}>Personel: </span>
-									<span style={textStyle}>{this.state.personelAdi}</span>
+									<span style={textStyle}>Departman: </span>
+									<span style={textStyle}>{this.state.departmanAdi + ' Departmanı'}</span>
 								</div>
 							) : null}
 						</Col>
-						<Col xs={2}>
-							{this.state.personelAdi ? (
+						<Col xs={3}>
+							{this.state.departmanAdi ? (
 								<div style={{ marginTop: 40, marginBottom: 10 }}>
-									<span style={textStyle}>Kişi Zimmet Dökümü</span>
+									<span style={textStyle}>Departman Zimmet Raporu</span>
 								</div>
 							) : null}
 						</Col>
