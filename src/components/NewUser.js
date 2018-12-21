@@ -76,13 +76,13 @@ class NewUser extends React.Component {
                     <GridMat item xs={3}>
                         <ListItemText primary={item.personelAdi} />
                     </GridMat>
-                    <GridMat item xs={3}>
+                    <GridMat item xs={2}>
                         <ListItemText primary={item.departmanAdi} />
                     </GridMat>
                     <GridMat item xs={2}>
                         <ListItemText primary={item.unvanAdi} />
                     </GridMat>
-                    <GridMat item xs={2}>
+                    <GridMat item xs={3}>
                         <ListItemText primary={item.email} />
                     </GridMat>
                     
@@ -101,10 +101,10 @@ class NewUser extends React.Component {
                             <PersonIcon />
                         </ListItemIcon>
                     </GridMat>
-                    <GridMat item xs={6}>
+                    <GridMat item xs={7}>
                         <ListItemText primary={item.email} />
                     </GridMat>
-                    <GridMat item xs={4}>
+                    <GridMat item xs={3}>
                         <ListItemText primary={item.rolAdi} />
                     </GridMat>
                 </GridMat>
