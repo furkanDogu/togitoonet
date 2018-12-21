@@ -71,16 +71,16 @@ export const getSuppliers = () => ({
 
 // an action to add new brand
 // parameters: brandName: string
-export const addBrand = (brandName) => ({
+export const addBrand = (brandName, brands) => ({
 	type: ADD_BRAND,
-	payload: brandName
+	payload: { brandName, brands }
 });
 
 // an action to add new category
 // parameters: categoryName: string
-export const addCategory = (categoryName) => ({
+export const addCategory = (categoryName, categories) => ({
 	type: ADD_CATEGORY,
-	payload: categoryName
+	payload: { categoryName, categories }
 });
 
 // an action to get all cities
@@ -97,9 +97,9 @@ export const getTowns = (cityID) => ({
 
 // an action to add new supplier
 // parameters: props: object
-export const addSupplier = (props) => ({
+export const addSupplier = (props, suppliers) => ({
 	type: ADD_SUPPLIER,
-	payload: props
+	payload: { props, suppliers }
 });
 
 // an action to add new component 

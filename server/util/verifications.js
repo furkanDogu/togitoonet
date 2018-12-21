@@ -77,37 +77,8 @@ const verifyTitle = (req, res, next) => {
         }
     });
 }
-// a middleware that checks if the brand that user wants to add exists
-// if the brand exists, user wont be allowed to add brand. 
-const verifyIfBrandExists = (req, res, next) => {
-    let queryString = 'SELECT * FROM tbl_marka';
-        global.db.query(queryString, (error, result) => {
-            if (error) return res.status(500).json({ error });
-            if (!req.body.brandName) return res.status(500).json({ message: 'Empty brand name' });
-            let brandName = req.body.brandName;
-            brandName = brandName.toLowerCase();
-            result.forEach((brand) => {
-                if (brand.markaAdi.toLowerCase() === brandName) return res.status(500).json({ message: 'Brand name is already being used'});
-            });
-            next();
-        });
-}
-// a middleware that checks if the category that user wants to add exists
-// if the category exists, user wont be allowed to add category. 
-const verifyIfCategoryExists = (req, res, next) => {
-    let queryString = 'SELECT * FROM tbl_kategori';
-        global.db.query(queryString, (error, result) => {
-            if (error) return res.status(500).json({ error });
-            if (!req.body.categoryName) return res.status(500).json({ message: 'Empty category name' });
-            let categoryName = req.body.categoryName;
-            categoryName = categoryName.toLowerCase();
-            result.forEach((category) => {
-                if (category.kategoriAdi.toLowerCase() === categoryName) return res.status(500).json({ message: 'Category name is already being used'});
-            });
-            next();
-        });
-}
-// a middleware that checks if the supplier that user wants to add exists
+
+/* // a middleware that checks if the supplier that user wants to add exists
 // if the supplier exists, user wont be allowed to add supplier. 
 const verifyIfSupplierExists = (req, res, next) => {
     let queryString = 'SELECT * FROM view_tedarikciler';
@@ -121,12 +92,9 @@ const verifyIfSupplierExists = (req, res, next) => {
         });
         next();
     });
-}
+} */
 module.exports = {
     verifyToken,
     verifyQuantity,
-    verifyTitle,
-    verifyIfBrandExists,
-    verifyIfCategoryExists,
-    verifyIfSupplierExists
+    verifyTitle
 }

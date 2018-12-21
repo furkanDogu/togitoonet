@@ -166,7 +166,6 @@ class NewAllOne extends React.Component {
 		}
 	}
 	addNewSupplier(props) {
-		console.log('asd');
 		this.props.addSupplier(props);
 		this.handleSupplierModal();
 	}
@@ -216,9 +215,7 @@ class NewAllOne extends React.Component {
 		if (target.name === 'pcColor') {
 			this.setState({ isPcColorValid: isNewPropNameValid(target.value)});
 		}
-		this.setState({ [target.name]: target.value }, () => {
-			console.log(this.state);
-		});
+		this.setState({ [target.name]: target.value });
 	}
 
 	renderBrandOptions() {

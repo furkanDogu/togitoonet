@@ -4,7 +4,7 @@ const router = express.Router();
 
 const auth = require('../util/auth');
 const verifications = require('../util/verifications');
-const { verifyToken, verifyIfSupplierExists } = verifications;
+const { verifyToken } = verifications;
 
 
 // this endpoint will return all suppliers saved in database
@@ -22,8 +22,7 @@ router.get('/', verifyToken ,(req, res, next) => {
 // this endpoint will add new supplier to the database
 // requirements in header: token 
 // requirements in body: supplierName, ilID, ilceID, telNo
-// Given supplier name and ilID will also be check by verifyIfSupplierExists middlleware. There can't be same named suppliers in same city.
-router.post('/', verifyToken, verifyIfSupplierExists, (req, res, next) => {
+router.post('/', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = 'INSERT INTO ?? (tedarikciAdi, ilceID, ilID, telNo) VALUES(?, ?, ?, ?)';
         global.db.query(queryString, [

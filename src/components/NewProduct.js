@@ -116,17 +116,17 @@ class NewComponent extends React.Component {
 	// helps us add new supplier takes supplier information as a parameter
 	// this method will be called from NewSupplierModal
 	addNewSupplier(props) {
-		this.props.addSupplier(props);
+		this.props.addSupplier(props, this.props.suppliers);
 		this.handleSupplierModal();
 	}
 	//  helps us add new brand or category depending on the given type parameter.
 	// this method will be called from NewProductPropModal
 	addNewProp(type, value) {
 		if (type === 'Yeni Marka') {
-			this.props.addBrand(value);
+			this.props.addBrand(value, this.props.brands);
 			this.handleBrandModal();
 		} else {
-			this.props.addCategory(value);
+			this.props.addCategory(value, this.props.categories);
 			this.handleCategoryModal();
 		}
 	}

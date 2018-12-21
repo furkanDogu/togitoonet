@@ -48,8 +48,6 @@ class NewSupplierModal extends React.Component {
                 isIlceValid: 'error'
             });
         }
-        console.log('buraya geliyor');
-        console.log(this.state);
     }
     componentDidMount() {
         this.props.getCities();

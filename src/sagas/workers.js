@@ -232,9 +232,18 @@ export function* getSuppliersAsync() {
 export function* addBrandAsync(action) {
     let endPoint = URL + '/brand';
     try {
-        yield axios.post(endPoint, { brandName: action.payload}, getTokenFromStorage());
-        yield getBrandsAsync();
-        yield put({ type: OPEN_SUCCESS_MODAL });
+        let isNameOkay = true;
+        yield action.payload.brands.forEach((brand) => {
+            if (brand.markaAdi.toLowerCase() === action.payload.brandName) isNameOkay = false;
+        });
+        if (isNameOkay) {
+            yield axios.post(endPoint, { brandName: action.payload.brandName}, getTokenFromStorage());
+            yield getBrandsAsync();
+            yield put({ type: OPEN_SUCCESS_MODAL });
+        } else {
+            yield put({ type: OPEN_FAIL_MODAL });
+        }
+        
     } catch(e) {
         yield put({ type: OPEN_FAIL_MODAL });
     }
@@ -245,9 +254,17 @@ export function* addBrandAsync(action) {
 export function* addCategoryAsync(action) {
     let endPoint = URL + '/category';
     try {
-        yield axios.post(endPoint, { categoryName: action.payload}, getTokenFromStorage());
-        yield getCategoriesAsync();
-        yield put({ type: OPEN_SUCCESS_MODAL });
+        let isNameOkay = true;
+        yield action.payload.categories.forEach((category) => {
+            if (category.kategoriAdi.toLowerCase() === action.payload.categoryName) isNameOkay = false;
+        });
+        if (isNameOkay) {
+            yield axios.post(endPoint, { categoryName: action.payload.categoryName}, getTokenFromStorage());
+            yield getCategoriesAsync();
+            yield put({ type: OPEN_SUCCESS_MODAL });
+        } else {
+            yield put({ type: OPEN_FAIL_MODAL });
+        }
     } catch(e) {
         yield put({ type: OPEN_FAIL_MODAL });
     }
@@ -279,14 +296,25 @@ export function* getTownsAsync(action) {
 export function* addSupplierAsync(action) {
     let endPoint = URL + '/supplier';
     try {
-        yield axios.post(endPoint, {
-            supplierName: action.payload.supplierName,
-            ilceID: action.payload.ilceID,
-            ilID: action.payload.ilID,
-            telNo: action.payload.telNo
-        }, getTokenFromStorage());
-        yield getSuppliersAsync();
-        yield put({ type: OPEN_SUCCESS_MODAL });
+        let state = true;
+        yield action.payload.suppliers.forEach((supplier) => {
+            if (supplier.tedarikciAdi.toLowerCase() === action.payload.props.supplierName.toLowerCase() && parseInt(supplier.ilID) === parseInt(action.payload.props.ilID)) {
+                state = false;
+            }
+        });
+        if (state) {
+            yield axios.post(endPoint, {
+                supplierName: action.payload.props.supplierName,
+                ilceID: action.payload.props.ilceID,
+                ilID: action.payload.props.ilID,
+                telNo: action.payload.props.telNo
+            }, getTokenFromStorage());
+            yield getSuppliersAsync();
+            yield put({ type: OPEN_SUCCESS_MODAL });
+        } else {
+            yield put({ type: OPEN_FAIL_MODAL });
+        }
+        
     } catch(e) {
         yield put({ type: OPEN_FAIL_MODAL });
     }

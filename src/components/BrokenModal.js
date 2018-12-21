@@ -32,7 +32,6 @@ export default class BrokenModal extends React.Component {
     };
 	handleBrokenClick(product) {
         if (product.Tip === 'Bileşen') {
-            console.log(this.state.desc);
            
             // check if description is empty
             // if it's not , call the function to add item to broken part list

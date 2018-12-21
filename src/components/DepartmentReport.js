@@ -28,7 +28,6 @@ class DepartmentReport extends React.Component {
 	// if current user is not chief, he can see all the departments and their registeration details
 	componentDidMount() {
 		if(this.props.role === 'chief') {
-			console.log('evet');
 			this.setState({ departmanID: this.props.departmanID}, () => {
 				this.props.getRegisteredByDepartment(this.state.departmanID);
 			});
@@ -80,7 +79,6 @@ class DepartmentReport extends React.Component {
 		if (this.state.departmanID) {
 			if (this.props.registeredProductsByDepartment) {
 				return this.props.registeredProductsByDepartment.map((item, index) => {
-					console.log(item);
 					return (
 						<tr key={index}>
 							<td style={colItem}>{item.personelID}</td>
