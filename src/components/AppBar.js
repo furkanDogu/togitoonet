@@ -6,6 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { Business } from '@material-ui/icons';
 
+
 const styles = {
   root: {
     flexGrow: 1,
@@ -13,6 +14,7 @@ const styles = {
   }
 };
 
+// This is the component that stands on top of the page. It is a dumb component which means it has no business logic.
 function SimpleAppBar(props) {
   const { classes } = props;
 

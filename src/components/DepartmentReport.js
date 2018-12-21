@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import { getRegisteredByDepartment, getDepartments } from '../actions/userActions';
 
+// This component is used to show department based registeration reports.
 class DepartmentReport extends React.Component {
 	constructor(props) {
 		super(props);
@@ -22,6 +23,9 @@ class DepartmentReport extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleListItemClick = this.handleListItemClick.bind(this);
 	}
+
+	// if current users role is chief then just show his department's info
+	// if current user is not chief, he can see all the departments and their registeration details
 	componentDidMount() {
 		if(this.props.role === 'chief') {
 			console.log('evet');
@@ -32,9 +36,9 @@ class DepartmentReport extends React.Component {
 			this.props.getDepartments();
 		}
 	}
-	componentDidUpdate(prevProps) {
-
-	}
+	
+	// whenever a list item clicked in departments list, set department's info to the state.
+	// finally, call getRegisteredByDepartment action to get registered products to that department
 	handleListItemClick(event, index, item) {
 		this.setState({ selectedIndex: index });
 		this.setState({ departmanAdi: item.departmanAdi });
@@ -42,6 +46,8 @@ class DepartmentReport extends React.Component {
 			this.props.getRegisteredByDepartment(this.state.departmanID);
 		});
 	}
+
+	// whenever user types an input set it to the state
 	handleChange({ target }) {
 		this.setState({ [target.name]: target.value });
 	}
@@ -93,6 +99,7 @@ class DepartmentReport extends React.Component {
 			}
 		}
 	}
+	// a function to print shown table. It basically creates new window with tbl element. Then prints it.
 	printTable() {
 		var divToPrint = document.getElementById('tbl');
 		var newWin = window.open('');
@@ -100,6 +107,7 @@ class DepartmentReport extends React.Component {
 		newWin.print();
 		newWin.close();
 	}
+	// if user is not chief we need to show all departments in a list.
 	renderDepartments(departments) {
 		if (this.props.role !== 'chief') {
 		return (

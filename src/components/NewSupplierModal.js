@@ -4,6 +4,7 @@ import { getCities, getTowns } from '../actions/productActions';
 import { isNewPropNameValid, isTelNoValid, isSelectValid } from '../util/validations';
 import { connect } from 'react-redux';
 
+// This component helps us add new supplier
 class NewSupplierModal extends React.Component {
     constructor(props) {
 		super(props);

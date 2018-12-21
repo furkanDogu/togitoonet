@@ -78,6 +78,7 @@ class NewComponent extends React.Component {
 		}
 		return false;
 	}
+	// this function cleans the input fiels and validation states after a successfull product adding process.
 	cleanAreas() {
 		this.setState({
 			selectedSupplierIndex: -1,
@@ -101,6 +102,9 @@ class NewComponent extends React.Component {
 			isSupplierModalOpen: false,
 		});
 	}
+	// when submit button is clicked, this function will be called.
+	// It first checks if there is any error in input fields, if not it adds new component
+	// this method will be called by this component
 	handleFormSubmit(e) {
 		e.preventDefault();
 		if (!this.checkIfAnyError()) {
@@ -109,11 +113,14 @@ class NewComponent extends React.Component {
 			this.cleanAreas();
 		}
 	}
+	// helps us add new supplier takes supplier information as a parameter
+	// this method will be called from NewSupplierModal
 	addNewSupplier(props) {
-		console.log('asd');
 		this.props.addSupplier(props);
 		this.handleSupplierModal();
 	}
+	//  helps us add new brand or category depending on the given type parameter.
+	// this method will be called from NewProductPropModal
 	addNewProp(type, value) {
 		if (type === 'Yeni Marka') {
 			this.props.addBrand(value);
@@ -123,16 +130,19 @@ class NewComponent extends React.Component {
 			this.handleCategoryModal();
 		}
 	}
+	// opens / closes the NewSupplierModal according to the current state of this modal
 	handleSupplierModal() {
 		this.setState(state => ({
 			isSupplierModalOpen: !state.isSupplierModalOpen,
 		}));
 	}
+	// opens / closes the NewProductPropModal according to the current state of this modal
 	handleCategoryModal() {
 		this.setState(state => ({
 			isCategoryModalOpen: !state.isCategoryModalOpen,
 		}));
 	}
+	// opens / closes the NewSupplierModal according to the current state of this modal
 	handleBrandModal() {
 		this.setState(state => ({
 			isBrandModalOpen: !state.isBrandModalOpen,
@@ -159,11 +169,9 @@ class NewComponent extends React.Component {
 		if (target.name === 'cost') {
 			this.setState({ isCostValid: isCostValid(target.value) });
 		}
-		this.setState({ [target.name]: target.value }, () => {
-			console.log(this.state);
-		});
+		this.setState({ [target.name]: target.value });
 	}
-
+	// shows all brands in a select box
 	renderBrandOptions() {
 		return (
 			<React.Fragment>
@@ -218,7 +226,8 @@ class NewComponent extends React.Component {
 		this.props.getCategories();
 		this.props.getSuppliers();
 	}
-	//search bar
+	// this is the search bar that is shown on top of the supplier list.
+	// it is responsbile for searching given string input in suppliers.
 	renderSearchBar() {
 		return (
 			<Grid style={{ marginBottom: 20 }}>
@@ -253,6 +262,7 @@ class NewComponent extends React.Component {
 			</Grid>
 		);
 	}
+	// this method is responsible for showing filtered suppliers in a list.
 	renderSuppliers(items) {
 		return items.map((item, index) => (
 			<ListItem

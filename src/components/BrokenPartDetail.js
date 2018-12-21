@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 
+// This is another dumb component that is just responsible for showing broken part details given by parent component. 
 export default ({ isOpen, onClose, product }) => {
 	const { header, subHeader, spanStyle } = styles;
 	return (

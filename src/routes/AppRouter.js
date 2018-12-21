@@ -4,7 +4,6 @@ import createHistory from 'history/createBrowserHistory';
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 import LoginForm from '../components/LoginForm';
-/* import Dashboard from '../components/Dashboard'; */
 import LoggedRouter from './LoggedRouter';
 
 

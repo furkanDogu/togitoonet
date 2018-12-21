@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Person';
 import { getRegisteredByUser, getEmployeesIncPassive } from '../actions/userActions';
 
+// This component helps us get registeration reports based on employee.
 class UserReport extends React.Component {
 	constructor(props) {
 		super(props);
@@ -25,9 +26,12 @@ class UserReport extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleListItemClick = this.handleListItemClick.bind(this);
 	}
+	// when component is created on the screen, get all the employees from store.
 	componentDidMount() {
 		this.props.getEmployeesIncPassive();
 	}
+	// whenever component gets new components that are registered to a employee, this function is called
+	// it checks if the employee is still employed in compony or not.
 	componentDidUpdate(prevProps) {
 		if (this.props.registeredProductsByUser !== prevProps.registeredProductsByUser) {
 			if (this.props.registeredProductsByUser.length > 0) {
@@ -35,6 +39,8 @@ class UserReport extends React.Component {
 			}
 		}
 	}
+	// with every click on employees list, this function is triggered and it sets employee info to the state.
+	// finally, it gets registered items to the employee.
 	handleListItemClick(event, index, item) {
 		this.setState({ selectedIndex: index });
 		this.setState({ personelAdi: item.personelAdi });
@@ -42,9 +48,11 @@ class UserReport extends React.Component {
 			this.props.getRegisteredByUser(this.state.personelID);
 		});
 	}
+	// handles any coming input to the search bar
 	handleChange({ target }) {
 		this.setState({ [target.name]: target.value });
 	}
+	// shows all users in list items
 	renderUsers(users) {
 		return users.map((item, index) => (
 			<ListItem
@@ -75,7 +83,9 @@ class UserReport extends React.Component {
 			</ListItem>
 		));
 	}
-
+	// if current user is chief, we are supposed to only show employees that are working in chief's department
+	// so this method just checks the role and if it's chief, gives the proper employees to show.
+	// if current user is not chief, it returns all employees (which means current user is either admin or sales)
 	giveValidUsers(employees) {
 		if (this.props.role === 'chief') {
 			return employees.filter(employee => {
@@ -86,6 +96,9 @@ class UserReport extends React.Component {
 			return employees;
 		}
 	}
+	// this method renders registeration info on the screen.
+	// it basically returns tr items with registeration info.
+	// this function will be used in <table> tag.
 	renderData() {
 		const { colItem } = styles;
 		if (this.state.personelID) {
@@ -108,6 +121,7 @@ class UserReport extends React.Component {
 			}
 		}
 	}
+	// prints the table
 	printTable() {
 		var divToPrint = document.getElementById('tbl');
 		var newWin = window.open('');
@@ -138,7 +152,6 @@ class UserReport extends React.Component {
 		);
 	}
 	render() {
-		// this.props.employeesIncPassive
 		const { colItem, textStyle } = styles;
 		return (
 			<Grid style={{ marginTop: 80 }}>

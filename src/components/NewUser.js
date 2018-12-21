@@ -56,6 +56,9 @@ class NewUser extends React.Component {
     handleListItemClick(event, selectedIndex, chosenEmployeeID) {
         this.setState({ selectedIndex, chosenEmployeeID });
     }
+
+    // this function will render all of the candidates in list items.
+    // List items will also be clickable. Whenever user clicks one of them it will set the state with candidate id.
     renderCandidates(candidates) {
         return candidates.map((item, index) => (
             <ListItem
@@ -90,6 +93,8 @@ class NewUser extends React.Component {
             </ListItem>
         ));
     }
+    // this method will render given users in a list item.
+    // each user will have its own list item. 
     renderUsers(users) {
         return users.map((item, index) => (
             <ListItem
@@ -111,9 +116,11 @@ class NewUser extends React.Component {
             </ListItem>
         ));
     }
+    // handles any coming input from search bar
     handleChange({ target }) {
         this.setState({ [target.name]: target.value });
     }
+    // whenever user enters an input to the search bar, we need to shape the input to make clean search in our candidate list
     compressSearchKey(item) {
         let searchKeyNew = this.state.searchKey.replace(/ +/, "");
         let itemInfo = item.personelAdi + item.unvanAdi + item.departmanAdi;

@@ -15,9 +15,12 @@ const styles = {
 	},
 	typo: {
 		marginBottom: 4
-	},
-	
+	},	
 };
+
+// if product is unregistered product : stockAmount will be shown
+// if product is registered product: registerationDate and registeredPerson will be shown
+// if product is broken product: errorDate will be shown
 const renderSpecialProp = (stockAmount, registerationDate, registeredPerson, styles, errorDate) => {
 	if (stockAmount && !registerationDate && !errorDate) {
 		return <Typography variant="subheading" className={styles.typo}>Stok Miktarı: {stockAmount}</Typography>;
@@ -47,6 +50,9 @@ const renderSpecialProp = (stockAmount, registerationDate, registeredPerson, sty
 		return <Typography variant="subheading" className={styles.typo}>ArızaTarihi: {errorDate}</Typography>; 
 	} else return null;
 }
+
+// This component is the most reusable component of our system. It is able to show all kinds of components.
+// Basically, according to the given properties it will shape itself.
 function ProductCard(props) {
 	const { classes, name, buttons, id, category, brand, stockAmount, registerationDate, registeredPerson, registerationID, errorDate, errorID } = props;
 

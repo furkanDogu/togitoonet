@@ -22,6 +22,9 @@ import InsertChartIcon from '@material-ui/icons/InsertChart';
 import PeopleIcon from '@material-ui/icons/People';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
+// This is the menu that stands on the left of drawer.
+//  Since it has 3 nested option in it, we need to keep state of them.
+// Whenever user clicks a nested option, we need to show details about the option by changing state.
 class DrawerMenu extends React.Component {
 	constructor(props) {
 		super(props);

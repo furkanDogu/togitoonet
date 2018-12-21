@@ -12,7 +12,6 @@ import productReducer from '../reducers/productReducer';
 
 
 
-
 it('renders and connects to redux store without crashing', () => {
   const div = document.createElement('div');
   const sagaMiddleware = createSagaMiddleware();

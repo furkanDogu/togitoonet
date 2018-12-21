@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Modal, Row, Col, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import { verifyProductName, isSelectValid } from '../util/validations';
-//{ isOpen, onClose, onOkay, categories, brands}
+
+// This statefull component helps us getting information about new pc component.
 export default class NewPcComponentModal extends React.Component {
 	constructor(props) {
 		super(props);
@@ -15,7 +16,8 @@ export default class NewPcComponentModal extends React.Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleOkayButton = this.handleOkayButton.bind(this);
-    }
+	}
+	// clears the areas after pressing okay button.
     clearAreas() {
         this.setState({
             pcComponentName: '',
@@ -25,7 +27,8 @@ export default class NewPcComponentModal extends React.Component {
             isCategoryValid: 'error',
             isBrandValid: 'error'
         });
-    }
+	}
+	//Sends pc component information to the parent.
     handleOkayButton() {
         const splittedBrand = this.state.pcComponentBrand.split('.');
         const splittedCategory = this.state.pcComponentCategory.split('.');
@@ -38,7 +41,8 @@ export default class NewPcComponentModal extends React.Component {
         }
         this.props.onOkay(pcComponent);
         this.clearAreas();
-    }
+	}
+	// renders brands in a select box
 	renderBrands() {
         return (
             <React.Fragment>
@@ -50,7 +54,8 @@ export default class NewPcComponentModal extends React.Component {
 				))}
 			</React.Fragment>
         );
-    }
+	}
+	// renders categories in a select box
     renderCategories() {
         return (
             <React.Fragment>
@@ -66,7 +71,9 @@ export default class NewPcComponentModal extends React.Component {
 				})}
 			</React.Fragment>
         );
-    }
+	}
+	// this method helps us detect if user inputs are valid yet
+	// also sets the state with user input
     handleChange({ target }) {
         
         if (target.name === 'pcComponentName') {

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Modal, Row, Col, FormGroup, FormControl, HelpBlock  } from 'react-bootstrap';
 import { isNewPropNameValid } from '../util/validations';
+
+// This component helps us add new brand or category. It renders a modal in it. After pressing okay button, all data in here will be sent to the parent.
 class NewProductPropModal extends React.Component {
 	constructor(props) {
 		super(props);

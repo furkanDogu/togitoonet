@@ -48,7 +48,7 @@ const styles = theme => ({
 		padding: theme.spacing.unit * 3,
 	}
 });
-
+// This is the main component that holds all the routes and components in it.
 class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
@@ -59,7 +59,7 @@ class Dashboard extends React.Component {
 		};
 		this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
 	}
-
+	// when screen gets smalller, we need to show the hamburger menu instead of drawer
 	handleDrawerToggle() {
 		this.setState(state => ({ mobileOpen: !state.mobileOpen }));
 	}

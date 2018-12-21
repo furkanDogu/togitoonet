@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, Col, Row, FormControl, HelpBlock, FormGroup } from 'react-bootstrap';
 import { isPasswordValid } from '../util/validations';
 
-
+// This component helps us get password for new user.
 class PasswordModal extends React.Component {
 
 	constructor(props) {
@@ -14,6 +14,7 @@ class PasswordModal extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleOkayClick = this.handleOkayClick.bind(this);
 	}
+	// after pressing okay button, this method will be triggered and it will send password to the parent.
 	handleOkayClick() {
 		if (this.state.isPasswordValid !== 'error') {
 			this.props.onOkay(this.state.value);
@@ -21,10 +22,10 @@ class PasswordModal extends React.Component {
 			this.props.onClose();
 		} 
 	}
+	// checks if the input is valid and then sets the state.
 	handleChange({ target }) {
 		this.setState({ isPasswordValid: isPasswordValid(target.value)});
 		this.setState({ [target.name]: target.value });
-		
 	}
 	render() {
 		const { isOpen, onClose, onOkay } = this.props;

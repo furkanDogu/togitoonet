@@ -1,3 +1,8 @@
+
+// Types are used in sagas, action creators and reducers.
+// They are used for preventing typos in code.
+// We create here once then import whenever needed.
+
 export const FETCH_USER_INFO = 'fetch_user_info';
 export const ON_LOGIN_SUCCESS = 'on_login_succes';
 export const ON_LOGIN_FAIL = 'on_login_fail';

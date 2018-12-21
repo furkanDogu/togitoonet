@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import ErrorModal from './ErrorModal';
 
+// This component helps us register a product to a user.
+// It has a list in it. List sends the chosen employee for registeration whenever user clicks an employee in list.
 class RegisterationModal extends React.Component {
 	 constructor(props) {
         super(props);
@@ -14,6 +16,7 @@ class RegisterationModal extends React.Component {
 		this.setChosenEmployee = this.setChosenEmployee.bind(this);
 		this.handleWarningModal = this.handleWarningModal.bind(this);
 	}
+	// if there is no employee chosen and user clicked okay button, show warning modal
 	handleWarningModal() {
 		this.setState(state => ({ warningModalOpen: !state.warningModalOpen }));
 	}

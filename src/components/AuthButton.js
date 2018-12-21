@@ -9,8 +9,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-const AuthButton = ({ history, isAuthenticated, logOut, text }) => (
-      
+// This is 'Çıkış' button stays in drawer menu. Whenever user clicks, it triggers logOut action.
+const AuthButton = ({ history, isAuthenticated, logOut, text }) => (    
       isAuthenticated ? (
           <ListItem button
             key={'Çıkış'}
