@@ -6,6 +6,8 @@ const auth = require('../util/auth');
 const verifications = require('../util/verifications');
 const { verifyToken, verifyIfCategoryExists } = verifications;
 
+// this endpoint will return all categories saved in database
+// requirements in header: token 
 router.get('/', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = 'SELECT * FROM tbl_kategori';
@@ -16,6 +18,10 @@ router.get('/', verifyToken, (req, res, next) => {
     });
 });
 
+// this endpoint will add new category to the database
+// requirements in header: token 
+// requirements in body: categoryName
+// Given category name will also be check by verifyIfCategoryExists middlleware. If category exists, it won't be added.
 router.post('/', verifyToken, verifyIfCategoryExists, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = 'INSERT INTO ?? (??) values(?)';

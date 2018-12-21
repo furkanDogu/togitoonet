@@ -181,7 +181,9 @@ router.post('/broken/:type/:id', verifyToken, (req, res, next) => {
     });
 });
 
-
+// this endpoint will return all of the products which are unregistered.
+// It first gets components then it gets all in one pcs. Finally, it gets pc components.
+// requirements in header: token 
 router.get('/unregistered', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = 'SELECT * FROM view_zimmetsiz_bilesenler';
@@ -204,6 +206,9 @@ router.get('/unregistered', verifyToken, (req, res, next) => {
     });
 });
 
+// this endpoint will return all of the products which are registered.
+// It first gets components then it gets all in one pcs. Finally, it gets pc components.
+// requirements in header: token 
 router.get('/registered', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin','sales'], req, res, () => {
         let queryString = 'SELECT * from view_zimmetli_bilesenler';
@@ -226,6 +231,9 @@ router.get('/registered', verifyToken, (req, res, next) => {
         });
     });
 });
+
+// this endpoint will return all of the components which are broken.
+// requirements in header: token 
 router.get('/broken', verifyToken, (req,res,next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
         let queryString = 'SELECT * from view_arizali_bilesenler';
@@ -236,6 +244,10 @@ router.get('/broken', verifyToken, (req,res,next) => {
     });
 });
 
+// this endpoint will be used in reporting screens. According to the given type paramter, it will return either products 
+// that are registered to a spesific person or products that are registered to a spesific department
+// requirements in header: token
+// requirements in url: type, id (either employee id or department id)
 router.get('/registered/:type/:id', verifyToken, (req,res,next) =>{
     return auth.doOnlyWith(['admin', 'sales', 'chief'], req, res, () => {
         let queryString = '';

@@ -77,7 +77,8 @@ const verifyTitle = (req, res, next) => {
         }
     });
 }
-
+// a middleware that checks if the brand that user wants to add exists
+// if the brand exists, user wont be allowed to add brand. 
 const verifyIfBrandExists = (req, res, next) => {
     let queryString = 'SELECT * FROM tbl_marka';
         global.db.query(queryString, (error, result) => {
@@ -91,6 +92,8 @@ const verifyIfBrandExists = (req, res, next) => {
             next();
         });
 }
+// a middleware that checks if the category that user wants to add exists
+// if the category exists, user wont be allowed to add category. 
 const verifyIfCategoryExists = (req, res, next) => {
     let queryString = 'SELECT * FROM tbl_kategori';
         global.db.query(queryString, (error, result) => {
@@ -104,7 +107,8 @@ const verifyIfCategoryExists = (req, res, next) => {
             next();
         });
 }
-
+// a middleware that checks if the supplier that user wants to add exists
+// if the supplier exists, user wont be allowed to add supplier. 
 const verifyIfSupplierExists = (req, res, next) => {
     let queryString = 'SELECT * FROM view_tedarikciler';
     global.db.query(queryString, (error, result) => {
@@ -118,7 +122,6 @@ const verifyIfSupplierExists = (req, res, next) => {
         next();
     });
 }
-
 module.exports = {
     verifyToken,
     verifyQuantity,

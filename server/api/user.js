@@ -63,6 +63,13 @@ router.post('/login', (req, res, next) => {
     });
 });
 
+// this endpoint will help us add new user to the system. 
+// verifyTitle middleware will also check if candidate user's title is enough to be a user
+// then finally, if title is enough, it will assign a role to the new user
+// requirements in header: token
+// requirements in URL: id (employeeID)
+// requirements in body: password
+
 router.post('/register/:id',verifyToken, verifyTitle, (req, res, next) => {
     return auth.doOnlyWith(['admin'], req, res, () => {
         bcrypt.hash(req.body.password, 10, (error, hash) => {
@@ -93,6 +100,8 @@ router.post('/check', (req, res, next) => {
     });
 });
 
+// this endpoint will return all active employees in database
+// requirements in header: token
 router.get('/', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales', 'chief'], req, res, () => {
         let queryString = 'SELECT * FROM view_personeller WHERE aktifMi = 1';
@@ -102,6 +111,9 @@ router.get('/', verifyToken, (req, res, next) => {
         });
     });
 });
+
+// this endpoint will return all employees including passive ones.
+// requirements in header: token
 router.get('/all', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales', 'chief'], req, res, () => {
         let queryString = 'SELECT * FROM view_personeller';
@@ -111,6 +123,9 @@ router.get('/all', verifyToken, (req, res, next) => {
         });
     });
 });
+
+// this endpoint will return user candidates (employees which have enough title to be a user)
+// requirements in header: token
 router.get('/candidates', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin'], req, res, () => {
         let queryString = "SELECT * FROM view_user_adaylari";
@@ -129,6 +144,8 @@ router.get('/candidates', verifyToken, (req, res, next) => {
     });
 });
 
+// this endpoint will return all departments saved in database. Returned departments will be used in reporting screen(to get department based registeration report)
+// requirements in header: token
 router.get('/departments', verifyToken, (req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales', 'chief'], req, res, () => {
         let queryString = "SELECT * FROM tbl_departman";
