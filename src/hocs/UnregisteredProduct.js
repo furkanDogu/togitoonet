@@ -34,9 +34,11 @@ const unregisteredProduct = WrappedComponent => {
 			const type = IDtype === 'B' ? 'bilesenID' : 'pcID';
 			return this.props.unregisteredProductsData.find(product => product[type] === id);
 		}
+		// gets products with given id
 		filterChosenPcComponents(id) {
 			return this.props.unregisteredPcComponents.filter(product => product.pcID === id);
 		}
+		// if registeration button is clicked, this method gets called. It basically opens registeration modal
 		handleRegisterationModal(id) {
 			if (id) {
 				const ID = this.splitID(id);
@@ -44,10 +46,13 @@ const unregisteredProduct = WrappedComponent => {
 			} 
 			this.setState(state => ({ registerationModalOpen: !state.registerationModalOpen }));
 		}
+		// since we add B or P to the IDs (to make it eaiser for user to understand bileşen or pc), we need to split them before doing anything
+		// because database only knows the numbers not the letters in IDs
 		splitID (id) {
 			let splittedID = id.split('-');
 			return [parseInt(splittedID[1]), splittedID[0]];
 		}
+		//Opens detail modal in detail button is clicked. While opening, it also sets the state with chosen product id
 		handleDetailModal(id) {
 			if (id) {
 				const ID = this.splitID(id);
@@ -56,7 +61,6 @@ const unregisteredProduct = WrappedComponent => {
 						this.setState({ pcComponents: this.filterChosenPcComponents(ID[0]) });
 					}
 				});
-				
 			} 
 			this.setState(state => ({ detailModalOpen: !state.detailModalOpen }));
 		}

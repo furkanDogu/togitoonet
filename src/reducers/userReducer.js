@@ -33,6 +33,7 @@ const INITIAL_STATE = {
     isSuccessModalOpen: false,
 };
 
+//This reducer is responsible for holding data that is about user
 export default (state = INITIAL_STATE, action) => {
     switch(action.type) {
         case ON_LOGIN_SUCCESS:

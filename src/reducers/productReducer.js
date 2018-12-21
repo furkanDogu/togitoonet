@@ -24,7 +24,7 @@ const INITIAL_STATE = {
     towns: []
 };
 
-
+// this reducer is responsible for saving data that is about to products
 export default (state = INITIAL_STATE, action) => {
     switch(action.type) {
         case  SET_UNREGISTERED_PRODUCTS:

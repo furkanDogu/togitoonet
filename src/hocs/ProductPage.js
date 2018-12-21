@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 
+// This hoc is responsible for holding product container.
+// ProductPage will give business logic to the product container
 export default WrappedComponent => {
 	class ProductPage extends React.Component {
 		constructor(props) {
@@ -15,9 +17,12 @@ export default WrappedComponent => {
 			}
 			this.handleChange = this.handleChange.bind(this);
 		}
+		//handles input coming from search bar
 		handleChange({ target }) {
 			this.setState({ [target.name]: target.value });
 		}
+		
+		//renders appropriate products according to product type
 		giveAppropriateProducts() {
 			const { productType } = this.props;
 			if (productType === 'unregisteredProduct') {
@@ -28,6 +33,7 @@ export default WrappedComponent => {
 				return this.filterProductsWithKey(this.props.brokenProducts);
 			}
 		}
+		// filters products according to the search bar text
 		filterProductsWithKey(products) {
 			const { productType } = this.props;
 			let filteredProducts = null;
@@ -66,6 +72,7 @@ export default WrappedComponent => {
 			return filteredProducts;
 			
 		}
+		//renders helper text of search bar according to the product type
 		giveTextsToSearchBar() {
 			const { productType } = this.props;
 			 if (productType === 'registeredProduct') {
@@ -74,8 +81,8 @@ export default WrappedComponent => {
 				return ['Lütfen ürüne ait anahtar giriniz', 'ID / Model / Kategori' ];
 			}
 		}
+		// this function is called when the component created on screen. This func. gets products according to the product type
 		componentDidMount() {
-			
 			const { getUnregisteredProducts, getEmployees, productType, getRegisteredProducts, getBrokenProducts } = this.props;
 			if (productType === 'unregisteredProduct') {
 				getUnregisteredProducts();
