@@ -54,7 +54,7 @@ const registeredProduct = WrappedComponent => {
             if (registerationID) {
                 const ID = this.splitID(id);
                 this.setState({ chosen: this.filterChosenProduct(parseInt(registerationID))}, () => {
-                    if (this.state.chosen.Tip === 'Hazır PC') {
+                    if (this.state.chosen.Tip === 'Hazir PC') {
                         this.setState({ pcComponents: this.filterChosenPcComponents(registerationID) });
                     }
                 });
@@ -80,7 +80,7 @@ const registeredProduct = WrappedComponent => {
 			if (id ,registerationID) {
                 const ID = this.splitID(id);
 				this.setState({ chosen: this.filterChosenProduct(parseInt(registerationID))}, () => {
-                    if (this.state.chosen.Tip === 'Hazır PC') {
+                    if (this.state.chosen.Tip === 'Hazir PC') {
                         this.setState({ pcComponents: this.filterChosenPcComponents(registerationID) });
                     }
 				});

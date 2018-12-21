@@ -146,7 +146,7 @@ export default ({ isOpen, onClose, product, pcComponents }) => {
 						</Grid>
 					)
 				) : null}
-				{Tip === 'Hazır PC' ? (
+				{Tip === 'Hazir PC' ? (
 					<div>
 						<Grid container spacing={8} alignItems={'center'} direction={'row'}>
 							<Grid item xs={4}>

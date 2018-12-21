@@ -235,7 +235,7 @@ class NewAllOne extends React.Component {
 			<React.Fragment>
 				<option value="" />
 				{this.props.categories.map((category, index) => {
-					if (category.kategoriAdi !== 'Hazır PC') {
+					if (category.kategoriAdi !== 'Hazir PC') {
 						return (
 							<option key={index} value={category.kategoriID}>
 								{category.kategoriAdi}
@@ -271,7 +271,7 @@ class NewAllOne extends React.Component {
 		this.props.getBrands();
 		this.props.getCategories();
 		this.props.getSuppliers();
-		this.setState({ category: 'Hazır PC', isCategoryValid: 'success'});	
+		this.setState({ category: 'Hazir PC', isCategoryValid: 'success'});	
 	}
 	//search bar
 	renderSearchBar() {

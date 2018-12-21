@@ -180,7 +180,7 @@ export default class BrokenModal extends React.Component {
 						</Grid>
 					</Grid>
 					{product ? (
-						product.Tip === 'Hazır PC' ? (
+						product.Tip === 'Hazir PC' ? (
 							<Grid
 								container
 								spacing={8}
@@ -194,7 +194,7 @@ export default class BrokenModal extends React.Component {
 							</Grid>
 						) : null
 					) : null}
-					{product ? (product.Tip === 'Hazır PC' ? this.renderPcComponents(pcComponents) : null) : null}
+					{product ? (product.Tip === 'Hazir PC' ? this.renderPcComponents(pcComponents) : null) : null}
 					<Grid container>
 						<TextField
 							fullWidth

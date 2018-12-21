@@ -64,7 +64,7 @@ class ProductContainer extends React.Component {
 											key={index}
 											name={product.pcAdi}
 											id={"P-"+product.pcID}
-											category={'Hazır PC'}
+											category={'Hazir PC'}
 											brand={product.markaAdi}
 											stockAmount={product.stokMiktari}
 											registerationDate={product.zimmetTarihi}

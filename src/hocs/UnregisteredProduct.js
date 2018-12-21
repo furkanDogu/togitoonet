@@ -57,7 +57,7 @@ const unregisteredProduct = WrappedComponent => {
 			if (id) {
 				const ID = this.splitID(id);
 				this.setState({ chosenForDetail: this.filterChosenProduct(ID[0], ID[1]) }, () => {
-					if (this.state.chosenForDetail.Tip === 'Hazır PC') {
+					if (this.state.chosenForDetail.Tip === 'Hazir PC') {
 						this.setState({ pcComponents: this.filterChosenPcComponents(ID[0]) });
 					}
 				});

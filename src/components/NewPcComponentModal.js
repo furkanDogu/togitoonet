@@ -61,7 +61,7 @@ export default class NewPcComponentModal extends React.Component {
             <React.Fragment>
 				<option value="" />
 				{this.props.categories.map((category, index) => {
-					if (category.kategoriAdi !== 'Hazır PC') {
+					if (category.kategoriAdi !== 'Hazir PC') {
 						return (
 							<option key={index} value={category.kategoriID+'.'+category.kategoriAdi}>
 								{category.kategoriAdi}
