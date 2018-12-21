@@ -27,6 +27,7 @@ router.post('/', verifyToken, verifyIfCategoryExists, (req, res, next) => {
         let queryString = 'INSERT INTO ?? (??) values(?)';
         global.db.query(queryString, ['tbl_kategori', 'kategoriAdi',req.body.categoryName], (error, result) => {
             if (error) return res.status(500).json({ error });
+            console.log('burada mı');
             res.status(200).json({ message: 'Category was successfully added'});
         });
     });
