@@ -34,6 +34,9 @@ export const isAmountValid = (amount) => {
 }
 
 export const isCostValid = (cost) => {
+    // first check if cost has e character if it does then return error
+    // second check if there is any input if not return error
+    // finally check if cost is valid 
     const costFloat = parseFloat(cost);
     if (cost.includes('e')) return 'error';
     if (cost.length < 1) return 'error';
@@ -55,11 +58,13 @@ export const isNewPropNameValid = (name) => {
 }
 
 export const isTelNoValid = (telNo) => {
+    // if telNo is 11 characters and starts with 0 then return success
     if (telNo.charAt(0) !== '0' || telNo.length < 11 || telNo.length > 11) return 'error';
     return 'success';
 }
 
 export const isPasswordValid = (password) => {
+    //if password longer than 5 characters and shorter than 40 characters return success
     if (password.length < 5 || password.length > 40) return 'error';
     return 'success';
 }

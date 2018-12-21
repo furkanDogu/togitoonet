@@ -14,10 +14,6 @@ import AppRouter from './routes/AppRouter';
 
 
 const sagaMiddleware = createSagaMiddleware();
-/* const store = createStore(
-    reducers,  
-    applyMiddleware(sagaMiddleware)
-); */
 
  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
  const store = createStore(reducers, composeEnhancers(
