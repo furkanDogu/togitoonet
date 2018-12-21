@@ -11,7 +11,7 @@ const { verifyToken, verifyIfSupplierExists } = verifications;
 // requirements in header: token 
 router.get('/', verifyToken ,(req, res, next) => {
     return auth.doOnlyWith(['admin', 'sales'], req, res, () => {
-        let queryString = 'SELECT * FROM view_tedarikciler';
+        let queryString = 'SELECT * FROM view_tedarikciler ORDER BY tedarikciAdi';
         global.db.query(queryString, (error, result) => {
             if (error) return res.status(500).json({ error });
             res.status(200).json({ result });

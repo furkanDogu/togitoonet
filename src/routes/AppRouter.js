@@ -5,10 +5,9 @@ import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 import LoginForm from '../components/LoginForm';
 import LoggedRouter from './LoggedRouter';
-
-
 export const history = createHistory();
 
+// this is the main router component holds dashboard and login page in it.
 const AppRouter = () => {
         return (
             <BrowserRouter>

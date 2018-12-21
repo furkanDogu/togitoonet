@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import BrokenPartDetail from '../components/BrokenPartDetail';
 
+// this hoc is responsible for rendering ProductCard component with suitable buttons in it.
+// It also creates detail modal for broken part
 const brokenProduct = WrappedComponent => {
     class BrokenProduct extends React.Component {
         constructor(props) {

@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 import { checkIfAuthenticated } from '../actions/userActions';
 
+
+// This component is responsible for showing public screens like login screen
+// whenever user is logged to the system, it redirects user to dashboard.
 export class PublicRoute extends React.Component {
     componentWillMount() {
       this.props.checkIfAuthenticated();

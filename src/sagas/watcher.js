@@ -57,6 +57,9 @@ import {
 
 
 
+// Watcher is responsible for listening listed actions below. Whenever one of those actions are caught, it will fire another action which will do
+// async works in generator functions for us. We use constants here to prevent typos. 
+// takeLatest function just takes the latest caught action meaning that if user clicks 100 times to a button it will just catch the last click.
 export default function* rootSaga() {
     yield all([
         takeLatest(CHECK_IF_AUTHENTICATED, checkIfAuthAsync),

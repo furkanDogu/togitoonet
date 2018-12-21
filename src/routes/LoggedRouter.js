@@ -17,7 +17,7 @@ const RegisteredProduct = ProductPage(ProductContainer);
 const BrokenProduct = ProductPage(ProductContainer);
 
 
-
+// This stateless component holds our routes which are only accessible if the user is logged in.
 const LoggedRouter = () => {
 	return (
 		<BrowserRouter>

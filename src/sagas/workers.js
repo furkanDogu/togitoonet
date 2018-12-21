@@ -23,6 +23,7 @@ import {
 import axios from 'axios';
 import { put } from 'redux-saga/effects';
 
+// setting token to a config object. It will be used while making requests.
 function getTokenFromStorage() {
     let config = {
         headers: {
@@ -32,16 +33,16 @@ function getTokenFromStorage() {
     return config;
 }
 
-// CATCH BLOKLARININ İÇİNE HERHANGİ BİR HATA DURUMUNDA AÇILACAK OLAN HER DRAWER'A KONULMUŞ BİR MODAL İÇİN GÖRÜNÜRLÜĞÜ TRUE YAPAN BİR ACTİON KOY.
-// BAŞARILI GERÇEKLEŞEN İŞLEMLERİN SONUNA DA BAŞARI BELİRTECEK BİR MODAL YAP VE ONUN GÖRÜNÜRLÜĞÜNÜ TRUE
-const URL = 'http://localhost:3001';
+// This URL saves the address where our webserver is currently working.
+const URL = 'http://localhost:3001'; 
+
+//sends user information (email, password) to the webserver
+// if login is successful then fires an action with type of ON_LOGIN_SUCCESS
 export function* fetchUserInfoAsync(action) {
+    const endPoint = URL + '/user/login';
     try {
-        console.log(action.payload);
-        const response = yield axios.post(
-            'http://localhost:3001/user/login',
-            action.payload
-        ).then(response => response)
+        const response = yield axios.post(endPoint, action.payload)
+        .then(response => response)
         .catch(err => null);
         if (response) {
             yield put({ type: ON_LOGIN_SUCCESS, payload: response.data });
@@ -54,7 +55,8 @@ export function* fetchUserInfoAsync(action) {
         console.log(e);
     }
 }
-
+// checks if stored token is still valid 
+// if token is valid then fires an action with type of ON_LOGIN_SUCCESS
 export function* checkIfAuthAsync() {
     let token = sessionStorage.getItem('jwtToken');
     if(!token || token === '') {
@@ -72,9 +74,10 @@ export function* checkIfAuthAsync() {
         console.log(e);
     }
 }
-
+// wants unregistered products from web server. 
+// If there is no error occured, first sets the unregistered products then sets unregistered pc components
+// If there is an error occured, shows fail modal.
 export function* getUnregisteredProductsAsync() {
-
     try {   
         const endPoint = URL+'/product/unregistered';
         const response = yield axios.get(endPoint, getTokenFromStorage());
@@ -85,9 +88,8 @@ export function* getUnregisteredProductsAsync() {
     }
 
 }
-
+// wants employees from web server then sets them to reducer by creating an action with type SET_EMPLOYEES
 export function* getEmployeesAsync() {
-    
     try {
         const endPoint = URL+'/user';
         const response = yield axios.get(endPoint, getTokenFromStorage());
@@ -96,6 +98,7 @@ export function* getEmployeesAsync() {
         yield put({ type: OPEN_FAIL_MODAL });
     }
 }
+// registers a product to a employee.
 export function* registerProductsAsync(action) {
     const { product, employeeID } = action.payload;
     let type = null;
@@ -114,16 +117,16 @@ export function* registerProductsAsync(action) {
             yield axios.post(endPoint, {
                 personelID: employeeID
             },getTokenFromStorage());
-            
+            // after registering a product, it calls getUnregisteredProductsAsync to update stock of products
             yield getUnregisteredProductsAsync();
             yield put({ type: OPEN_SUCCESS_MODAL });
         } catch(e) {
             yield put({ type: OPEN_FAIL_MODAL });
         }
 }
-
+// wants all registered products from web server
+// first sets products then sets pc components in order.
 export function* getRegisteredProductsAsync() {
-    
     try {   
         const endPoint = URL+'/product/registered';
         const response = yield axios.get(endPoint, getTokenFromStorage());
@@ -149,7 +152,8 @@ export function* removeRegisterationAsync(action) {
     }
     try {
         endPoint = `${URL}/product/removereg/${productType}/${parseInt(registerationID)}`;
-        yield axios.post(endPoint, { }, getTokenFromStorage())
+        yield axios.post(endPoint, { }, getTokenFromStorage());
+        // after removing registeration it calls getRegisteredProductsAsync to update data kept in reducer
         yield getRegisteredProductsAsync();
         yield put({ type: OPEN_SUCCESS_MODAL });
 
@@ -158,6 +162,7 @@ export function* removeRegisterationAsync(action) {
     }
 } 
 
+// this async function will call make a request to API and send product information to be added as broken.
 export function* addBrokenProductAsync(action) {
     const { desc, registerationID, type } = action.payload;
     let endPoint = null;
@@ -177,6 +182,7 @@ export function* addBrokenProductAsync(action) {
     }
 }
 
+// wants all broken products from API and sets them to reducer by creating an action with SET_BROKEN_PRODUCTS type
 export function* getBrokenProductsAsync() {
     let endPoint = URL + '/product/broken';
     try {
@@ -188,6 +194,7 @@ export function* getBrokenProductsAsync() {
     }
 }
 
+// wants all brands from API and sets them to reducer by creating an action with SET_BRANDS type
 export function* getBrandsAsync() {
     let endPoint = URL + '/brand';
     try {
@@ -198,6 +205,7 @@ export function* getBrandsAsync() {
     }
 }
 
+// wants all categories from API and sets them to reducer by creating an action with SET_CATEGORIES type
 export function* getCategoriesAsync() {
     let endPoint = URL + '/category';
     try {
@@ -208,6 +216,7 @@ export function* getCategoriesAsync() {
     }
 }
 
+// wants all suppliers from API and sets them to reducer by creating an action with SET_SUPPLIERS type 
 export function* getSuppliersAsync() {
     let endPoint = URL + '/supplier';
     try {
@@ -218,6 +227,8 @@ export function* getSuppliersAsync() {
     }
 }
 
+// this async function makes a request to add a new brand to the system.
+// sending brandName in body of request. If process goes well, it calls getBrandsAsync to get updated brands.
 export function* addBrandAsync(action) {
     let endPoint = URL + '/brand';
     try {
@@ -229,6 +240,8 @@ export function* addBrandAsync(action) {
     }
 }
 
+// this async function makes a request to add a new category to the system.
+// sending categoryName in body of request. If process goes well, it calls getCategoriesAsync to get updated brands.
 export function* addCategoryAsync(action) {
     let endPoint = URL + '/category';
     try {
@@ -240,6 +253,7 @@ export function* addCategoryAsync(action) {
     }
 }
 
+// wants all cities from API and sets them to reducer by creating an action with SET_CITIES type 
 export function* getCitiesAsync() {
     let endPoint = URL + '/supplier/cities';
     try {
@@ -250,6 +264,7 @@ export function* getCitiesAsync() {
     }
 }
 
+// wants all towns in a specific city which is sent in URL and sets towns to reducer by creating action with SET_TOWNS type
 export function* getTownsAsync(action) {
     let endPoint = `${URL}/supplier/towns/${action.payload}`;
     try {
@@ -260,6 +275,7 @@ export function* getTownsAsync(action) {
     }
 }
 
+// this async function adds new supplier and after adding supplier calls getSuppliersAsync to update supplier data in store
 export function* addSupplierAsync(action) {
     let endPoint = URL + '/supplier';
     try {
@@ -275,6 +291,9 @@ export function* addSupplierAsync(action) {
         yield put({ type: OPEN_FAIL_MODAL });
     }
 }
+
+// this async function adds new component.
+// makes a post request with action's payload
 export function* addNewComponentAsync(action) {
     let endPoint = URL + '/product/add/component';
     try {
@@ -293,10 +312,11 @@ export function* addNewComponentAsync(action) {
     }
 }
 
+// this async function adds new all in one pc.
+// makes a post request with action's payload
 export function* addNewAllOneAsync(action) {
     let endPoint = URL + '/product/add/allOne';
     try {
-        console.log(action.payload);
         yield axios.post(endPoint, action.payload, getTokenFromStorage());
         yield put({ type: OPEN_SUCCESS_MODAL });
     } catch(e) {
@@ -304,6 +324,7 @@ export function* addNewAllOneAsync(action) {
     }
 }
 
+// wants all user candidates and users  from API and sets them by creating an action with SET_CANDIDATES_AND_USERS type
 export function* getCandidatesAndUsersAsync() {
     let endPoint = URL + '/user/candidates';
     try {
@@ -314,6 +335,8 @@ export function* getCandidatesAndUsersAsync() {
     }
 }
 
+// this async function adds new user to the system.
+// makes a post request with password in request's body
 export function* addNewUserAsync(action) {
     let endPoint = `${URL}/user/register/${action.payload.employeeID}`;
     try {
@@ -325,6 +348,7 @@ export function* addNewUserAsync(action) {
     }
 }
 
+// wants registered products based on employeeID, after getting data, sets it to store by creating an action with SET_REGISTERED_BY_USER type
 export function* getRegisteredByUserAsync(action) {
     let endPoint = `${URL}/product/registered/users/${action.payload}`;
     try {
@@ -334,6 +358,8 @@ export function* getRegisteredByUserAsync(action) {
         yield put({ type: OPEN_FAIL_MODAL });
     }
 }
+
+// wants all employees saved in database, after getting data, sets it to store by creating an action with SET_EMPLOYEES_INC_PASSIVE type
 export function* getEmployeesIncPassiveAsync() {
     let endPoint = URL + '/user/all';
     try {
@@ -344,6 +370,7 @@ export function* getEmployeesIncPassiveAsync() {
     }
 }
 
+// wants all departments saved in database with a basic get request then sets the data to store by creating an action with SET_DEPARTMENTS type
 export function* getDepartmentsAsync() {
     let endPoint = URL + '/user/departments';
     try {
@@ -353,6 +380,9 @@ export function* getDepartmentsAsync() {
         yield put({ type: OPEN_FAIL_MODAL });
     }
 }
+
+
+// wants registered products based on departmentID, after getting data, sets it to store by creating an action with SET_REGISTERED_BY_DEPARTMENT type
 export function* getRegisteredByDepartment(action) {
     let endPoint = `${URL}/product/registered/departments/${action.payload}`;
     try {
