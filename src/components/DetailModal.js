@@ -141,7 +141,7 @@ export default ({ isOpen, onClose, product, pcComponents }) => {
 								<h4 style={subHeader}>Satın Alan Personel: </h4>
 							</Grid>
 							<Grid item xs={8} style={gridStyle}>
-								<span style={spanStyle}>{product ? product.personelAdi : null}</span>
+								<span style={spanStyle}>{product.personelAdi ? product.personelAdi : null}</span>
 							</Grid>
 						</Grid>
 					)

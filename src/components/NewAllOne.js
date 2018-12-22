@@ -166,15 +166,15 @@ class NewAllOne extends React.Component {
 		}
 	}
 	addNewSupplier(props) {
-		this.props.addSupplier(props);
+		this.props.addSupplier(props, this.props.suppliers);
 		this.handleSupplierModal();
 	}
 	addNewProp(type, value) {
 		if (type === 'Yeni Marka') {
-			this.props.addBrand(value);
+			this.props.addBrand(value, this.props.brands);
 			this.handleBrandModal();
 		} else {
-			this.props.addCategory(value);
+			this.props.addCategory(value, this.props.categories);
 			this.handleCategoryModal();
 		}
 	}
