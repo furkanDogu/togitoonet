@@ -49,7 +49,7 @@ router.post('/login', (req, res, next) => {
 
                 return res.status(200).json({
                     auth: true,
-                    token: token,
+                    token,
                     email,
                     name,
                     userID,
