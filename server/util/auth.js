@@ -19,7 +19,7 @@ const doOnlyWith = (people, req, res, action) => {
     if (people.includes(req.role)) {
         return action();
     } 
-    return res.status(403).json({ 'message': 'Access if forbidden'});
+    return res.status(403).json({ 'message': 'Access is forbidden'});
 }
 
 module.exports = {
